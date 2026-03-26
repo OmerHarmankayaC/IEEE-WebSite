@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IEEE TEDU | Mühendislikte İlerleme, Değişimde İlham</title>
+    <!-- Using classic system fonts for a stark, brutalist editorial look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav class="navbar transition-all">
+        <div class="nav-container">
+            <div class="brand">
+                <a href="#" class="brand-link">
+                    <img src="Initial-elements/IEEE_TEDU-Symbol.png" alt="IEEE TEDU Logo" class="nav-logo">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#home" onclick="if(window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '') { window.scrollTo({top: 0, behavior: 'smooth'}); return false; }">Ana Sayfa</a></li>
+                <li><a href="index.html#about">Hakkımızda</a></li>
+                <li><a href="index.html#committees">Komiteler</a></li>
+                <li><a href="index.html#team">Ekibimiz</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html">İletişim</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="container text-center">
+            <h1 class="hero-title reveal text-navy" style="line-height:0.95; padding-bottom: 2rem;">
+                <span class="font-sans font-black uppercase" style="letter-spacing: -3px;">Mühendislikte</span> <br>
+                <span class="font-serif font-italic text-red" style="text-transform: lowercase; font-size: 1.15em; display: inline-block; margin: -10px 0;">her zaman</span> <br>
+                <span class="font-sans font-black uppercase" style="letter-spacing: -3px;">Bir Adım</span> <br>
+                <span class="font-sans font-black uppercase" style="letter-spacing: -3px;">İleriye</span>
+            </h1>
+            <p class="hero-subtitle reveal mt-3 font-serif pb-4">
+                IEEE TEDU Teknoloji ve Mühendislik topluluğu olarak, evrensel mühendislik standartlarını kampüse taşıyoruz. Geleceği bizimle inşa et.
+            </p>
+            <div class="mt-4 reveal">
+                <a href="#about" class="btn btn-primary font-sans uppercase">Keşfet</a>
+            </div>
+        </div>
+    </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section bg-navy text-white">
+            <div class="container reveal">
+                <h2 class="section-title">Biz Kimiz?</h2>
+                <h3 class="about-highlight">IEEE TEDU, teknolojiyi insanlık yararına ilerletmeye odaklanmış kolektif bir merkezdir. İnovasyon, liderlik ve dinamik bir öğrenci topluluğuyla akademik teoriyi gerçek dünyanın etkisiyle buluşturuyoruz.</h3>
+                
+                <div class="about-text-grid mt-4">
+                    <p>IEEE(Institute of Electrical and Electronics Engineers), 160 ülkede, 400,000’den fazla üyesi ile dünyanın en büyük kar amacı gütmeyen profesyonel teknik organizasyonlarından biridir. IEEE sadece elektrik, elektronik mühendislerine yönelik olmaktan çıkarak bilişim, otomasyon, robotik gibi pek çok mühendislik ve bilim alanında teori ve uygulamalarının gelişimi için çalışmalar yapmanın yanı sıra, bu amaca hizmet etmek isteyen herkes için dünya çapında çeşitli eğitimler ve etkinlikler organize etmektedir.</p>
+                    <p>Bu büyük organizasyonun bir parçası olan IEEE TEDU olarak bizler, Computer Society, Robotics and Automation Society ve Women in Engineering gibi alt birimlerimiz ile beraber çalışarak mühendislik ve pozitif bilim alanlarına ilgi duyan herkese birlikte öğrenme ve çalışmalar yapma fırsatı sunmayı hedefliyoruz. Bu süreçte yapacağımız eğitimler ve teknik gezilerle beraber öğrenirken, atölyeler, projeler ve yarışmalarla hem tecrübe kazanmayı hem de bilimin ve teknolojinin gelişmesine katkıda bulunmayı amaçlıyoruz.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Committees Section -->
+        <section id="committees" class="committees-section bg-light">
+            <div class="container">
+                <h2 class="section-title reveal dark-text">Komitelerimiz</h2>
+                
+                <!-- Computer Society -->
+                <div class="committee-card reveal">
+                    <div class="committee-focus">
+                        <div class="logo-flip-container">
+                            <div class="logo-flip-inner">
+                                <div class="logo-flip-front logo-box">
+                                    <img src="Initial-elements/IEEE_TEDU_CS-Symbol.png" alt="Computer Society Logo">
+                                </div>
+                                <div class="logo-flip-back bg-navy text-white">
+                                    <p class="committee-desc-back">Yazılım dünyasının dinamizmini, algoritmaların mantığıyla birleştiriyoruz. Computer Society olarak sadece kod yazmıyor; veri biliminden yapay zekaya, siber güvenlikten oyun geliştirmeye kadar dijital evrenin her katmanını keşfediyoruz.</p>
+                                    <p class="committee-desc-back mt-3">Geliştirdiğimiz projeler ve düzenlediğimiz teknik eğitimlerle, teorik bilgiyi pratiğe dökerek yarının teknoloji liderlerini bugünden hazırlıyoruz.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-info">
+                        <p class="committee-short">Geleceğin sistemlerini inşa etmek için kod, yapay zeka ve yazılım mimarisiyle dijital sınırları keşfediyoruz.</p>
+                        <h3 class="committee-motto">"Kodun Ötesinde,<br>Geleceğin Mimarisinde."</h3>
+                    </div>
+                </div>
+
+                <!-- Robotics and Automation -->
+                <div class="committee-card reveal reverse mt-4">
+                    <div class="committee-focus">
+                        <div class="logo-flip-container">
+                            <div class="logo-flip-inner">
+                                <div class="logo-flip-front logo-box">
+                                    <img src="Initial-elements/IEEE_TEDU_RAS-Symbol.png" alt="Robotics and Automation Society Logo">
+                                </div>
+                                <div class="logo-flip-back bg-navy text-white">
+                                    <p class="committee-desc-back">Mekanik estetiği, kontrol sistemlerinin zekasıyla bir araya getiriyoruz. RAS bünyesinde, hayal edilen projeleri somut robotik sistemlere dönüştürmek için çalışıyoruz. Sensörlerden gömülü sistemlere kadar otomasyonun her adımında elini taşın altına koyan, disiplinler arası çalışmanın gücüne inanan ve teknolojiyi fiziksel dünyada canlandıran bir ekibiz.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-info">
+                        <p class="committee-short">Mekanik hassasiyeti akıllı kontrol sistemleri ve robotikle birleştirerek fikirleri fiziksel dünyada hayata geçiriyoruz.</p>
+                        <h3 class="committee-motto">"Fikirleri Hareketle Buluşturan Mühendislik."</h3>
+                    </div>
+                </div>
+
+                <!-- Women in Engineering -->
+                <div class="committee-card reveal mt-4">
+                    <div class="committee-focus">
+                        <div class="logo-flip-container">
+                            <div class="logo-flip-inner">
+                                <div class="logo-flip-front logo-box">
+                                    <img src="Initial-elements/IEEE_TEDU_WIE-Symbol-Reversed.png" alt="Women in Engineering Logo">
+                                </div>
+                                <div class="logo-flip-back bg-navy text-white">
+                                    <p class="committee-desc-back">Teknoloji ve bilimde cinsiyet bariyerlerini yıkarak, herkes için kapsayıcı bir mühendislik kültürü inşa ediyoruz. WIE olarak, kadınların STEM alanındaki varlığını güçlendirmeyi, liderlik potansiyellerini ortaya çıkarmayı ve ilham veren başarı hikayelerini büyütmeyi hedefliyoruz. Çeşitliliğin getirdiği zenginlikle, daha adil ve yenilikçi bir gelecek için birlikte ilerliyoruz.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="committee-info">
+                        <p class="committee-short">Kapsayıcı ve yenilikçi bir mühendislik kültürü oluşturmak için çeşitliliği teşvik ediyor ve her sesi güçlendiriyoruz.</p>
+                        <h3 class="committee-motto">"Mühendislikte Çeşitlilik, Gelecekte Eşitlik."</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- Fikirler & Projeler / Activities -->
+    <section id="activities" class="activities-section bg-navy text-white position-relative">
+        <button class="nav-arrow nav-prev" id="activities-prev" aria-label="Sola Kaydır">❮</button>
+        <button class="nav-arrow nav-next" id="activities-next" aria-label="Sağa Kaydır">❯</button>
+        <div class="container mb-4">
+            <h2 class="section-title reveal text-white">Fikirler & Projeler</h2>
+        </div>
+        <div class="activities-carousel reveal" id="activities-carousel-track">
+            <!-- Reference Full Pastel Cards -->
+            <div class="activity-card" style="flex: 0 0 500px; background-color: #f7dcd1;">
+                <a href="blog-post.html" class="activity-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <p class="ac-category">Kariyer Söyleşileri</p>
+                <h3 class="ac-title">Silikon Vadisi'nde <br>Bir Türk Mühendis</h3>
+            </div>
+            <div class="activity-card" style="flex: 0 0 350px; background-color: #d1e8f7;">
+                <a href="blog-post.html" class="activity-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <p class="ac-category">Teknik Gezi</p>
+                <h3 class="ac-title">Savunma Sanayii<br>Ziyareti</h3>
+            </div>
+            <div class="activity-card" style="flex: 0 0 600px; background-color: #e4d1f7;">
+                <a href="blog-post.html" class="activity-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <p class="ac-category">Proje Takımları</p>
+                <h3 class="ac-title">Otonom Araç Projesi<br>Finallerde Derece Yaptı</h3>
+            </div>
+            <div class="activity-card" style="flex: 0 0 400px; background-color: #d8f7d1;">
+                <a href="blog-post.html" class="activity-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <p class="ac-category">Mentörlük</p>
+                <h3 class="ac-title">Akademi Buluşmaları<br>Devam Ediyor</h3>
+            </div>
+            <!-- See All Activities Card -->
+            <div class="activity-card" style="flex: 0 0 350px; background-color: var(--ted-navy); border: 1px solid rgba(255,255,255,0.1); justify-content: center; align-items: center; border-radius: 20px;">
+                <a href="blog.html" style="color: white; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                    <h3 class="ac-title" style="margin: 0; text-align: center;">Tüm<br>Etkinlikleri Gör</h3>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--ted-red)" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+        <!-- Board of Directors Section -->
+        <section id="team" class="team-section bg-light">
+            <div class="container text-center">
+                <h2 class="section-title reveal dark-text" style="margin-bottom:4rem;">Yönetim Kurulu</h2>
+                
+                <!-- Genel Başkan -->
+                <div class="genel-baskan reveal" id="genel-baskan-container">
+                    <!-- Loaded via JS -->
+                </div>
+
+                <!-- Committee Tabs with Leaders Above boxes -->
+                <div class="team-tabs-container reveal">
+                    <div class="team-tabs">
+                        <!-- CS -->
+                        <div class="team-tab-wrapper active" data-target="cs-board">
+                            <div class="tab-leader" id="cs-leader"></div>
+                            <div class="tab-box">
+                                <button class="team-tab">CS</button>
+                                <div class="tab-arrow"></div>
+                            </div>
+                        </div>
+
+                        <!-- RAS -->
+                        <div class="team-tab-wrapper" data-target="ras-board">
+                            <div class="tab-leader" id="ras-leader"></div>
+                            <div class="tab-box">
+                                <button class="team-tab">RAS</button>
+                                <div class="tab-arrow"></div>
+                            </div>
+                        </div>
+
+                        <!-- WIE -->
+                        <div class="team-tab-wrapper" data-target="wie-board">
+                            <div class="tab-leader" id="wie-leader"></div>
+                            <div class="tab-box">
+                                <div class="tab-button-wrapper">
+                                    <button class="team-tab">WIE</button>
+                                </div>
+                                <div class="tab-arrow"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Collins Horizontal Slides per Committee -->
+            <div class="carousels-wrapper reveal position-relative">
+                <button class="nav-arrow nav-prev team-prev" id="team-prev" aria-label="Sola Kaydır">❮</button>
+                <button class="nav-arrow nav-next team-next" id="team-next" aria-label="Sağa Kaydır">❯</button>
+                <div class="collins-carousel" id="cs-board"></div>
+                <div class="collins-carousel" id="ras-board" style="display:none;"></div>
+                <div class="collins-carousel" id="wie-board" style="display:none;"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer / Contact -->
+    <footer id="contact" class="footer bg-navy text-white">
+        <!-- New 2-column stacked layout -->
+        <div class="container text-left py-5">
+            <div class="footer-top reveal" style="display: flex; gap: 4rem; justify-content: space-between; flex-wrap: wrap;">
+                <div>
+                     <h2 class="huge-text mb-4" style="line-height:0.8; font-size:clamp(4rem, 10vw, 8rem);">BİZE<br><span class="text-red">KATIL.</span></h2>
+                </div>
+                <div class="footer-links" style="display: flex; gap: 4rem; margin-top: 1rem; flex: 1; max-width: 600px;">
+                    <div class="link-group" style="flex: 1.5;">
+                        <h4>Instagram</h4>
+                        <ul>
+                            <li><a href="https://www.instagram.com/ieee.tedu/" target="_blank">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:middle;">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                                IEEE TEDU</a>
+                            </li>
+                            <li style="margin-top: 0.5rem;"><a href="https://www.instagram.com/ieeeteducomputersociety/" target="_blank">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:middle;">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                                Computer Society</a>
+                            </li>
+                            <li style="margin-top: 0.5rem;"><a href="https://www.instagram.com/tedu.ras/" target="_blank">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:middle;">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                                Robotics and Auto</a>
+                            </li>
+                            <li style="margin-top: 0.5rem;"><a href="https://www.instagram.com/teduwie/" target="_blank">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:middle;">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                                Women in Engineering</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="flex: 1; display:flex; flex-direction:column; gap:2rem;">
+                        <div class="link-group">
+                            <h4>Profesyonel Ağ</h4>
+                            <ul>
+                                <li><a href="https://www.linkedin.com/company/ieeetedusb/" target="_blank">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:middle;">
+                                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                        <rect x="2" y="9" width="4" height="12"></rect>
+                                        <circle cx="4" cy="4" r="2"></circle>
+                                    </svg>
+                                    LinkedIn</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="link-group" style="margin-top: -1rem;">
+                            <h4>İletişim</h4>
+                            <ul>
+                                <li><a href="mailto:ieee@tedu.edu.tr" target="_blank">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:middle;">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                    ieee@tedu.edu.tr</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom mt-5" style="text-align: left; opacity:0.5;">
+                <p>&copy; 2026 IEEE TEDU Student Society. Tüm hakları saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Communication Card -->
+    <a href="contact.html" class="floating-contact" id="floating-contact">
+        <span class="fc-title">İletişim</span>
+    </a>
+
+    <script src="app.js"></script>
+</body>
+</html>

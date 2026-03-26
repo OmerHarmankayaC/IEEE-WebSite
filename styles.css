@@ -1,0 +1,877 @@
+/* CSS Variables for TEDU Colors & Theme */
+:root {
+    --ted-navy: #040914; /* Much darker navy */
+    --ted-red: #C8102E;
+    --bg-light: #F6F6F8;
+    --text-dark: #121212;
+    --text-muted: #555555;
+    --white: #FFFFFF;
+    --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* Typography */
+    --font-heading: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-serif: 'Lora', Georgia, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.font-sans { font-family: var(--font-sans) !important; }
+.font-serif { font-family: var(--font-serif) !important; }
+.font-italic { font-style: italic !important; }
+.font-black { font-weight: 900 !important; letter-spacing: -0.05em; }
+.uppercase { text-transform: uppercase !important; }
+
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Typography Utilities */
+h1, h2, h3, h4, .huge-text {
+    font-family: var(--font-heading);
+    letter-spacing: -0.03em;
+}
+
+.text-red { color: var(--ted-red); }
+.text-navy { color: var(--ted-navy); }
+.text-white { color: var(--white); }
+.dark-text { color: var(--text-dark); }
+.mt-4 { margin-top: 4rem; }
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 5%;
+}
+
+.section-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    margin-bottom: 2rem;
+    line-height: 1.1;
+}
+
+.btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: var(--transition-smooth);
+}
+
+.btn-primary {
+    background-color: var(--ted-red);
+    color: var(--white);
+    border: 2px solid var(--ted-red);
+}
+
+.btn-primary:hover {
+    background-color: transparent;
+    color: var(--ted-red);
+}
+
+/* Navigation */
+.navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 1.5rem 5%;
+    background: rgba(246, 246, 248, 0.9);
+    backdrop-filter: blur(15px);
+    z-index: 1000;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.navbar.scrolled {
+    padding: 1rem 5%;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.brand-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+}
+
+.brand-text {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--ted-navy);
+    letter-spacing: -0.02em;
+}
+
+.nav-logo {
+    height: 95px;
+    mix-blend-mode: multiply;
+    filter: contrast(1.1); /* slight contrast bump */
+}
+
+.nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 2px;
+    background: var(--ted-red);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Hero Section */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 18rem; /* Dramatically increased to avoid navbar overlap */
+    padding-bottom: 5rem;
+    background-color: var(--bg-light);
+}
+
+.hero-title {
+    font-size: clamp(3rem, 8vw, 7.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    text-transform: uppercase;
+    color: var(--ted-navy);
+    margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    color: var(--text-muted);
+    font-weight: 400;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* About Section */
+.bg-navy { background-color: var(--ted-navy); }
+.about-section {
+    padding: 8rem 0;
+}
+
+.about-highlight {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--white);
+    margin-bottom: 4rem;
+    max-width: 1000px;
+}
+
+.about-text-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.8);
+}
+
+/* Committees Section - Vertical Stack with Flip Logo */
+.committees-section {
+    padding: 6rem 0 4rem 0; 
+}
+.committee-card {
+    display: flex;
+    align-items: center;
+    gap: 6rem;
+    margin-top: 6rem;
+}
+.committee-card.reverse {
+    flex-direction: row-reverse;
+}
+.committee-card:last-child {
+    margin-bottom: 4rem; 
+}
+.committee-focus {
+    flex: 1;
+}
+.committee-info {
+    flex: 1.2;
+}
+.mt-3 { margin-top: 1rem; }
+
+.committee-short {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ted-red);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+}
+.committee-motto {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--ted-navy);
+}
+
+/* Logo Sliding Reveal */
+.logo-flip-container {
+    background-color: transparent;
+    aspect-ratio: 1;
+    position: relative;
+    border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(11, 29, 58, 0.05);
+}
+.logo-flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.logo-flip-container:hover .logo-flip-front {
+    transform: scale(0.95);
+    opacity: 0.1;
+}
+.logo-flip-container:hover .logo-flip-back {
+    clip-path: inset(0 0 0 0); /* Slide up to reveal */
+}
+.logo-flip-front, .logo-flip-back {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 40px;
+    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #d0e4ff; /* Stronger pastel blue */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.logo-box {
+    background: var(--white);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.logo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Crops any excess white borders seamlessly */
+    mix-blend-mode: multiply;
+    filter: contrast(1.15) saturate(1.1);
+    image-rendering: -webkit-optimize-contrast;
+}
+.logo-flip-back {
+    background-color: var(--ted-navy);
+    color: var(--white);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    clip-path: inset(100% 0 0 0); /* Masked out from bottom */
+    z-index: 3;
+}
+.committee-desc-back {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.9);
+}
+
+/* Activities / Blog Section */
+.activities-section {
+    padding: 1rem 0;
+    overflow: hidden;
+}
+.activities-carousel {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem 5vw 4rem 5vw;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    align-items: flex-end; /* cards bottom part on the same line */
+}
+.activities-carousel::-webkit-scrollbar { display: none; }
+
+.activity-card {
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: var(--text-dark);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+    transition: transform 0.4s;
+    min-height: 400px;
+}
+.activity-card:hover { transform: translateY(-10px); }
+.ac-title {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 800;
+    font-family: var(--font-heading);
+    margin-bottom: 1rem;
+    line-height: 1.1;
+}
+.ac-category {
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+    opacity: 0.8;
+}
+
+/* Team Section - Collins Carousel */
+.team-section {
+    padding: 8rem 0;
+    overflow: hidden;
+}
+
+.mb-4 { margin-bottom: 4rem; }
+
+/* Genel Baskan & Tabs */
+.genel-baskan {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5rem;
+}
+.gb-avatar {
+    width: 280px; /* Explicit width */
+    max-width: 100%;
+    aspect-ratio: 4/5;
+    border-radius: 15px;
+    object-fit: cover;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.gb-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.gb-name {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-style: italic;
+    color: var(--ted-navy); /* Dark text on white bg */
+    text-transform: capitalize;
+}
+.gb-role {
+    color: var(--ted-red);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+.team-tabs-container {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto 6rem auto;
+}
+.team-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    position: relative;
+    align-items: end;
+}
+.team-tab-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+.team-tab-wrapper:hover .tab-leader,
+.team-tab-wrapper:hover .team-tab {
+    opacity: 0.8;
+}
+.tab-leader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    opacity: 0.4;
+    transition: opacity 0.3s;
+}
+.team-tab-wrapper.active .tab-leader {
+    opacity: 1;
+}
+.tab-box {
+    width: 100%;
+    background: transparent;
+    border-top: 2px solid rgba(4, 9, 20, 0.1);
+    border-bottom: 2px solid rgba(4, 9, 20, 0.1);
+    border-left: 1px solid rgba(4, 9, 20, 0.1);
+    border-right: 1px solid rgba(4, 9, 20, 0.1);
+    border-radius: 0;
+    padding: 0.8rem; /* Thinner */
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+}
+.team-tab-wrapper:first-child .tab-box {
+    border-left: 2px solid rgba(4, 9, 20, 0.1);
+    border-radius: 0; /* Sharp edges */
+}
+.team-tab-wrapper:last-child .tab-box {
+    border-right: 2px solid rgba(4, 9, 20, 0.1);
+    border-radius: 0; /* Sharp edges */
+}
+.team-tab-wrapper.active .tab-box {
+    background: rgba(4, 9, 20, 0.05); /* Slight dark navy tint active */
+}
+.leader-avatar {
+    width: 220px; /* Explicit width to prevent flex collapse when empty */
+    max-width: 100%;
+    aspect-ratio: 4/5;
+    border-radius: 15px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.leader-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.leader-name {
+    font-size: clamp(1.2rem, 1.6vw, 1.5rem);
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-style: italic;
+    color: var(--ted-navy); /* Dark text */
+    text-transform: capitalize;
+    text-align: center;
+}
+.team-tab {
+    background: transparent;
+    color: var(--ted-navy); /* Dark text */
+    border: none;
+    font-size: 1.8rem;
+    font-family: var(--font-heading);
+    font-weight: bold;
+    pointer-events: none;
+    text-transform: uppercase;
+    padding: 0;
+    opacity: 0.4;
+    transition: opacity 0.3s;
+}
+.team-tab-wrapper.active .team-tab {
+    opacity: 1;
+}
+.tab-arrow {
+    display: none;
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-top: 14px solid var(--ted-red);
+}
+.team-tab-wrapper.active .tab-arrow {
+    display: block;
+}
+
+.collins-carousel {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0 5vw 4rem 5vw; /* bleed cleanly */
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+}
+
+.collins-carousel::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.collins-card {
+    flex: 0 0 clamp(280px, 25vw, 420px);
+    aspect-ratio: 4/5;
+    position: relative;
+    border-radius: 20px;
+    background: #d0e4ff; /* Stronger pastel blue */
+    scroll-snap-align: start;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(4, 9, 20, 0.1);
+}
+
+.collins-card:hover {
+    transform: scale(0.98);
+}
+
+.collins-card-bg {
+    display: none; /* Removed the radial gradient overlay causing darkness */
+}
+
+.collins-card-content {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    z-index: 2;
+}
+
+.collins-card-name {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 600;
+    color: var(--ted-navy); /* Dark text on light pastel card */
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    text-transform: capitalize;
+    text-shadow: none; /* No shadow */
+}
+
+.collins-card-role {
+    font-size: 1rem;
+    color: var(--ted-red);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: none;
+}
+
+@media (max-width: 1000px) {
+    .collins-grid { grid-template-columns: repeat(2, 1fr); }
+    .collins-grid-item:nth-child(2n) { border-right: none; }
+    .collins-grid-item:nth-child(4n) { border-right: 1px solid rgba(0,0,0,0.1); }
+}
+@media (max-width: 600px) {
+    .collins-grid { grid-template-columns: 1fr; }
+    .collins-grid-item { border-right: none !important; aspect-ratio: 16/9; padding: 1.5rem; }
+}
+
+.avatar {
+    width: 100%;
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #F0F0F0 0%, #E4E4E4 100%);
+    border-radius: 30px;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition-smooth);
+}
+
+.avatar::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border: 2px solid rgba(11, 29, 58, 0.05);
+    border-radius: 30px;
+}
+
+.team-member:hover .avatar {
+    transform: scale(1.05);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.team-name {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--ted-navy);
+}
+
+.team-role {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+/* Footer Section */
+.footer {
+    padding: 8rem 0 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 4rem;
+    margin-bottom: 2rem;
+}
+
+.huge-text {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(4rem, 10vw, 12rem);
+    line-height: 0.85;
+    margin-left: -0.05em;
+}
+
+.footer-links {
+    display: flex;
+    gap: 5rem;
+    margin-top: 1rem;
+}
+
+.link-group h4 {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.link-group ul {
+    list-style: none;
+}
+
+.link-group ul li {
+    margin-bottom: 1rem;
+}
+
+.link-group a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 1.1rem;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.link-group a:hover {
+    color: var(--ted-red);
+}
+
+.footer-bottom {
+    text-align: right;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.9rem;
+}
+
+/* Animations */
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .about-text-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .committee-card, .committee-card.reverse {
+        flex-direction: column;
+        gap: 3rem;
+        text-align: center;
+    }
+    .nav-links {
+        display: none; /* simple mobile nav hide for MVP */
+    }
+    .footer-top {
+        flex-direction: column;
+        gap: 4rem;
+    }
+    .footer-links {
+        flex-direction: column;
+        gap: 3rem;
+    }
+}
+
+/* Floating Contact Card */
+.floating-contact {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--ted-navy);
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(4, 9, 20, 0.2);
+    text-decoration: none;
+    z-index: 9999;
+    overflow: hidden; /* Enables sliding effect */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+}
+.floating-contact::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 0%;
+    background: var(--white);
+    transition: width 0.4s ease-in-out;
+    z-index: -1;
+}
+.floating-contact.dark-bg-mode::before {
+    width: 100%;
+}
+.floating-contact.dark-bg-mode {
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.15);
+}
+.floating-contact:hover {
+    transform: translateY(-5px) scale(1.02);
+}
+.fc-title {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: var(--white) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.4s ease-in-out;
+    position: relative;
+    z-index: 10;
+}
+.floating-contact.dark-bg-mode .fc-title {
+    color: var(--ted-navy) !important;
+}
+@media (max-width: 768px) {
+    .floating-contact {
+        bottom: 20px;
+        right: 20px;
+        padding: 1rem 2rem;
+    }
+    .fc-title {
+        font-size: 1rem;
+    }
+}
+
+.activity-arrow {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    color: var(--ted-navy);
+    background: rgba(4,9,20,0.1);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0s;
+}
+.activity-card:hover .activity-arrow {
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.2s ease-in;
+}
+.activity-arrow:hover {
+    transform: scale(1.1) translateX(5px);
+    background: var(--ted-navy);
+    color: var(--white);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Utility Helpers missing without Bootstrap */
+.position-relative {
+    position: relative !important;
+}
+
+/* Nav Arrows for Carousels */
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.8);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--ted-navy);
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s, background 0.2s;
+}
+.nav-arrow:hover {
+    transform: translateY(-50%) scale(1.1);
+    background: var(--white);
+}
+.nav-prev { left: 1rem; }
+.nav-next { right: 1rem; }
+@media(max-width: 900px) {
+    .nav-arrow { display: none; }
+}
+
+/* Force dark arrows on bright backgrounds like Team Section */
+.team-section .nav-arrow {
+    background: var(--ted-navy) !important;
+    color: var(--white) !important;
+    z-index: 99 !important;
+    opacity: 1; /* Reset default opacity before JS override */
+}
+.team-section .nav-arrow.nav-prev {
+    left: 20px !important; 
+}
+.team-section .nav-arrow.nav-next {
+    left: auto !important;
+    right: 20px !important;
+}
+.team-section .nav-arrow:hover {
+    background: var(--ted-red) !important;
+}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İletişim | IEEE TEDU</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .contact-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-light);
+            padding: 10rem 2rem 5rem 2rem;
+        }
+        .contact-container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 4rem;
+            box-shadow: 0 20px 50px rgba(4, 9, 20, 0.05);
+            border: 1px solid rgba(4, 9, 20, 0.1);
+        }
+        .contact-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .contact-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-family: var(--font-heading);
+            color: var(--ted-navy);
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+        .contact-subtitle {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            color: var(--ted-navy);
+            opacity: 0.7;
+            font-style: italic;
+        }
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        .form-label {
+            display: block;
+            font-family: var(--font-sans);
+            font-weight: bold;
+            color: var(--ted-navy);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        .form-control {
+            width: 100%;
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--ted-navy);
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ted-red);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(200, 16, 46, 0.1);
+        }
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .contact-btn {
+            width: 100%;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+        .back-link {
+            position: absolute;
+            top: 40px;
+            left: 5vw;
+            color: var(--ted-navy);
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-sans);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .back-link:hover {
+            color: var(--ted-red);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Geri Dön</a>
+
+    <div class="contact-page">
+        <div class="contact-container reveal">
+            <div class="contact-header">
+                <h1 class="contact-title">İletişime Geçin</h1>
+                <p class="contact-subtitle">İşbirlikleri, projeler ve sorularınız için bize ulaşın.</p>
+            </div>
+            
+            <form action="#" method="POST" id="contact-form">
+                <div class="form-group">
+                    <label class="form-label" for="name">Adınız Soyadınız</label>
+                    <input type="text" id="name" class="form-control" placeholder="Örn. Ahmet Yılmaz" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">E-Posta Adresiniz</label>
+                    <input type="email" id="email" class="form-control" placeholder="ornek@sirket.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="message">Mesajınız</label>
+                    <textarea id="message" class="form-control" placeholder="Detayları buraya yazabilirsiniz..." required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary contact-btn">MESAJI GÖNDER</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Mesajınız başarıyla alınmıştır. En kısa sürede ieee@tedu.edu.tr üzerinden dönüş sağlayacağız.');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
