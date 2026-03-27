@@ -1,7 +1,15 @@
 /* CSS Variables for TEDU Colors & Theme */
 :root {
-    --ted-navy: #040914; /* Much darker navy */
+    /* IEEE Theme (Current) */
+    --ted-navy: #002855; /* IEEE Navy */
+    --ted-red: #00629B;  /* IEEE Blue */
+
+    /* Original TEDU Colors (Commented for easy reversal) */
+    /*
+    --ted-navy: #040914;
     --ted-red: #C8102E;
+    */
+
     --bg-light: #F6F6F8;
     --text-dark: #121212;
     --text-muted: #555555;
