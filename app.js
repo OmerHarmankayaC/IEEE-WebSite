@@ -59,24 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2c. Mobile committee accordion
-    document.querySelectorAll('.mobile-committee-toggle').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const isOpen = btn.classList.contains('open');
-            const desc = btn.closest('.mobile-committee-info').nextElementSibling;
-            // Close all others
-            document.querySelectorAll('.mobile-committee-toggle').forEach(b => {
-                b.classList.remove('open');
-                b.setAttribute('aria-expanded', 'false');
-                const d = b.closest('.mobile-committee-info').nextElementSibling;
-                if (d) d.classList.remove('open');
+    // 2c. Committee Switcher (Mobile)
+    const comTabs = document.querySelectorAll('.com-tab');
+    const comWrappers = document.querySelectorAll('.committee-wrapper');
+
+    comTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetId = tab.getAttribute('data-target');
+            comTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            comWrappers.forEach(w => {
+                if (w.id === targetId) w.classList.add('active');
+                else w.classList.remove('active');
             });
-            // Toggle clicked one
-            if (!isOpen) {
-                btn.classList.add('open');
-                btn.setAttribute('aria-expanded', 'true');
-                if (desc) desc.classList.add('open');
-            }
         });
     });
 
@@ -197,7 +192,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         actPrev.addEventListener('click', () => activitiesCarousel.scrollBy({ left: -400, behavior: 'smooth' }));
         actNext.addEventListener('click', () => activitiesCarousel.scrollBy({ left: 400, behavior: 'smooth' }));
+
+        // 3b. Activity Card Direct Click (Mobile)
+        const activityCards = document.querySelectorAll('.activity-card');
+        activityCards.forEach(card => {
+            let startX, startY;
+            card.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }, {passive: true});
+            
+            card.addEventListener('touchend', (e) => {
+                const endX = e.changedTouches[0].clientX;
+                const endY = e.changedTouches[0].clientY;
+                const diffX = Math.abs(endX - startX);
+                const diffY = Math.abs(endY - startY);
+                
+                if (diffX < 10 && diffY < 10) {
+                    const link = card.querySelector('a');
+                    if (link) window.location.href = link.href;
+                }
+            }, {passive: true});
+        });
     }
+
 
     // Force all team carousels to start at position 0
     document.querySelectorAll('.collins-carousel').forEach(c => { c.scrollLeft = 0; });

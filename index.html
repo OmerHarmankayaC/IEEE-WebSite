@@ -19,9 +19,10 @@
                     <img src="Initial-elements/IEEE_LOGOwTEDU_MAVI.png" alt="IEEE TEDU Logo" class="nav-logo">
                 </a>
             </div>
-            <button class="hamburger" id="hamburger" aria-label="Menüyü Aç" aria-expanded="false">
-                <span></span><span></span><span></span>
-            </button>
+            <div class="mobile-nav-links">
+                <a href="blog.html">Blog</a>
+                <a href="contact.html">İletişim</a>
+            </div>
             <ul class="nav-links" id="nav-links">
                 <li><a href="index.html#home" onclick="if(window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '') { window.scrollTo({top: 0, behavior: 'smooth'}); return false; }">Ana Sayfa</a></li>
                 <li><a href="index.html#about">Hakkımızda</a></li>
@@ -31,18 +32,8 @@
                 <li><a href="contact.html">İletişim</a></li>
             </ul>
         </div>
-        <!-- Mobile menu overlay -->
-        <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
-        <div class="mobile-menu" id="mobile-menu">
-            <ul>
-                <li><a href="index.html#home">Ana Sayfa</a></li>
-                <li><a href="index.html#about">Hakkımızda</a></li>
-                <li><a href="index.html#committees">Komiteler</a></li>
-                <li><a href="index.html#team">Ekibimiz</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="contact.html">İletişim</a></li>
-            </ul>
-        </div>
+        <!-- Mobile menu removed as per request -->
+
     </nav>
 
     <main>
@@ -84,122 +75,123 @@
 
         <!-- Committees Section -->
         <section id="committees" class="committees-section bg-light">
-            <div class="container">
-                <h2 class="section-title reveal dark-text">Komitelerimiz</h2>
-                
-                <!-- Computer Society -->
-                <div class="committee-card reveal">
-                    <div class="committee-focus">
-                        <div class="expand-hover-box">
-                            <div class="eh-logo">
-                                <img src="Initial-elements/IEEE_TEDU_CS-Symbol.jpg" alt="Computer Society Logo">
-                            </div>
-                            <div class="eh-content">
-                                <div class="eh-text-wrap">
-                                    <p>Yazılım dünyasının dinamizmini, algoritmaların mantığıyla birleştiriyoruz. Computer Society olarak sadece kod yazmıyor; veri biliminden yapay zekaya, siber güvenlikten oyun geliştirmeye kadar dijital evrenin her katmanını keşfediyoruz.</p>
-                                    <p class="mt-3">Geliştirdiğimiz projeler ve düzenlediğimiz teknik eğitimlerle, teorik bilgiyi pratiğe dökerek yarının teknoloji liderlerini bugünden hazırlıyoruz.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Mobile-only card -->
-                    <div class="mobile-committee-card">
-                        <div class="mobile-committee-logo">
-                            <img src="Initial-elements/IEEE_TEDU_CS-Symbol.jpg" alt="Computer Society Logo">
-                        </div>
-                        <div class="mobile-committee-info">
-                            <p class="committee-short">Geleceğin sistemlerini inşa etmek için kod, yapay zeka ve yazılım mimarisiyle dijital sınırları keşfediyoruz.</p>
-                            <h3 class="committee-motto">"Kodun Ötesinde,<br>Geleceğin Mimarisinde."</h3>
-                            <button class="mobile-committee-toggle" aria-expanded="false">
-                                <span>Hakkında</span>
-                                <span class="toggle-icon">▾</span>
-                            </button>
-                        </div>
-                        <div class="mobile-committee-desc">
-                            Yazılım dünyasının dinamizmini, algoritmaların mantığıyla birleştiriyoruz. Computer Society olarak sadece kod yazmıyor; veri biliminden yapay zekaya, siber güvenlikten oyun geliştirmeye kadar dijital evrenin her katmanını keşfediyoruz. Geliştirdiğimiz projeler ve teknik eğitimlerle teorik bilgiyi pratiğe döküyoruz.
-                        </div>
-                    </div>
-                    <div class="committee-info">
-                        <p class="committee-short">Geleceğin sistemlerini inşa etmek için kod, yapay zeka ve yazılım mimarisiyle dijital sınırları keşfediyoruz.</p>
-                        <h3 class="committee-motto">"Kodun Ötesinde,<br>Geleceğin Mimarisinde."</h3>
-                    </div>
+            <div class=                <!-- Committee Switcher (Mobile Only) -->
+                <div class="committee-switcher mobile-only reveal">
+                    <button class="com-tab active" data-target="cs-mobile">CS</button>
+                    <button class="com-tab" data-target="ras-mobile">RAS</button>
+                    <button class="com-tab" data-target="wie-mobile">WIE</button>
                 </div>
 
-                <!-- Robotics and Automation -->
-                <div class="committee-card reveal reverse mt-4">
-                    <div class="committee-focus">
-                        <div class="expand-hover-box">
-                            <div class="eh-logo">
-                                <img src="Initial-elements/IEEE_TEDU_RAS-Symbol.jpg" alt="Robotics and Automation Society Logo">
-                            </div>
-                            <div class="eh-content">
-                                <div class="eh-text-wrap">
-                                    <p>Mekanik estetiği, kontrol sistemlerinin zekasıyla bir araya getiriyoruz. RAS bünyesinde, hayal edilen projeleri somut robotik sistemlere dönüştürmek için çalışıyoruz. Sensörlerden gömülü sistemlere kadar otomasyonun her adımında elini taşın altına koyan, disiplinler arası çalışmanın gücüne inanan ve teknolojiyi fiziksel dünyada canlandıran bir ekibiz.</p>
+                <div class="committees-container">
+                    <!-- Computer Society -->
+                    <div id="cs-mobile" class="committee-wrapper active">
+                        <div class="committee-card reveal">
+                            <div class="committee-focus">
+                                <div class="expand-hover-box">
+                                    <div class="eh-logo">
+                                        <img src="Initial-elements/IEEE_TEDU_CS-Symbol.jpg" alt="Computer Society Logo">
+                                    </div>
+                                    <div class="eh-content">
+                                        <div class="eh-text-wrap">
+                                            <p>Yazılım dünyasının dinamizmini, algoritmaların mantığıyla birleştiriyoruz. Computer Society olarak sadece kod yazmıyor; veri biliminden yapay zekaya, siber güvenlikten oyun geliştirmeye kadar dijital evrenin her katmanını keşfediyoruz.</p>
+                                            <p class="mt-3">Geliştirdiğimiz projeler ve düzenlediğimiz teknik eğitimlerle, teorik bilgiyi pratiğe dökerek yarının teknoloji liderlerini bugünden hazırlıyoruz.</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <!-- Mobile-only card -->
+                            <div class="mobile-committee-card">
+                                <div class="mobile-committee-logo">
+                                    <img src="Initial-elements/IEEE_TEDU_CS-Symbol.jpg" alt="Computer Society Logo">
+                                </div>
+                                <div class="mobile-committee-info">
+                                    <p class="committee-short">Geleceğin sistemlerini inşa etmek için kod, yapay zeka ve yazılım mimarisiyle dijital sınırları keşfediyoruz.</p>
+                                    <h3 class="committee-motto">"Kodun Ötesinde,<br>Geleceğin Mimarisinde."</h3>
+                                    <div class="mobile-committee-desc">
+                                        Yazılım dünyasının dinamizmini, algoritmaların mantığıyla birleştiriyoruz. Computer Society olarak sadece kod yazmıyor; veri biliminden yapay zekaya, siber güvenlikten oyun geliştirmeye kadar dijital evrenin her katmanını keşfediyoruz. Geliştirdiğimiz projeler ve teknik eğitimlerle teorik bilgiyi pratiğe döküyoruz.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="committee-info">
+                                <p class="committee-short">Geleceğin sistemlerini inşa etmek için kod, yapay zeka ve yazılım mimarisiyle dijital sınırları keşfediyoruz.</p>
+                                <h3 class="committee-motto">"Kodun Ötesinde,<br>Geleceğin Mimarisinde."</h3>
+                            </div>
                         </div>
                     </div>
-                    <!-- Mobile-only card -->
-                    <div class="mobile-committee-card">
-                        <div class="mobile-committee-logo">
-                            <img src="Initial-elements/IEEE_TEDU_RAS-Symbol.jpg" alt="Robotics and Automation Society Logo">
-                        </div>
-                        <div class="mobile-committee-info">
-                            <p class="committee-short">Mekanik hassasiyeti akıllı kontrol sistemleri ve robotikle birleştirerek fikirleri fiziksel dünyada hayata geçiriyoruz.</p>
-                            <h3 class="committee-motto">"Fikirleri Hareketle Buluşturan Mühendislik."</h3>
-                            <button class="mobile-committee-toggle" aria-expanded="false">
-                                <span>Hakkında</span>
-                                <span class="toggle-icon">▾</span>
-                            </button>
-                        </div>
-                        <div class="mobile-committee-desc">
-                            Mekanik estetiği, kontrol sistemlerinin zekasıyla bir araya getiriyoruz. RAS bünyesinde, hayal edilen projeleri somut robotik sistemlere dönüştürmek için çalışıyoruz. Sensörlerden gömülü sistemlere kadar otomasyonun her adımında elini taşın altına koyan bir ekibiz.
-                        </div>
-                    </div>
-                    <div class="committee-info">
-                        <p class="committee-short">Mekanik hassasiyeti akıllı kontrol sistemleri ve robotikle birleştirerek fikirleri fiziksel dünyada hayata geçiriyoruz.</p>
-                        <h3 class="committee-motto">"Fikirleri Hareketle Buluşturan Mühendislik."</h3>
-                    </div>
-                </div>
 
-                <!-- Women in Engineering -->
-                <div class="committee-card reveal mt-4">
-                    <div class="committee-focus">
-                        <div class="expand-hover-box">
-                            <div class="eh-logo">
-                                <img src="Initial-elements/IEEE_TEDU_WIE-Symbol.jpeg" alt="Women in Engineering Logo">
-                            </div>
-                            <div class="eh-content">
-                                <div class="eh-text-wrap">
-                                    <p>Teknoloji ve bilimde cinsiyet bariyerlerini yıkarak, herkes için kapsayıcı bir mühendislik kültürü inşa ediyoruz. WIE olarak, kadınların STEM alanındaki varlığını güçlendirmeyi, liderlik potansiyellerini ortaya çıkarmayı ve ilham veren başarı hikayelerini büyütmeyi hedefliyoruz. Çeşitliliğin getirdiği zenginlikle, daha adil ve yenilikçi bir gelecek için birlikte ilerliyoruz.</p>
+                    <!-- Robotics and Automation -->
+                    <div id="ras-mobile" class="committee-wrapper">
+                        <div class="committee-card reveal reverse">
+                            <div class="committee-focus">
+                                <div class="expand-hover-box">
+                                    <div class="eh-logo">
+                                        <img src="Initial-elements/IEEE_TEDU_RAS-Symbol.jpg" alt="Robotics and Automation Society Logo">
+                                    </div>
+                                    <div class="eh-content">
+                                        <div class="eh-text-wrap">
+                                            <p>Mekanik estetiği, kontrol sistemlerinin zekasıyla bir araya getiriyoruz. RAS bünyesinde, hayal edilen projeleri somut robotik sistemlere dönüştürmek için çalışıyoruz. Sensörlerden gömülü sistemlere kadar otomasyonun her adımında elini taşın altına koyan, disiplinler arası çalışmanın gücüne inanan ve teknolojiyi fiziksel dünyada canlandıran bir ekibiz.</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <!-- Mobile-only card -->
+                            <div class="mobile-committee-card">
+                                <div class="mobile-committee-logo">
+                                    <img src="Initial-elements/IEEE_TEDU_RAS-Symbol.jpg" alt="Robotics and Automation Society Logo">
+                                </div>
+                                <div class="mobile-committee-info">
+                                    <p class="committee-short">Mekanik hassasiyeti akıllı kontrol sistemleri ve robotikle birleştirerek fikirleri fiziksel dünyada hayata geçiriyoruz.</p>
+                                    <h3 class="committee-motto">"Fikirleri Hareketle Buluşturan Mühendislik."</h3>
+                                    <div class="mobile-committee-desc">
+                                        Mekanik estetiği, kontrol sistemlerinin zekasıyla bir araya getiriyoruz. RAS bünyesinde, hayal edilen projeleri somut robotik sistemlere dönüştürmek için çalışıyoruz. Sensörlerden gömülü sistemlere kadar otomasyonun her adımında elini taşın altına koyan bir ekibiz.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="committee-info">
+                                <p class="committee-short">Mekanik hassasiyeti akıllı kontrol sistemleri ve robotikle birleştirerek fikirleri fiziksel dünyada hayata geçiriyoruz.</p>
+                                <h3 class="committee-motto">"Fikirleri Hareketle Buluşturan Mühendislik."</h3>
+                            </div>
                         </div>
                     </div>
-                    <!-- Mobile-only card -->
-                    <div class="mobile-committee-card">
-                        <div class="mobile-committee-logo">
-                            <img src="Initial-elements/IEEE_TEDU_WIE-Symbol.jpeg" alt="Women in Engineering Logo">
+
+                    <!-- Women in Engineering -->
+                    <div id="wie-mobile" class="committee-wrapper">
+                        <div class="committee-card reveal">
+                            <div class="committee-focus">
+                                <div class="expand-hover-box">
+                                    <div class="eh-logo">
+                                        <img src="Initial-elements/IEEE_TEDU_WIE-Symbol.jpeg" alt="Women in Engineering Logo">
+                                    </div>
+                                    <div class="eh-content">
+                                        <div class="eh-text-wrap">
+                                            <p>Teknoloji ve bilimde cinsiyet bariyerlerini yıkarak, herkes için kapsayıcı bir mühendislik kültürü inşa ediyoruz. WIE olarak, kadınların STEM alanındaki varlığını güçlendirmeyi, liderlik potansiyellerini ortaya çıkarmayı ve ilham veren başarı hikayelerini büyütmeyi hedefliyoruz. Çeşitliliğin getirdiği zenginlikle, daha adil ve yenilikçi bir gelecek için birlikte ilerliyoruz.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Mobile-only card -->
+                            <div class="mobile-committee-card">
+                                <div class="mobile-committee-logo">
+                                    <img src="Initial-elements/IEEE_TEDU_WIE-Symbol.jpeg" alt="Women in Engineering Logo">
+                                </div>
+                                <div class="mobile-committee-info">
+                                    <p class="committee-short">Kapsayıcı ve yenilikçi bir mühendislik kültürü oluşturmak için çeşitliliği teşvik ediyor ve her sesi güçlendiriyoruz.</p>
+                                    <h3 class="committee-motto">"Mühendislikte Çeşitlilik, Gelecekte Eşitlik."</h3>
+                                    <div class="mobile-committee-desc">
+                                        Teknoloji ve bilimde cinsiyet bariyerlerini yıkarak, herkes için kapsayıcı bir mühendislik kültürü inşa ediyoruz. WIE olarak, kadınların STEM alanındaki varlığını güçlendirmeyi, liderlik potansiyellerini ortaya çıkarmayı ve ilham veren başarı hikayelerini büyütmeyi hedefliyoruz.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="committee-info">
+                                <p class="committee-short">Kapsayıcı ve yenilikçi bir mühendislik kültürü oluşturmak için çeşitliliği teşvik ediyor ve her sesi güçlendiriyoruz.</p>
+                                <h3 class="committee-motto">"Mühendislikte Çeşitlilik, Gelecekte Eşitlik."</h3>
+                            </div>
                         </div>
-                        <div class="mobile-committee-info">
-                            <p class="committee-short">Kapsayıcı ve yenilikçi bir mühendislik kültürü oluşturmak için çeşitliliği teşvik ediyor ve her sesi güçlendiriyoruz.</p>
-                            <h3 class="committee-motto">"Mühendislikte Çeşitlilik, Gelecekte Eşitlik."</h3>
-                            <button class="mobile-committee-toggle" aria-expanded="false">
-                                <span>Hakkında</span>
-                                <span class="toggle-icon">▾</span>
-                            </button>
-                        </div>
-                        <div class="mobile-committee-desc">
-                            Teknoloji ve bilimde cinsiyet bariyerlerini yıkarak, herkes için kapsayıcı bir mühendislik kültürü inşa ediyoruz. WIE olarak, kadınların STEM alanındaki varlığını güçlendirmeyi, liderlik potansiyellerini ortaya çıkarmayı ve ilham veren başarı hikayelerini büyütmeyi hedefliyoruz.
-                        </div>
-                    </div>
-                    <div class="committee-info">
-                        <p class="committee-short">Kapsayıcı ve yenilikçi bir mühendislik kültürü oluşturmak için çeşitliliği teşvik ediyor ve her sesi güçlendiriyoruz.</p>
-                        <h3 class="committee-motto">"Mühendislikte Çeşitlilik, Gelecekte Eşitlik."</h3>
                     </div>
                 </div>
             </div>
         </section>
+
 
     <!-- Fikirler & Projeler / Activities -->
     <section id="activities" class="activities-section bg-navy text-white position-relative">

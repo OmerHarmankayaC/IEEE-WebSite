@@ -27,7 +27,7 @@
 .font-serif { font-family: var(--font-serif) !important; }
 .font-italic { font-style: italic !important; }
 .font-black { font-weight: 900 !important; letter-spacing: -0.05em; }
-.uppercase { text-transform: uppercase !important; }
+.mobile-only { display: none; }
 
 /* Reset & Base Styles */
 * {
@@ -138,7 +138,31 @@ h1, h2, h3, h4, .huge-text {
     height: 95px;
     mix-blend-mode: multiply;
     filter: contrast(1.1); /* slight contrast bump */
+    transition: height 0.3s ease;
 }
+
+.mobile-nav-links {
+    display: none;
+    gap: 1.5rem;
+    margin-left: auto;
+    margin-right: 1.5rem;
+}
+
+.mobile-nav-links a {
+    text-decoration: none;
+    color: var(--ted-navy);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
+}
+
+.mobile-nav-links a:hover {
+    color: var(--ted-red);
+}
+
 
 .nav-links {
     display: flex;
@@ -908,136 +932,208 @@ h1, h2, h3, h4, .huge-text {
         gap: 2rem;
     }
 
-    /* Hide desktop nav links, show hamburger */
+    /* Hide desktop nav links, hide hamburger, show mobile links */
     .nav-links {
         display: none !important;
     }
     .hamburger {
+        display: none !important;
+    }
+    .mobile-nav-links {
         display: flex;
     }
     .mobile-menu,
     .mobile-menu-overlay {
-        display: block;
+        display: none !important;
+    }
+    .nav-logo {
+        height: 50px !important;
+    }
+    .navbar {
+        padding: 0.6rem 5% !important;
     }
 
-    /* --- Committees: full mobile redesign --- */
-    /* Hide the fancy hover-expand design on mobile */
+
+    /* --- Committees: switcher-based mobile redesign --- */
+    .committee-switcher {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 2rem auto 3.5rem auto;
+        padding: 0.5rem;
+        background: rgba(4, 9, 20, 0.04);
+        border-radius: 50px;
+        width: fit-content;
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .com-tab {
+        background: transparent;
+        border: none;
+        padding: 0.7rem 1.4rem;
+        border-radius: 50px;
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--ted-navy);
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        opacity: 0.6;
+    }
+    .com-tab.active {
+        background: var(--white);
+        color: var(--ted-navy);
+        box-shadow: 0 5px 15px rgba(4, 9, 20, 0.08);
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+
+    .committee-wrapper {
+        display: none;
+    }
+    .committee-wrapper.active {
+        display: block;
+        animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     .committee-card {
         flex-direction: column;
         gap: 0;
-        margin-top: 3rem;
-        border-radius: 20px;
+        margin-top: 0;
+        border-radius: 25px;
         overflow: hidden;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.07);
+        box-shadow: 0 15px 45px rgba(0,0,0,0.06);
         background: var(--white);
+        border: 1px solid rgba(0,0,0,0.05);
     }
     .committee-card.reverse {
         flex-direction: column;
     }
 
-    /* Hide the desktop expand-hover-box entirely on mobile */
-    .committee-focus {
-        display: none;
+    .mobile-only {
+        display: block !important;
     }
 
-    /* Show a simpler mobile committee card */
+    /* Show a cleaner mobile committee card without toggles */
     .mobile-committee-card {
         display: flex;
         flex-direction: column;
-        align-items: center;
         width: 100%;
     }
     .mobile-committee-logo {
         width: 100%;
-        max-height: 200px;
+        height: 180px;
         overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 2rem;
+        padding: 2.5rem;
         background: var(--white);
+        border-bottom: 1px solid rgba(0,0,0,0.04);
     }
     .mobile-committee-logo img {
         max-width: 100%;
-        max-height: 160px;
+        max-height: 100%;
         object-fit: contain;
         mix-blend-mode: multiply;
     }
     .mobile-committee-info {
         width: 100%;
-        background: var(--bg-light);
-        padding: 1.5rem 1.5rem 0 1.5rem;
+        background: var(--white);
+        padding: 2.5rem;
     }
     .mobile-committee-info .committee-short {
-        margin-bottom: 1rem;
+        margin-bottom: 1.2rem;
+        font-size: 1rem;
     }
     .mobile-committee-info .committee-motto {
-        font-size: clamp(1.5rem, 6vw, 2.2rem);
-    }
-    /* Tap to expand description */
-    .mobile-committee-toggle {
-        width: 100%;
-        background: var(--ted-red);
-        color: var(--white);
-        border: none;
-        padding: 0.9rem 1.5rem;
-        font-family: var(--font-heading);
-        font-weight: 700;
-        font-size: 0.95rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 1.5rem;
-        transition: background 0.2s;
-    }
-    .mobile-committee-toggle:hover,
-    .mobile-committee-toggle.open {
-        background: var(--ted-navy);
-    }
-    .mobile-committee-toggle .toggle-icon {
-        font-size: 1.2rem;
-        transition: transform 0.3s;
-    }
-    .mobile-committee-toggle.open .toggle-icon {
-        transform: rotate(180deg);
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
     }
     .mobile-committee-desc {
-        max-height: 0;
-        overflow: hidden;
-        background: var(--ted-navy);
-        color: rgba(255,255,255,0.9);
         font-family: var(--font-serif);
-        font-size: 1rem;
+        font-size: 1.05rem;
         line-height: 1.7;
-        transition: max-height 0.45s cubic-bezier(0.25, 1, 0.5, 1), padding 0.3s;
-        padding: 0 1.5rem;
-    }
-    .mobile-committee-desc.open {
-        max-height: 600px;
-        padding: 1.5rem;
+        color: var(--text-muted);
+        border-top: 1px solid rgba(0,0,0,0.05);
+        padding-top: 1.5rem;
     }
 
-    /* Existing committee-info hides on mobile (we use mobile-committee-card instead) */
+
+    /* Activities Section: Skyline Refinement (Mobile) */
+    .activities-section {
+        padding: 2rem 0 !important;
+    }
+
+    .activities-carousel {
+        display: flex !important;
+        align-items: flex-end !important;
+        gap: 0 !important;
+        padding: 0 !important;
+    }
+    .activity-card {
+        flex: 0 0 75vw !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    /* Dynamic heights for skyline effect */
+    .activity-card:nth-child(5n+1) { height: 450px !important; }
+    .activity-card:nth-child(5n+2) { height: 360px !important; }
+    .activity-card:nth-child(5n+3) { height: 500px !important; }
+    .activity-card:nth-child(5n+4) { height: 400px !important; }
+    .activity-card:nth-child(5n+5) { height: 470px !important; }
+
+    .activity-arrow {
+        display: none !important;
+    }
+
+
     .committee-info {
         display: none !important;
     }
 
+
     .footer-top {
         flex-direction: column;
-        gap: 4rem;
+        gap: 2.5rem;
     }
     .footer-links {
         flex-direction: column;
-        gap: 3rem;
+        gap: 1.5rem;
     }
+    .footer-top .huge-text {
+        font-size: clamp(2.5rem, 9vw, 3.8rem) !important;
+        margin-bottom: 1.5rem !important;
+        line-height: 0.85;
+    }
+
+    .link-group h4 {
+        font-size: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+    .link-group a {
+        font-size: 0.95rem !important;
+    }
+    .footer-bottom {
+        text-align: left;
+        margin-top: 3rem;
+    }
+
 
     /* Hero spacing */
     .hero-section {
-        padding-top: 9rem;
+        padding-top: 10rem;
     }
+
     .hero-subtitle {
         margin-top: 2rem !important;
     }
