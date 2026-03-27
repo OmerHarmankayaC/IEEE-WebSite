@@ -968,6 +968,9 @@ h1, h2, h3, h4, .huge-text {
 
 
     /* --- Committees: switcher-based mobile redesign --- */
+    .committee-focus {
+        display: none !important;
+    }
     .committee-card {
         display: block !important;
         max-width: 100% !important;
@@ -1319,26 +1322,14 @@ h1, h2, h3, h4, .huge-text {
     color: var(--ted-navy);
     background: rgba(4,9,20,0.1);
     border-radius: 50%;
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0s;
-}
-.activity-card:hover .activity-arrow {
     opacity: 1;
-    visibility: visible;
-    transition: all 0.2s ease-in;
-}
-.activity-arrow:hover {
-    transform: scale(1.1) translateX(5px);
-    background: var(--ted-navy);
-    color: var(--white);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    pointer-events: none; /* purely decorative */
 }
 
 /* Utility Helpers missing without Bootstrap */
