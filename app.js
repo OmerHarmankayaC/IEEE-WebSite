@@ -46,20 +46,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Populate CS Carousel
-    let csHTML = generateCollinsCarouselCard("CS Başkanı", "Başkan CS");
-    for(let i=1; i<=6; i++) csHTML += generateCollinsCarouselCard("CS Üyesi", `Üye ${i}`);
+    let csHTML = "";
+    for(let i=1; i<=20; i++) csHTML += generateCollinsCarouselCard("CS Üyesi", `Üye ${i}`);
     const csBoard = document.getElementById('cs-board');
     if(csBoard) csBoard.innerHTML = csHTML;
 
     // Populate RAS Carousel
-    let rasHTML = generateCollinsCarouselCard("RAS Başkanı", "Başkan RAS");
-    for(let i=1; i<=6; i++) rasHTML += generateCollinsCarouselCard("RAS Üyesi", `Üye ${i}`);
+    let rasHTML = "";
+    for(let i=1; i<=20; i++) rasHTML += generateCollinsCarouselCard("RAS Üyesi", `Üye ${i}`);
     const rasBoard = document.getElementById('ras-board');
     if(rasBoard) rasBoard.innerHTML = rasHTML;
 
     // Populate WIE Carousel
-    let wieHTML = generateCollinsCarouselCard("WIE Başkanı", "Başkan WIE");
-    for(let i=1; i<=6; i++) wieHTML += generateCollinsCarouselCard("WIE Üyesi", `Üye ${i}`);
+    let wieHTML = "";
+    for(let i=1; i<=20; i++) wieHTML += generateCollinsCarouselCard("WIE Üyesi", `Üye ${i}`);
     const wieBoard = document.getElementById('wie-board');
     if(wieBoard) wieBoard.innerHTML = wieHTML;
 
@@ -134,12 +134,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const actPrev = document.getElementById('activities-prev');
     const actNext = document.getElementById('activities-next');
     if(activitiesCarousel && actPrev && actNext) {
+        // Force reset to true beginning
+        activitiesCarousel.scrollLeft = 0;
         updateArrowVisibility(activitiesCarousel, actPrev, actNext);
         activitiesCarousel.addEventListener('scroll', () => updateArrowVisibility(activitiesCarousel, actPrev, actNext));
 
         actPrev.addEventListener('click', () => activitiesCarousel.scrollBy({ left: -400, behavior: 'smooth' }));
         actNext.addEventListener('click', () => activitiesCarousel.scrollBy({ left: 400, behavior: 'smooth' }));
     }
+
+    // Force all team carousels to start at position 0
+    document.querySelectorAll('.collins-carousel').forEach(c => { c.scrollLeft = 0; });
 
     const teamPrev = document.getElementById('team-prev');
     const teamNext = document.getElementById('team-next');
@@ -176,10 +181,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Dynamic Floating Button Colors
+    // 4. Dynamic Floating Button Colors and Hide Logic
     const floatingBtn = document.getElementById('floating-contact');
     if (floatingBtn) {
         window.addEventListener('scroll', () => {
+            // Hide if at the very top of the document
+            if (window.scrollY < 100) {
+                floatingBtn.classList.add('hide-contact');
+            } else {
+                floatingBtn.classList.remove('hide-contact');
+            }
+
             const rect = floatingBtn.getBoundingClientRect();
             const x = rect.left + rect.width / 2;
             const y = rect.top + rect.height / 2;

@@ -168,7 +168,7 @@ h1, h2, h3, h4, .huge-text {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding-top: 18rem; /* Dramatically increased to avoid navbar overlap */
+    padding-top: 14rem; /* Safely clear navbar */
     padding-bottom: 5rem;
     background-color: var(--bg-light);
 }
@@ -221,9 +221,10 @@ h1, h2, h3, h4, .huge-text {
 }
 .committee-card {
     display: flex;
-    align-items: center;
+    align-items: center; /* Center to prevent height shifts */
     gap: 6rem;
     margin-top: 6rem;
+    position: relative;
 }
 .committee-card.reverse {
     flex-direction: row-reverse;
@@ -233,9 +234,19 @@ h1, h2, h3, h4, .huge-text {
 }
 .committee-focus {
     flex: 1;
+    min-width: 0;
+    aspect-ratio: 1;
+    position: relative; /* Anchor for absolute drawer */
+    container-type: inline-size; /* Enable CQW sizing */
 }
 .committee-info {
     flex: 1.2;
+    overflow: hidden;
+    opacity: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: opacity 0.4s ease; /* No flex shifting! */
 }
 .mt-3 { margin-top: 1rem; }
 
@@ -256,34 +267,105 @@ h1, h2, h3, h4, .huge-text {
     color: var(--ted-navy);
 }
 
-/* Logo Sliding Reveal */
-.logo-flip-container {
-    background-color: transparent;
-    aspect-ratio: 1;
-    position: relative;
-    border-radius: 40px;
-    overflow: hidden;
-    box-shadow: 0 20px 50px rgba(11, 29, 58, 0.05);
+/* Hover Mechanics for Row Expansion */
+.committee-card:has(.expand-hover-box:hover) .committee-info {
+    opacity: 0; /* Fade out motto smoothly */
 }
-.logo-flip-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-.logo-flip-container:hover .logo-flip-front {
-    transform: scale(0.95);
-    opacity: 0.1;
-}
-.logo-flip-container:hover .logo-flip-back {
-    clip-path: inset(0 0 0 0); /* Slide up to reveal */
-}
-.logo-flip-front, .logo-flip-back {
+
+/* Expand Drawer Box Concept (Absolute Precision) */
+.expand-hover-box {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0; left: 0; bottom: 0;
+    width: 100cqw; /* Base width perfectly matches focus bounding box */
+    display: flex;
+    flex-direction: row;
+    background: var(--ted-navy);
+    border-radius: 40px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+    overflow: hidden;
+    cursor: pointer;
+    transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 10;
+}
+
+/* Reverse Card specifically swaps Flex Row Direction */
+.committee-card.reverse .expand-hover-box {
+    left: auto; right: 0;
+    flex-direction: row-reverse;
+}
+
+.eh-logo {
+    width: 100%;
+    flex: 0 0 100cqw; /* ALWAYS preserve exact pixel scale! No flex-basis jitter! */
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    background: var(--white);
+    border-radius: 40px;
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.eh-logo img {
     width: 100%;
     height: 100%;
-    border-radius: 40px;
-    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    object-fit: contain;
+    mix-blend-mode: multiply;
+}
+
+.eh-content {
+    flex-grow: 1; /* Stretch to fill expanded box */
+    opacity: 0;
+    padding: 0;
+    background: var(--ted-navy);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    transition: opacity 0.4s ease 0s;
+}
+
+/* Expansion Trigger locked natively to the Drawer! */
+.expand-hover-box:hover {
+    width: calc(220% + 6rem); /* Absolutely expand over the 1.2x adjacent column + gap */
+}
+.expand-hover-box:hover .eh-logo {
+    border-radius: 40px 0 0 40px; /* Flat inner edge */
+}
+.committee-card.reverse .expand-hover-box:hover .eh-logo {
+    border-radius: 0 40px 40px 0; /* Flat inner edge for right-align */
+}
+
+.expand-hover-box:hover .eh-content {
+    opacity: 1;
+    padding: 3rem;
+    transition: opacity 0.6s ease 0.4s; /* Heavy delay text reveal */
+}
+
+/* Internal text cascade */
+.eh-text-wrap {
+    min-width: 400px; /* Safe bounds */
+}
+.eh-text-wrap p {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0s;
+}
+.eh-text-wrap p.mt-3 {
+    margin-top: 1.5rem;
+}
+.expand-hover-box:hover .eh-text-wrap p {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0.5s; /* Substantial delay */
+}
+.expand-hover-box:hover .eh-text-wrap p.mt-3 {
+    transition-delay: 0.7s;
 }
 .avatar-placeholder {
     width: 100%;
@@ -338,6 +420,7 @@ h1, h2, h3, h4, .huge-text {
     padding: 2rem 5vw 4rem 5vw;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-padding-left: 5vw;
     scrollbar-width: none;
     align-items: flex-end; /* cards bottom part on the same line */
 }
@@ -476,6 +559,7 @@ h1, h2, h3, h4, .huge-text {
     max-width: 100%;
     aspect-ratio: 4/5;
     border-radius: 15px;
+    background-color: rgba(4, 9, 20, 0.05); /* Soft placeholder grey */
     object-fit: cover;
     margin-bottom: 1rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -528,6 +612,7 @@ h1, h2, h3, h4, .huge-text {
     padding: 0 5vw 4rem 5vw; /* bleed cleanly */
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-padding-left: 5vw;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;
 }
@@ -537,7 +622,7 @@ h1, h2, h3, h4, .huge-text {
 }
 
 .collins-card {
-    flex: 0 0 clamp(280px, 25vw, 420px);
+    flex: 0 0 clamp(200px, 18vw, 300px);
     aspect-ratio: 4/5;
     position: relative;
     border-radius: 20px;
@@ -720,6 +805,32 @@ h1, h2, h3, h4, .huge-text {
         gap: 3rem;
         text-align: center;
     }
+    .committee-short, .committee-motto {
+        min-width: 0;
+    }
+    .expand-hover-box, .committee-card.reverse .expand-hover-box {
+        position: relative !important;
+        width: 100% !important;
+        flex-direction: column;
+    }
+    .eh-logo {
+        flex: auto !important;
+        width: 100% !important;
+    }
+    /* Hover vertical accordion strictly for mobile */
+    .expand-hover-box:hover .eh-content {
+        max-height: 800px;
+        padding: 2rem;
+        opacity: 1;
+    }
+    .expand-hover-box:hover .eh-logo {
+        height: 200px;
+        aspect-ratio: auto;
+        border-radius: 40px 40px 0 0 !important;
+    }
+    .eh-text-wrap {
+        min-width: 0;
+    }
     .nav-links {
         display: none; /* simple mobile nav hide for MVP */
     }
@@ -731,6 +842,28 @@ h1, h2, h3, h4, .huge-text {
         flex-direction: column;
         gap: 3rem;
     }
+}
+
+.hero-scroll-indicator {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--ted-navy);
+    pointer-events: none;
+    animation: bounce 2s infinite ease-in-out;
+    opacity: 0.7;
+    z-index: 5;
+}
+@keyframes bounce {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, 15px); }
+}
+
+.hero-btn-wrap {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 /* Floating Contact Card */
@@ -783,6 +916,11 @@ h1, h2, h3, h4, .huge-text {
 .floating-contact.dark-bg-mode .fc-title {
     color: var(--ted-navy) !important;
 }
+.floating-contact.hide-contact {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(150px) !important; /* Deep slide up */
+}
 @media (max-width: 768px) {
     .floating-contact {
         bottom: 20px;
@@ -797,7 +935,8 @@ h1, h2, h3, h4, .huge-text {
 .activity-arrow {
     position: absolute;
     top: 2rem;
-    left: 2rem;
+    right: 2rem;
+    left: auto;
     color: var(--ted-navy);
     background: rgba(4,9,20,0.1);
     border-radius: 50%;
