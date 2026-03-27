@@ -76,9 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 3. Populate Team Carousel and handle Tabs dynamically
-    const generateCollinsCarouselCard = (role, name = "İsim Soyisim") => `
+    const generateCollinsCarouselCard = (role, name = "İsim Soyisim", imgSrc = "") => `
         <div class="collins-card">
-            <div class="collins-card-bg"></div>
+            <div class="collins-card-bg" ${imgSrc ? `style="background-image: url('${imgSrc}'); background-size: cover; background-position: center;"` : ''}></div>
             <div class="collins-card-content">
                 <h4 class="collins-card-name">${name}</h4>
                 <p class="collins-card-role">${role}</p>
@@ -86,47 +86,88 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     `;
 
-    // Populate Genel Baskan
-    const gbContainer = document.getElementById('genel-baskan-container');
-    if(gbContainer) {
-        gbContainer.innerHTML = `
-            <div class="gb-avatar"></div>
-            <h3 class="gb-name">Yönetici Adı</h3>
-            <p class="gb-role">Genel Koordinatör</p>
+    const generateLeaderHTML = (name, imgSrc = "") => `
+        <div class="leader-avatar" ${imgSrc ? `style="background-image: url('${imgSrc}'); background-size: cover; background-position: center;"` : ''}></div>
+        <p class="leader-name">${name}</p>
+    `;
+
+    const teamData = {
+        "cs": {
+            leader: { name: "Eylül Akpınar", img: "people-pictures/Eylül Akpınar CS-başkan.jpeg" },
+            members: [
+                { name: "Enes Taşçı", role: "CS Üyesi", img: "people-pictures/Enes Taşçı - CS.jpeg" },
+                { name: "Esra Eda Kılıç", role: "CS Üyesi", img: "people-pictures/Esra Eda Kılıç CS.jpg" },
+                { name: "İdil Yavuzer", role: "CS Üyesi", img: "people-pictures/İdil yavuzer -cs.jpg" },
+                { name: "Yusuf Atakan Ünal", role: "CS Üyesi", img: "people-pictures/Yusuf Atakan Ünal WIE_CS.jpg" },
+                { name: "Ömer Harmankaya", role: "CS Üyesi", img: "people-pictures/Ömer Harmankaya-CS.jpg" }
+            ]
+        },
+        "ras": {
+            leader: { name: "Boran Bozkurt", img: "people-pictures/Boran Bozkurt-RAS-başkan.JPG" },
+            members: [
+                { name: "Ali Rahima", role: "RAS Üyesi", img: "people-pictures/Ali Rahima RAS.jpg" },
+                { name: "Harun Emre Erten", role: "RAS Üyesi", img: "people-pictures/Harun Emre Erten-RAS.jpeg" },
+                { name: "İbrahim Efe Yılmaz", role: "RAS Üyesi", img: "people-pictures/İbrahim Efe Yılmaz-RAS.jpeg" },
+                { name: "Kayra Üstten", role: "RAS Üyesi", img: "people-pictures/Kayra Üstten RAS .jpeg" }
+            ]
+        },
+        "wie": {
+            leader: { name: "İrem Akıl", img: "people-pictures/İrem Akıl wie-başkan.HEIC" },
+            members: [
+                { name: "Aysu Ece Atalay", role: "WIE Üyesi", img: "people-pictures/Aysu Ece Atalay Wie.jpg" },
+                { name: "Serra Yelmenoğlu", role: "WIE Üyesi", img: "people-pictures/Serra Yelmenoğlu-WIE.heif" },
+                { name: "Zeynep Nil Usluoğlu", role: "WIE Üyesi", img: "people-pictures/Zeynep Nil Usluoğlu wie.jpg" },
+                { name: "İpek Özdemir", role: "WIE Üyesi", img: "people-pictures/ipek özdemir wie.png" },
+                { name: "İrem Aköz", role: "WIE Üyesi", img: "people-pictures/irem aköz wie.jpg" }
+            ]
+        },
+        "medya": {
+            leader: { name: "Duru Türkmen", img: "people-pictures/Duru Türkmen-Sosyal Medya ve Tasarım-başkan.jpg" },
+            members: [
+                { name: "Duru Baykan", role: "Tasarım Üyesi", img: "people-pictures/Duru Baykan-Sosyal Medya ve Tasarım.jpeg" },
+                { name: "Ece Salman", role: "Tasarım Üyesi", img: "people-pictures/Ece salman-tasarım ve medya.jpeg" },
+                { name: "Ela Nur Yerli", role: "Tasarım Üyesi", img: "people-pictures/Ela Nur Yerli-Sosyal Medya ve Tasarım.jpg" },
+                { name: "Simay Balaban", role: "Medya Üyesi", img: "people-pictures/Simay Balaban medya.jpg" },
+                { name: "Zeynep Öztürk", role: "Tasarım Üyesi", img: "people-pictures/Zeynep Öztürk tasarım.jpg" }
+            ]
+        }
+    };
+
+    // Populate Presidential Duo
+    const presOffice = document.getElementById('presidential-office-container');
+    if(presOffice) {
+        presOffice.innerHTML = `
+            <div class="president-box">
+                <div class="gb-avatar" style="background-image: url('people-pictures/Umut Uygur-başkan.jpeg');"></div>
+                <h3 class="gb-name">Umut Uygur</h3>
+                <p class="gb-role">Genel Başkan</p>
+            </div>
+            <div class="president-box">
+                <div class="gb-avatar" style="background-image: url('people-pictures/Dilasude Özdoğan-Genel başkan yardımcısı.jpeg');"></div>
+                <h3 class="gb-name">Dilasude Özdoğan</h3>
+                <p class="gb-role">Genel Başkan Yardımcısı</p>
+            </div>
         `;
     }
 
-    // Populate CS Carousel
-    let csHTML = "";
-    for(let i=1; i<=20; i++) csHTML += generateCollinsCarouselCard("CS Üyesi", `Üye ${i}`);
-    const csBoard = document.getElementById('cs-board');
-    if(csBoard) csBoard.innerHTML = csHTML;
-
-    // Populate RAS Carousel
-    let rasHTML = "";
-    for(let i=1; i<=20; i++) rasHTML += generateCollinsCarouselCard("RAS Üyesi", `Üye ${i}`);
-    const rasBoard = document.getElementById('ras-board');
-    if(rasBoard) rasBoard.innerHTML = rasHTML;
-
-    // Populate WIE Carousel
-    let wieHTML = "";
-    for(let i=1; i<=20; i++) wieHTML += generateCollinsCarouselCard("WIE Üyesi", `Üye ${i}`);
-    const wieBoard = document.getElementById('wie-board');
-    if(wieBoard) wieBoard.innerHTML = wieHTML;
-
-    // Tab Interface Logic & Leader Injection
-    const generateLeaderHTML = (name) => `
-        <div class="leader-avatar"></div>
-        <p class="leader-name">${name}</p>
-    `;
-    const csLeader = document.getElementById('cs-leader');
-    if(csLeader) csLeader.innerHTML = generateLeaderHTML("Başkan CS");
-    
-    const rasLeader = document.getElementById('ras-leader');
-    if(rasLeader) rasLeader.innerHTML = generateLeaderHTML("Başkan RAS");
-    
-    const wieLeader = document.getElementById('wie-leader');
-    if(wieLeader) wieLeader.innerHTML = generateLeaderHTML("Başkan WIE");
+    // Populate Leaders and Carousels
+    Object.keys(teamData).forEach(key => {
+        const data = teamData[key];
+        
+        // Leader
+        const leaderEl = document.getElementById(`${key}-leader`);
+        if(leaderEl) leaderEl.innerHTML = generateLeaderHTML(data.leader.name, data.leader.img);
+        
+        // Carousel
+        const carouselEl = document.getElementById(`${key}-board`);
+        if(carouselEl) {
+            let html = "";
+            data.members.forEach(m => {
+                html += generateCollinsCarouselCard(m.role, m.name, m.img);
+            });
+            carouselEl.innerHTML = html;
+        }
+    });
 
     const tabs = document.querySelectorAll('.team-tab-wrapper');
     tabs.forEach(tab => {

@@ -256,14 +256,15 @@
             <div class="container text-center">
                 <h2 class="section-title reveal dark-text" style="margin-bottom:4rem;">Yönetim Kurulu</h2>
                 
-                <!-- Genel Başkan -->
-                <div class="genel-baskan reveal" id="genel-baskan-container">
+                <!-- Presidential Office (President & VP) -->
+                <div class="presidential-office reveal" id="presidential-office-container">
                     <!-- Loaded via JS -->
                 </div>
 
                 <!-- Committee Tabs with Leaders Above boxes -->
                 <div class="team-tabs-container reveal">
                     <div class="team-tabs">
+
                         <!-- CS -->
                         <div class="team-tab-wrapper active" data-target="cs-board">
                             <div class="tab-leader" id="cs-leader"></div>
@@ -286,9 +287,16 @@
                         <div class="team-tab-wrapper" data-target="wie-board">
                             <div class="tab-leader" id="wie-leader"></div>
                             <div class="tab-box">
-                                <div class="tab-button-wrapper">
-                                    <button class="team-tab">WIE</button>
-                                </div>
+                                <button class="team-tab">WIE</button>
+                                <div class="tab-arrow"></div>
+                            </div>
+                        </div>
+
+                        <!-- TASARIM VE MEDYA -->
+                        <div class="team-tab-wrapper" data-target="medya-board">
+                            <div class="tab-leader" id="medya-leader"></div>
+                            <div class="tab-box">
+                                <button class="team-tab">MEDYA</button>
                                 <div class="tab-arrow"></div>
                             </div>
                         </div>
@@ -303,6 +311,7 @@
                 <div class="collins-carousel" id="cs-board"></div>
                 <div class="collins-carousel" id="ras-board" style="display:none;"></div>
                 <div class="collins-carousel" id="wie-board" style="display:none;"></div>
+                <div id="medya-board" class="collins-carousel" style="display: none;"></div>
             </div>
         </section>
     </main>

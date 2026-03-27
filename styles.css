@@ -99,7 +99,7 @@ h1, h2, h3, h4, .huge-text {
 .navbar {
     position: fixed;
     top: 0; left: 0; right: 0;
-    padding: 1.5rem 5%;
+    padding: 1rem 5%;
     background: rgba(246, 246, 248, 0.9);
     backdrop-filter: blur(15px);
     z-index: 1000;
@@ -107,7 +107,7 @@ h1, h2, h3, h4, .huge-text {
 }
 
 .navbar.scrolled {
-    padding: 1rem 5%;
+    padding: 0.6rem 5%;
     box-shadow: 0 4px 30px rgba(0,0,0,0.05);
 }
 
@@ -135,11 +135,16 @@ h1, h2, h3, h4, .huge-text {
 }
 
 .nav-logo {
-    height: 95px;
+    height: 115px;
     mix-blend-mode: multiply;
     filter: contrast(1.1); /* slight contrast bump */
     transition: height 0.3s ease;
 }
+
+.navbar.scrolled .nav-logo {
+    height: 90px;
+}
+
 
 .mobile-nav-links {
     display: none;
@@ -503,18 +508,25 @@ h1, h2, h3, h4, .huge-text {
 .mb-4 { margin-bottom: 4rem; }
 
 /* Genel Baskan & Tabs */
-.genel-baskan {
+.presidential-office {
+    display: flex;
+    justify-content: center;
+    gap: clamp(2rem, 8vw, 6rem);
+    margin-bottom: 6rem;
+    flex-wrap: wrap;
+}
+.president-box {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 5rem;
 }
 .gb-avatar {
-    width: 280px; /* Explicit width */
+    width: clamp(220px, 20vw, 280px);
     max-width: 100%;
     aspect-ratio: 4/5;
     border-radius: 15px;
-    object-fit: cover;
+    background-size: cover;
+    background-position: center;
     margin-bottom: 1.5rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
@@ -543,7 +555,7 @@ h1, h2, h3, h4, .huge-text {
 }
 .team-tabs {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     position: relative;
     align-items: end;
 }
@@ -599,7 +611,8 @@ h1, h2, h3, h4, .huge-text {
     aspect-ratio: 4/5;
     border-radius: 15px;
     background-color: rgba(4, 9, 20, 0.05); /* Soft placeholder grey */
-    object-fit: cover;
+    background-size: cover;
+    background-position: center;
     margin-bottom: 1rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
@@ -678,7 +691,12 @@ h1, h2, h3, h4, .huge-text {
 }
 
 .collins-card-bg {
-    display: none; /* Removed the radial gradient overlay causing darkness */
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    display: block; 
 }
 
 .collins-card-content {
@@ -1201,9 +1219,10 @@ h1, h2, h3, h4, .huge-text {
 
     /* Team section tabs */
     .team-tabs {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         align-items: end;
     }
+
     .leader-avatar {
         width: clamp(80px, 25vw, 180px);
     }
