@@ -93,42 +93,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const teamData = {
         "cs": {
-            leader: { name: "Eylül Akpınar", img: "people-pictures/Eylül Akpınar CS-başkan.jpeg" },
+            leader: { name: "Eylül Akpınar", img: "people-pictures/eylul-akpinar-cs-baskan.jpg" },
             members: [
-                { name: "Enes Taşçı", role: "CS Üyesi", img: "people-pictures/Enes Taşçı - CS.jpeg" },
-                { name: "Esra Eda Kılıç", role: "CS Üyesi", img: "people-pictures/Esra Eda Kılıç CS.jpg" },
-                { name: "İdil Yavuzer", role: "CS Üyesi", img: "people-pictures/İdil yavuzer -cs.jpg" },
-                { name: "Yusuf Atakan Ünal", role: "CS Üyesi", img: "people-pictures/Yusuf Atakan Ünal WIE_CS.jpg" },
-                { name: "Ömer Harmankaya", role: "CS Üyesi", img: "people-pictures/Ömer Harmankaya-CS.jpg" }
+                { name: "Enes Taşçı", role: "CS Üyesi", img: "people-pictures/enes-tasci-cs.jpg" },
+                { name: "Esra Eda Kılıç", role: "CS Üyesi", img: "people-pictures/esra-eda-kilic-cs.jpg" },
+                { name: "İdil Yavuzer", role: "CS Üyesi", img: "people-pictures/idil-yavuzer-cs.jpg" },
+                { name: "Yusuf Atakan Ünal", role: "CS Üyesi", img: "people-pictures/yusuf-atakan-unal-wie-cs.jpg" },
+                { name: "Ömer Harmankaya", role: "CS Üyesi", img: "people-pictures/omer-harmankaya-cs.jpg" }
             ]
         },
         "ras": {
-            leader: { name: "Boran Bozkurt", img: "people-pictures/Boran Bozkurt-RAS-başkan.JPG" },
+            leader: { name: "Boran Bozkurt", img: "people-pictures/boran-bozkurt-ras-baskan.jpg" },
             members: [
-                { name: "Ali Rahima", role: "RAS Üyesi", img: "people-pictures/Ali Rahima RAS.jpg" },
-                { name: "Harun Emre Erten", role: "RAS Üyesi", img: "people-pictures/Harun Emre Erten-RAS.jpeg" },
-                { name: "İbrahim Efe Yılmaz", role: "RAS Üyesi", img: "people-pictures/İbrahim Efe Yılmaz-RAS.jpeg" },
-                { name: "Kayra Üstten", role: "RAS Üyesi", img: "people-pictures/Kayra Üstten RAS .jpeg" }
+                { name: "Ali Rahima", role: "RAS Üyesi", img: "people-pictures/ali-rahima-ras.jpg" },
+                { name: "Harun Emre Erten", role: "RAS Üyesi", img: "people-pictures/harun-emre-erten-ras.jpg" },
+                { name: "İbrahim Efe Yılmaz", role: "RAS Üyesi", img: "people-pictures/ibrahim-efe-yilmaz-ras.jpg" },
+                { name: "Kayra Üstten", role: "RAS Üyesi", img: "people-pictures/kayra-ustten-ras.jpg" }
             ]
         },
         "wie": {
-            leader: { name: "İrem Akıl", img: "people-pictures/İrem Akıl wie-başkan.HEIC" },
+            leader: { name: "İrem Akıl", img: "people-pictures/irem-akil-wie-baskan.jpg" },
             members: [
-                { name: "Aysu Ece Atalay", role: "WIE Üyesi", img: "people-pictures/Aysu Ece Atalay Wie.jpg" },
-                { name: "Serra Yelmenoğlu", role: "WIE Üyesi", img: "people-pictures/Serra Yelmenoğlu-WIE.heif" },
-                { name: "Zeynep Nil Usluoğlu", role: "WIE Üyesi", img: "people-pictures/Zeynep Nil Usluoğlu wie.jpg" },
-                { name: "İpek Özdemir", role: "WIE Üyesi", img: "people-pictures/ipek özdemir wie.png" },
-                { name: "İrem Aköz", role: "WIE Üyesi", img: "people-pictures/irem aköz wie.jpg" }
+                { name: "Aysu Ece Atalay", role: "WIE Üyesi", img: "people-pictures/aysu-ece-atalay-wie.jpg" },
+                { name: "Serra Yelmenoğlu", role: "WIE Üyesi", img: "people-pictures/serra-yelmenoglu-wie.jpg" },
+                { name: "Zeynep Nil Usluoğlu", role: "WIE Üyesi", img: "people-pictures/zeynep-nil-usluoglu-wie.jpg" },
+                { name: "İpek Özdemir", role: "WIE Üyesi", img: "people-pictures/ipek-ozdemir-wie.jpg" },
+                { name: "İrem Aköz", role: "WIE Üyesi", img: "people-pictures/irem-akoz-wie.jpg" }
             ]
         },
         "medya": {
-            leader: { name: "Duru Türkmen", img: "people-pictures/Duru Türkmen-Sosyal Medya ve Tasarım-başkan.jpg" },
+            leader: { name: "Duru Türkmen", img: "people-pictures/duru-turkmen-sosyal-medya-ve-tasarim-baskan.jpg" },
             members: [
-                { name: "Duru Baykan", role: "Tasarım Üyesi", img: "people-pictures/Duru Baykan-Sosyal Medya ve Tasarım.jpeg" },
-                { name: "Ece Salman", role: "Tasarım Üyesi", img: "people-pictures/Ece salman-tasarım ve medya.jpeg" },
-                { name: "Ela Nur Yerli", role: "Tasarım Üyesi", img: "people-pictures/Ela Nur Yerli-Sosyal Medya ve Tasarım.jpg" },
-                { name: "Simay Balaban", role: "Medya Üyesi", img: "people-pictures/Simay Balaban medya.jpg" },
-                { name: "Zeynep Öztürk", role: "Tasarım Üyesi", img: "people-pictures/Zeynep Öztürk tasarım.jpg" }
+                { name: "Duru Baykan", role: "Tasarım Üyesi", img: "people-pictures/duru-baykan-sosyal-medya-ve-tasarim.jpg" },
+                { name: "Ece Salman", role: "Tasarım Üyesi", img: "people-pictures/ece-salman-tasarim-ve-medya.jpg" },
+                { name: "Ela Nur Yerli", role: "Tasarım Üyesi", img: "people-pictures/ela-nur-yerli-sosyal-medya-ve-tasarim.jpg" },
+                { name: "Simay Balaban", role: "Medya Üyesi", img: "people-pictures/simay-balaban-medya.jpg" },
+                { name: "Zeynep Öztürk", role: "Tasarım Üyesi", img: "people-pictures/zeynep-ozturk-tasarim.jpg" }
             ]
         }
     };
@@ -138,12 +138,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if(presOffice) {
         presOffice.innerHTML = `
             <div class="president-box">
-                <div class="gb-avatar" style="background-image: url('people-pictures/Umut Uygur-başkan.jpeg');"></div>
+                <div class="gb-avatar" style="background-image: url('people-pictures/umut-uygur-baskan.jpg');"></div>
                 <h3 class="gb-name">Umut Uygur</h3>
                 <p class="gb-role">Genel Başkan</p>
             </div>
             <div class="president-box">
-                <div class="gb-avatar" style="background-image: url('people-pictures/Dilasude Özdoğan-Genel başkan yardımcısı.jpeg');"></div>
+                <div class="gb-avatar" style="background-image: url('people-pictures/dilasude-ozdogan-genel-baskan-yardimcisi.jpg');"></div>
                 <h3 class="gb-name">Dilasude Özdoğan</h3>
                 <p class="gb-role">Genel Başkan Yardımcısı</p>
             </div>
