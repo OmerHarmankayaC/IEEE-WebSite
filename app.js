@@ -24,6 +24,62 @@ document.addEventListener('DOMContentLoaded', () => {
         else navbar.classList.remove('scrolled');
     });
 
+    // 2b. Hamburger Menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileOverlay = document.getElementById('mobile-menu-overlay');
+
+    function openMobileMenu() {
+        hamburger.classList.add('open');
+        mobileMenu.classList.add('open');
+        mobileOverlay.classList.add('open');
+        hamburger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeMobileMenu() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        mobileOverlay.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+
+    if (hamburger) {
+        hamburger.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('open')) closeMobileMenu();
+            else openMobileMenu();
+        });
+    }
+    if (mobileOverlay) mobileOverlay.addEventListener('click', closeMobileMenu);
+
+    // Close mobile menu when any link is tapped
+    if (mobileMenu) {
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+    }
+
+    // 2c. Mobile committee accordion
+    document.querySelectorAll('.mobile-committee-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const isOpen = btn.classList.contains('open');
+            const desc = btn.closest('.mobile-committee-info').nextElementSibling;
+            // Close all others
+            document.querySelectorAll('.mobile-committee-toggle').forEach(b => {
+                b.classList.remove('open');
+                b.setAttribute('aria-expanded', 'false');
+                const d = b.closest('.mobile-committee-info').nextElementSibling;
+                if (d) d.classList.remove('open');
+            });
+            // Toggle clicked one
+            if (!isOpen) {
+                btn.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+                if (desc) desc.classList.add('open');
+            }
+        });
+    });
+
     // 3. Populate Team Carousel and handle Tabs dynamically
     const generateCollinsCarouselCard = (role, name = "İsim Soyisim") => `
         <div class="collins-card">

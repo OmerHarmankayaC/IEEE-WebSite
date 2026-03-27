@@ -227,6 +227,9 @@ h1, h2, h3, h4, .huge-text {
 .committees-section {
     padding: 6rem 0 4rem 0; 
 }
+.mobile-committee-card {
+    display: none;
+}
 .committee-card {
     display: flex;
     align-items: center; /* Center to prevent height shifts */
@@ -802,46 +805,226 @@ h1, h2, h3, h4, .huge-text {
     transform: translateY(0);
 }
 
-/* Responsive */
+/* =============================================
+   HAMBURGER MENU
+   ============================================= */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 1100;
+}
+.hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--ted-navy);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+.hamburger.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+.hamburger.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile slide-in menu */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0; right: 0;
+    width: 75vw;
+    max-width: 320px;
+    height: 100%;
+    background: var(--white);
+    z-index: 1050;
+    padding: 6rem 2.5rem 3rem 2.5rem;
+    box-shadow: -10px 0 40px rgba(0,0,0,0.12);
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    overflow-y: auto;
+}
+.mobile-menu.open {
+    transform: translateX(0);
+}
+.mobile-menu ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+.mobile-menu ul li {
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.mobile-menu ul li a {
+    display: block;
+    padding: 1.1rem 0;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--ted-navy);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    transition: color 0.2s;
+}
+.mobile-menu ul li a:hover {
+    color: var(--ted-red);
+}
+
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1040;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+.mobile-menu-overlay.open {
+    opacity: 1;
+}
+
+/* =============================================
+   RESPONSIVE — 900px and below
+   ============================================= */
 @media (max-width: 900px) {
     .about-text-grid {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
-    .committee-card, .committee-card.reverse {
-        flex-direction: column;
-        gap: 3rem;
-        text-align: center;
-    }
-    .committee-short, .committee-motto {
-        min-width: 0;
-    }
-    .expand-hover-box, .committee-card.reverse .expand-hover-box {
-        position: relative !important;
-        width: 100% !important;
-        flex-direction: column;
-    }
-    .eh-logo {
-        flex: auto !important;
-        width: 100% !important;
-    }
-    /* Hover vertical accordion strictly for mobile */
-    .expand-hover-box:hover .eh-content {
-        max-height: 800px;
-        padding: 2rem;
-        opacity: 1;
-    }
-    .expand-hover-box:hover .eh-logo {
-        height: 200px;
-        aspect-ratio: auto;
-        border-radius: 40px 40px 0 0 !important;
-    }
-    .eh-text-wrap {
-        min-width: 0;
-    }
+
+    /* Hide desktop nav links, show hamburger */
     .nav-links {
-        display: none; /* simple mobile nav hide for MVP */
+        display: none !important;
     }
+    .hamburger {
+        display: flex;
+    }
+    .mobile-menu,
+    .mobile-menu-overlay {
+        display: block;
+    }
+
+    /* --- Committees: full mobile redesign --- */
+    /* Hide the fancy hover-expand design on mobile */
+    .committee-card {
+        flex-direction: column;
+        gap: 0;
+        margin-top: 3rem;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.07);
+        background: var(--white);
+    }
+    .committee-card.reverse {
+        flex-direction: column;
+    }
+
+    /* Hide the desktop expand-hover-box entirely on mobile */
+    .committee-focus {
+        display: none;
+    }
+
+    /* Show a simpler mobile committee card */
+    .mobile-committee-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .mobile-committee-logo {
+        width: 100%;
+        max-height: 200px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        background: var(--white);
+    }
+    .mobile-committee-logo img {
+        max-width: 100%;
+        max-height: 160px;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+    }
+    .mobile-committee-info {
+        width: 100%;
+        background: var(--bg-light);
+        padding: 1.5rem 1.5rem 0 1.5rem;
+    }
+    .mobile-committee-info .committee-short {
+        margin-bottom: 1rem;
+    }
+    .mobile-committee-info .committee-motto {
+        font-size: clamp(1.5rem, 6vw, 2.2rem);
+    }
+    /* Tap to expand description */
+    .mobile-committee-toggle {
+        width: 100%;
+        background: var(--ted-red);
+        color: var(--white);
+        border: none;
+        padding: 0.9rem 1.5rem;
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 1.5rem;
+        transition: background 0.2s;
+    }
+    .mobile-committee-toggle:hover,
+    .mobile-committee-toggle.open {
+        background: var(--ted-navy);
+    }
+    .mobile-committee-toggle .toggle-icon {
+        font-size: 1.2rem;
+        transition: transform 0.3s;
+    }
+    .mobile-committee-toggle.open .toggle-icon {
+        transform: rotate(180deg);
+    }
+    .mobile-committee-desc {
+        max-height: 0;
+        overflow: hidden;
+        background: var(--ted-navy);
+        color: rgba(255,255,255,0.9);
+        font-family: var(--font-serif);
+        font-size: 1rem;
+        line-height: 1.7;
+        transition: max-height 0.45s cubic-bezier(0.25, 1, 0.5, 1), padding 0.3s;
+        padding: 0 1.5rem;
+    }
+    .mobile-committee-desc.open {
+        max-height: 600px;
+        padding: 1.5rem;
+    }
+
+    /* Existing committee-info hides on mobile (we use mobile-committee-card instead) */
+    .committee-info {
+        display: none !important;
+    }
+
     .footer-top {
         flex-direction: column;
         gap: 4rem;
@@ -850,7 +1033,36 @@ h1, h2, h3, h4, .huge-text {
         flex-direction: column;
         gap: 3rem;
     }
+
+    /* Hero spacing */
+    .hero-section {
+        padding-top: 9rem;
+    }
+    .hero-subtitle {
+        margin-top: 2rem !important;
+    }
+    .hero-title {
+        font-size: clamp(2.5rem, 12vw, 5rem);
+    }
+
+    /* About text size */
+    .about-highlight {
+        font-size: clamp(1.4rem, 4vw, 2rem);
+    }
+
+    /* Team section tabs */
+    .team-tabs {
+        grid-template-columns: repeat(3, 1fr);
+        align-items: end;
+    }
+    .leader-avatar {
+        width: clamp(80px, 25vw, 180px);
+    }
+    .team-tab {
+        font-size: 1.2rem;
+    }
 }
+
 
 .hero-scroll-indicator {
     position: absolute;
