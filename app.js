@@ -76,12 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 3. Populate Team Carousel and handle Tabs dynamically
-    const generateCollinsCarouselCard = (role, name = "İsim Soyisim", imgSrc = "") => `
+    const generateCollinsCarouselCard = (name = "İsim Soyisim", imgSrc = "") => `
         <div class="collins-card">
-            <div class="collins-card-bg" ${imgSrc ? `style="background-image: url('${imgSrc}'); background-size: cover; background-position: center;"` : ''}></div>
+            <div class="collins-card-bg" ${imgSrc ? `style="background-image: url('${imgSrc}');"` : ''}></div>
             <div class="collins-card-content">
                 <h4 class="collins-card-name">${name}</h4>
-                <p class="collins-card-role">${role}</p>
             </div>
         </div>
     `;
@@ -163,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(carouselEl) {
             let html = "";
             data.members.forEach(m => {
-                html += generateCollinsCarouselCard(m.role, m.name, m.img);
+                html += generateCollinsCarouselCard(m.name, m.img);
             });
             carouselEl.innerHTML = html;
         }
