@@ -253,257 +253,287 @@ h1, h2, h3, h4, .huge-text {
 }
 
 /* Committees Section - Vertical Stack with Flip Logo */
+/* Committees Section - New 3-Column Design */
 .committees-section {
-    padding: 6rem 0 4rem 0; 
+    padding: 10rem 0;
+    background-color: var(--bg-light);
 }
-.mobile-committee-card {
-    display: none;
+
+.committees-section .container {
+    max-width: 1600px; /* Overriding default container for more width */
 }
-.committee-card {
-    display: flex;
-    align-items: center; /* Center to prevent height shifts */
-    gap: 6rem;
-    margin-top: 6rem;
+
+.committees-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 4rem;
+    max-width: 1600px;
+    width: 95%;
+    margin: 0 auto;
+}
+
+/* Desktop override for all-in-one-line */
+@media (min-width: 1024px) {
+    .committees-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .committee-wrapper {
+        display: block !important;
+        opacity: 1 !important;
+    }
+}
+
+.committee-card-new {
     position: relative;
-    max-width: 1100px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.committee-card.reverse {
-    flex-direction: row-reverse;
-}
-.committee-card:last-child {
-    margin-bottom: 4rem; 
-}
-.committee-focus {
-    flex: 1;
-    min-width: 0;
-    aspect-ratio: 1;
-    position: relative; /* Anchor for absolute drawer */
-    container-type: inline-size; /* Enable CQW sizing */
-}
-.committee-info {
-    flex: 1.2;
-    overflow: hidden;
-    opacity: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    transition: opacity 0.4s ease; /* No flex shifting! */
-}
-.mt-3 { margin-top: 1rem; }
-
-.committee-short {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--ted-red);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 1.5rem;
-}
-.committee-motto {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: clamp(2.5rem, 4.5vw, 4rem);
-    font-weight: 600;
-    line-height: 1.1;
-    color: var(--ted-navy);
-}
-
-/* Hover Mechanics for Row Expansion */
-.committee-card:has(.expand-hover-box:hover) .committee-info {
-    opacity: 0; /* Fade out motto smoothly */
-}
-
-/* Expand Drawer Box Concept (Absolute Precision) */
-.expand-hover-box {
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    width: 100cqw; /* Base width perfectly matches focus bounding box */
-    display: flex;
-    flex-direction: row;
-    background: var(--ted-navy);
-    border-radius: 40px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+    width: 100%;
+    aspect-ratio: 0.85; /* More balanced shape, less 'long' */
+    background: var(--white);
+    border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
-    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 10;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Reverse Card specifically swaps Flex Row Direction */
-.committee-card.reverse .expand-hover-box {
-    left: auto; right: 0;
-    flex-direction: row-reverse;
+.committee-card-new:hover {
+    transform: translateY(-10px);
 }
 
-.eh-logo {
-    width: 100%;
-    flex: 0 0 100cqw; /* ALWAYS preserve exact pixel scale! No flex-basis jitter! */
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem;
-    background: var(--white);
-    border-radius: 40px;
-    transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+.card-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1;
+    transition: filter 0.6s ease;
 }
-.eh-logo img {
+
+.card-bg img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    padding: 1rem;
     mix-blend-mode: multiply;
 }
 
-.eh-content {
-    flex-grow: 1; /* Stretch to fill expanded box */
-    opacity: 0;
-    padding: 3rem;
-    background: var(--ted-navy);
-    color: var(--white);
+.card-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 2;
+    padding: 2.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-    transition: opacity 0.5s ease 0s;
+    justify-content: flex-start;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(0,0,0,0.02));
+    transition: all 0.6s ease;
 }
 
-/* Expansion Trigger locked natively to the Drawer! */
-.expand-hover-box:hover {
-    width: calc(220% + 6rem); /* Absolutely expand over the 1.2x adjacent column + gap */
-}
-.expand-hover-box:hover .eh-logo {
-    border-radius: 40px 0 0 40px; /* Flat inner edge */
-}
-.committee-card.reverse .expand-hover-box:hover .eh-logo {
-    border-radius: 0 40px 40px 0; /* Flat inner edge for right-align */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
-.expand-hover-box:hover .eh-content {
-    opacity: 1;
-    transition: opacity 0.6s ease 0.4s; /* Heavy delay text reveal */
-}
-
-/* Internal text cascade */
-.eh-text-wrap {
-    width: 450px; /* Safe bounds to prevent text reflow */
-}
-.eh-text-wrap p {
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    line-height: 1.6;
+.card-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--ted-navy);
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
     margin: 0;
+    transition: color 0.4s ease;
+}
+
+.card-icon-wrap {
+    width: 40px;
+    height: 40px;
+    position: relative;
+}
+
+/* Plus Icon Construction */
+.plus-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 3px;
+    background-color: var(--ted-navy);
+    transform: translate(-50%, -50%);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.plus-icon::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: var(--ted-navy);
+    transform: rotate(90deg);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-description {
+    margin-top: 2.5rem;
+    color: var(--white);
     opacity: 0;
     transform: translateY(20px);
-    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0s;
-}
-.eh-text-wrap p.mt-3 {
-    margin-top: 1.5rem;
-}
-.expand-hover-box:hover .eh-text-wrap p {
-    opacity: 1;
-    transform: translateY(0);
-    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1) 0.5s; /* Substantial delay */
-}
-.expand-hover-box:hover .eh-text-wrap p.mt-3 {
-    transition-delay: 0.7s;
-}
-.avatar-placeholder {
-    width: 100%;
-    height: 100%;
-    background: #d0e4ff; /* Stronger pastel blue */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
-.logo-box {
-    background: var(--white);
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-.logo-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Crops any excess white borders seamlessly */
-    mix-blend-mode: multiply;
-    filter: contrast(1.15) saturate(1.1);
-    image-rendering: -webkit-optimize-contrast;
-}
-.logo-flip-back {
-    background-color: var(--ted-navy);
-    color: var(--white);
-    padding: 3rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: left;
-    clip-path: inset(100% 0 0 0); /* Masked out from bottom */
-    z-index: 3;
-}
-.committee-desc-back {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: rgba(255,255,255,0.9);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
 }
 
+.card-description p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* HOVER STATES */
+.committee-card-new:hover .card-bg {
+    filter: blur(12px) brightness(0.7);
+}
+
+.committee-card-new:hover .card-overlay {
+    background: rgba(0, 40, 85, 0.85); /* Deep IEEE Navy with transparency */
+    backdrop-filter: blur(4px);
+}
+
+.committee-card-new:hover .card-title {
+    color: var(--white);
+}
+
+.committee-card-new:hover .plus-icon {
+    background-color: var(--white);
+    transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.committee-card-new:hover .plus-icon::before {
+    background-color: var(--white);
+    transform: rotate(0deg); /* Horizontal line now */
+}
+
+.committee-card-new:hover .card-description {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 1023px) {
+    .committee-wrapper {
+        display: none;
+    }
+    .committee-wrapper.active {
+        display: block;
+    }
+}
+
+
 /* Activities / Blog Section */
+/* Visual Restoration Styles */
 .activities-section {
-    padding: 1rem 0;
+    padding: 10rem 0 6rem 0;
     overflow: hidden;
 }
+
 .activities-carousel {
     display: flex;
     gap: 2rem;
-    padding: 2rem 5vw 4rem 5vw;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 5vw;
-    scrollbar-width: none;
-    align-items: flex-end; /* cards bottom part on the same line */
+    padding: 2rem 0;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scroll-behavior: smooth;
 }
-.activities-carousel::-webkit-scrollbar { display: none; }
+
+.activities-carousel::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
 
 .activity-card {
-    border-radius: 20px;
-    padding: 3rem 2rem;
-    scroll-snap-align: start;
+    flex: 0 0 380px;
+    aspect-ratio: 0.85; /* Squarer, more balanced look */
+    border-radius: 24px;
+    padding: 2.5rem;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: space-between;
     color: var(--text-dark);
-    text-decoration: none; /* for when used as <a> tag */
-    box-shadow: 0 15px 40px rgba(0,0,0,0.05);
-    transition: transform 0.4s;
-    min-height: 400px;
-    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-}
-.activity-card:hover { transform: translateY(-10px); }
-@media (hover: none) {
-    .activity-card:hover { transform: none; }
-}
-.ac-title {
-    font-size: clamp(1.5rem, 3vw, 2.5rem);
-    font-weight: 800;
-    font-family: var(--font-heading);
-    margin-bottom: 1rem;
-    line-height: 1.1;
-}
-.ac-category {
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    font-weight: bold;
-    letter-spacing: 2px;
-    margin-bottom: 2rem;
-    opacity: 0.8;
+    cursor: pointer;
 }
 
+.activity-card:hover { 
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.ac-top-right {
+    align-self: flex-end;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+
+.activity-card:hover .ac-top-right {
+    opacity: 1;
+}
+
+.ac-content {
+    text-align: left;
+}
+
+.ac-category {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+}
+
+.ac-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    font-family: var(--font-heading);
+    line-height: 1.2;
+    margin: 0;
+}
+
+/* Navigation Arrow Button */
+.activities-nav-next {
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 56px;
+    height: 56px;
+    background-color: var(--white);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ted-navy);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.activities-nav-next:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+    .activity-card {
+        flex: 0 0 85%;
+        padding: 2rem;
+    }
+    .activities-nav-next {
+        display: none;
+    }
+}
 /* Team Section - Collins Carousel */
 .team-section {
     padding: 8rem 0;
@@ -647,37 +677,16 @@ h1, h2, h3, h4, .huge-text {
 .team-tab-wrapper.active .team-tab {
     opacity: 1;
 }
-.tab-arrow {
-    display: none;
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 14px solid transparent;
-    border-right: 14px solid transparent;
-    border-top: 14px solid var(--ted-red);
-}
-.team-tab-wrapper.active .tab-arrow {
-    display: block;
-}
 
 .collins-carousel {
     display: flex;
+    flex-wrap: nowrap !important; 
     gap: 1.5rem;
-    padding: 0 5vw 4rem 5vw; /* bleed cleanly */
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 5vw;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;
-    /* justify-content: flex-start; allows scrolling both ways properly without clipping */
+    padding: 0 5vw 4rem 5vw;
+    justify-content: center;
+    overflow-x: hidden; /* Fit everyone on one line without sliding */
 }
 
-.collins-carousel::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
-}
 
 .collins-card {
     flex: 0 0 clamp(200px, 18vw, 300px);
@@ -712,11 +721,81 @@ h1, h2, h3, h4, .huge-text {
 .collins-card-name {
     font-family: var(--font-serif);
     font-style: italic;
-    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    font-size: clamp(1.1rem, 2.5vw, 1.8rem);
     font-weight: 600;
     color: var(--ted-navy);
     line-height: 1.2;
     text-transform: capitalize;
+}
+
+/* LinkedIn Icon Component */
+.member-linkedin {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    background: #0077B5;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    z-index: 10;
+}
+.member-linkedin:hover {
+    transform: scale(1.15);
+    background: #006097;
+}
+.member-linkedin svg {
+    width: 16px;
+    height: 16px;
+}
+/* Link styling for LinkedIn icons */
+.member-linkedin {
+    text-decoration: none !important;
+    color: white !important;
+}
+
+/* Ensure parents are relative for positioning icon */
+.gb-avatar, .leader-avatar, .collins-card-bg {
+    position: relative !important;
+}
+
+@media (max-width: 1100px) {
+    .collins-carousel {
+        gap: 1rem;
+    }
+    .collins-card {
+        min-width: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .collins-carousel {
+        gap: 0.5rem;
+        padding-left: 2vw;
+        padding-right: 2vw;
+    }
+    .collins-card {
+        min-width: 0;
+        flex: 1 1 0px !important;
+    }
+    .collins-card-bg {
+        border-radius: 10px;
+    }
+    .member-linkedin {
+        width: 20px;
+        height: 20px;
+        bottom: 5px;
+        right: 5px;
+    }
+    .member-linkedin svg {
+        width: 12px;
+        height: 12px;
+    }
 }
 
 @media (max-width: 1000px) {
@@ -1111,32 +1190,18 @@ h1, h2, h3, h4, .huge-text {
     }
 
 
-    /* Activities Section: Skyline Refinement (Mobile) */
-    .activities-section {
-        padding: 2rem 0 !important;
+    /* Instagram Feed Grid (replaces Activities Carousel on mobile) */
+    .instagram-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem !important;
     }
-
-    .activities-carousel {
-        display: flex !important;
-        align-items: flex-end !important;
-        gap: 0 !important;
-        padding: 0 !important;
+    .instagram-post {
+        border-radius: 8px !important;
     }
-    .activity-card {
-        flex: 0 0 75vw !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
-        border: none !important;
-        box-shadow: none !important;
+    .instagram-follow-btn {
+        font-size: 0.9rem !important;
+        padding: 0.5rem 1rem !important;
     }
-    /* Dynamic heights for skyline effect */
-    .activity-card:nth-child(5n+1) { height: 450px !important; }
-    .activity-card:nth-child(5n+2) { height: 360px !important; }
-    .activity-card:nth-child(5n+3) { height: 500px !important; }
-    .activity-card:nth-child(5n+4) { height: 400px !important; }
-    .activity-card:nth-child(5n+5) { height: 470px !important; }
-
-    /* activity arrows preserved on mobile */
 
 
     .committee-info {
@@ -1219,19 +1284,43 @@ h1, h2, h3, h4, .huge-text {
     }
     
     .team-tab {
-        font-size: 1rem !important;
+        font-size: 0.9rem !important;
     }
     
     .tab-box {
-        padding: 0.6rem 0.2rem !important;
+        padding: 0.4rem 0.1rem !important;
     }
     
-    .gb-avatar {
-        width: clamp(150px, 45vw, 220px) !important;
-        margin-bottom: 1rem !important;
+    .presidential-office {
+        flex-wrap: nowrap !important;
+        gap: 0.8rem !important;
+        justify-content: center !important;
     }
-    .gb-name {
-        font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
+
+    .president-box .gb-avatar {
+        width: 140px !important;
+        height: 175px !important;
+        margin-bottom: 0.8rem !important;
+    }
+
+    .president-box .gb-name {
+        font-size: 1.1rem !important;
+    }
+
+    .president-box .gb-role {
+        font-size: 0.7rem !important;
+    }
+    
+    .mobile-committee-logo {
+        width: 140px !important;
+        height: 140px !important;
+    }
+    
+    .committee-switcher {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 1rem;
+        -webkit-overflow-scrolling: touch;
     }
 }
 
@@ -1324,23 +1413,124 @@ h1, h2, h3, h4, .huge-text {
     }
 }
 
-.activity-arrow {
+/* --- Instagram Feed Grid --- */
+.instagram-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.instagram-post {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 15px;
+    background-color: var(--light-muted);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.instagram-post:hover {
+    transform: translateY(-8px);
+}
+
+.instagram-post img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.instagram-post:hover img {
+    transform: scale(1.08);
+}
+
+.instagram-overlay {
     position: absolute;
-    top: 2rem;
-    right: 2rem;
-    left: auto;
-    color: var(--ted-navy);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(4, 9, 20, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
-    opacity: 1;
-    pointer-events: none; /* purely decorative */
-    transition: transform 0.3s ease;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.activity-card:hover .activity-arrow {
-    transform: translate(5px, -5px);
+.instagram-post:hover .instagram-overlay {
+    opacity: 1;
+}
+
+.instagram-overlay-icon {
+    color: white;
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.instagram-post:hover .instagram-overlay-icon {
+    transform: scale(1);
+}
+
+.instagram-follow-btn {
+    display: inline-flex;
+    align-items: center;
+    background: #E1306C; /* Instagram gradient start */
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 5px 15px rgba(225, 48, 108, 0.3);
+}
+
+.instagram-follow-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(225, 48, 108, 0.4);
+    color: white;
+}
+
+.instagram-skeleton {
+    aspect-ratio: 1/1;
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.instagram-skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.btn-outline-white {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 1rem 2.5rem;
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.btn-outline-white:hover {
+    background: white;
+    color: var(--ted-navy);
 }
 
 /* Utility Helpers missing without Bootstrap */
@@ -1394,4 +1584,20 @@ h1, h2, h3, h4, .huge-text {
 }
 .team-section .nav-arrow:hover {
     background: var(--ted-red) !important;
+}
+/* Final Mobile Overrides */
+@media (max-width: 768px) {
+    .hero-btn-wrap {
+        display: none !important;
+    }
+    .collins-carousel {
+        flex-wrap: nowrap !important;
+        gap: 0.8rem;
+        justify-content: flex-start !important; /* switch back to start if fitting on one line to avoid micro-centering */
+        overflow-x: hidden; /* Ensure no scrollbar */
+    }
+    .collins-card {
+        flex: 1 1 0px !important;
+        min-width: 0 !important;
+    }
 }

@@ -72,62 +72,112 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (w.id === targetId) w.classList.add('active');
                 else w.classList.remove('active');
             });
+            // Center the active tab in switcher
+            tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         });
     });
 
-    // 3. Populate Team Carousel and handle Tabs dynamically
-    const generateCollinsCarouselCard = (name = "İsim Soyisim", imgSrc = "") => `
+    // Swipe Functionality for Committees (Mobile)
+    const comContainer = document.querySelector('.committees-container');
+    if (comContainer) {
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        comContainer.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        comContainer.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleComSwipe();
+        }, { passive: true });
+
+        function handleComSwipe() {
+            const threshold = 60;
+            const currentTab = document.querySelector('.com-tab.active');
+            if (!currentTab) return;
+
+            const tabsArray = Array.from(comTabs);
+            const currentIndex = tabsArray.indexOf(currentTab);
+
+            if (touchEndX < touchStartX - threshold) {
+                // Swipe Left -> Next
+                if (currentIndex < tabsArray.length - 1) {
+                    tabsArray[currentIndex + 1].click();
+                }
+            } else if (touchEndX > touchStartX + threshold) {
+                // Swipe Right -> Prev
+                if (currentIndex > 0) {
+                    tabsArray[currentIndex - 1].click();
+                }
+            }
+        }
+    }
+
+    const generateCollinsCarouselCard = (name = "İsim Soyisim", imgSrc = "", linkedin = "#") => `
         <div class="collins-card">
-            <div class="collins-card-bg" ${imgSrc ? `style="background-image: url('${imgSrc}');"` : ''}></div>
+            <div class="collins-card-bg" ${imgSrc ? `style="background-image: url('${imgSrc}');"` : ''}>
+                <a href="${linkedin}" target="_blank" class="member-linkedin" title="LinkedIn Profile">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                </a>
+            </div>
             <div class="collins-card-content">
                 <h4 class="collins-card-name">${name}</h4>
             </div>
         </div>
     `;
 
-    const generateLeaderHTML = (name, imgSrc = "") => `
-        <div class="leader-avatar" ${imgSrc ? `style="background-image: url('${imgSrc}'); background-size: cover; background-position: center;"` : ''}></div>
+    const generateLeaderHTML = (name, imgSrc = "", linkedin = "#") => `
+        <div class="leader-avatar" ${imgSrc ? `style="background-image: url('${imgSrc}'); background-size: cover; background-position: center;"` : ''}>
+            <a href="${linkedin}" target="_blank" class="member-linkedin" title="LinkedIn Profile">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+            </a>
+        </div>
         <p class="leader-name">${name}</p>
     `;
 
     const teamData = {
         "cs": {
-            leader: { name: "Eylül Akpınar", img: "people-pictures/eylul-akpinar-cs-baskan.jpg" },
+            leader: { name: "Eylül Akpınar", img: "people-pictures/eylul-akpinar-cs-baskan.jpg", linkedin: "https://www.linkedin.com/in/eyl%C3%BCl-akp%C4%B1nar-887634343/" },
             members: [
-                { name: "Enes Taşçı", role: "CS Üyesi", img: "people-pictures/enes-tasci-cs.jpg" },
-                { name: "Esra Eda Kılıç", role: "CS Üyesi", img: "people-pictures/esra-eda-kilic-cs.jpg" },
-                { name: "İdil Yavuzer", role: "CS Üyesi", img: "people-pictures/idil-yavuzer-cs.jpg" },
-                { name: "Yusuf Atakan Ünal", role: "CS Üyesi", img: "people-pictures/yusuf-atakan-unal-wie-cs.jpg" },
-                { name: "Ömer Harmankaya", role: "CS Üyesi", img: "people-pictures/omer-harmankaya-cs.jpg" }
+                { name: "Enes Taşçı", role: "CS Üyesi", img: "people-pictures/enes-tasci-cs.jpg", linkedin: "https://www.linkedin.com/in/enestsc/" },
+                { name: "Esra Eda Kılıç", role: "CS Üyesi", img: "people-pictures/esra-eda-kilic-cs.jpg", linkedin: "https://www.linkedin.com/in/esraedak%C4%B1l%C4%B1%C3%A7/" },
+                { name: "İdil Yavuzer", role: "CS Üyesi", img: "people-pictures/idil-yavuzer-cs.jpg", linkedin: "https://www.linkedin.com/in/idil-duru-yavuzer-3047a8322/" },
+                { name: "Yusuf Atakan Ünal", role: "CS Üyesi", img: "people-pictures/yusuf-atakan-unal-wie-cs.jpg", linkedin: "https://www.linkedin.com/in/yusufatakanunal/" },
+                { name: "Ömer Harmankaya", role: "CS Üyesi", img: "people-pictures/omer-harmankaya-cs.jpg", linkedin: "http://www.linkedin.com/in/omer-harmankaya" }
             ]
         },
         "ras": {
-            leader: { name: "Boran Bozkurt", img: "people-pictures/boran-bozkurt-ras-baskan.jpg" },
+            leader: { name: "Boran Bozkurt", img: "people-pictures/boran-bozkurt-ras-baskan.jpg", linkedin: "https://www.linkedin.com/in/boran-bozkurt-b45a1a27b/" },
             members: [
-                { name: "Ali Rahima", role: "RAS Üyesi", img: "people-pictures/ali-rahima-ras.jpg" },
-                { name: "Harun Emre Erten", role: "RAS Üyesi", img: "people-pictures/harun-emre-erten-ras.jpg" },
-                { name: "İbrahim Efe Yılmaz", role: "RAS Üyesi", img: "people-pictures/ibrahim-efe-yilmaz-ras.jpg" },
-                { name: "Kayra Üstten", role: "RAS Üyesi", img: "people-pictures/kayra-ustten-ras.jpg" }
+                { name: "Ali Rahima", role: "RAS Üyesi", img: "people-pictures/ali-rahima-ras.jpg", linkedin: "https://www.linkedin.com/in/ali-rahima-5b1a8729b/" },
+                { name: "Harun Emre Erten", role: "RAS Üyesi", img: "people-pictures/harun-emre-erten-ras.jpg", linkedin: "https://www.linkedin.com/in/harun-emre-erten-083653300/" },
+                { name: "İbrahim Efe Yılmaz", role: "RAS Üyesi", img: "people-pictures/ibrahim-efe-yilmaz-ras.jpg", linkedin: "https://www.linkedin.com/in/ibrahim-efe-y%C4%B1lmaz-52a880318/" },
+                { name: "Kayra Üstten", role: "RAS Üyesi", img: "people-pictures/kayra-ustten-ras.jpg", linkedin: "https://www.linkedin.com/in/kayra-ustten-650268313/" }
             ]
         },
         "wie": {
-            leader: { name: "İrem Akıl", img: "people-pictures/irem-akil-wie-baskan.jpg" },
+            leader: { name: "İrem Akıl", img: "people-pictures/irem-akil-wie-baskan.jpg", linkedin: "https://www.linkedin.com/in/irem-ak%C4%B1l-9202a829a/" },
             members: [
-                { name: "Aysu Ece Atalay", role: "WIE Üyesi", img: "people-pictures/aysu-ece-atalay-wie.jpg" },
-                { name: "Serra Yelmenoğlu", role: "WIE Üyesi", img: "people-pictures/serra-yelmenoglu-wie.jpg" },
-                { name: "Zeynep Nil Usluoğlu", role: "WIE Üyesi", img: "people-pictures/zeynep-nil-usluoglu-wie.jpg" },
-                { name: "İpek Özdemir", role: "WIE Üyesi", img: "people-pictures/ipek-ozdemir-wie.jpg" },
-                { name: "İrem Aköz", role: "WIE Üyesi", img: "people-pictures/irem-akoz-wie.jpg" }
+                { name: "Aysu Ece Atalay", role: "WIE Üyesi", img: "people-pictures/aysu-ece-atalay-wie.jpg", linkedin: "https://www.linkedin.com/in/aysu-ece-atalay-619bb139b/" },
+                { name: "Serra Yelmenoğlu", role: "WIE Üyesi", img: "people-pictures/serra-yelmenoglu-wie.jpg", linkedin: "https://www.linkedin.com/in/serra-yelmeno%C4%9Flu-2680743b4/" },
+                { name: "Zeynep Nil Usluoğlu", role: "WIE Üyesi", img: "people-pictures/zeynep-nil-usluoglu-wie.jpg", linkedin: "https://www.linkedin.com/in/zeynep-nil-usluo%C4%9Flu-72a729328/" },
+                { name: "İpek Özdemir", role: "WIE Üyesi", img: "people-pictures/ipek-ozdemir-wie.jpg", linkedin: "https://www.linkedin.com/in/ipek-%C3%B6zdemir-b1350b299/" },
+                { name: "İrem Aköz", role: "WIE Üyesi", img: "people-pictures/irem-akoz-wie.jpg", linkedin: "https://www.linkedin.com/in/irem-ak%C3%B6z-aa7450247/" }
             ]
         },
         "medya": {
-            leader: { name: "Duru Türkmen", img: "people-pictures/duru-turkmen-sosyal-medya-ve-tasarim-baskan.jpg" },
+            leader: { name: "Duru Türkmen", img: "people-pictures/duru-turkmen-sosyal-medya-ve-tasarim-baskan.jpg", linkedin: "https://www.linkedin.com/in/duru-t%C3%BCrkmen-756a7733a/" },
             members: [
-                { name: "Duru Baykan", role: "Tasarım Üyesi", img: "people-pictures/duru-baykan-sosyal-medya-ve-tasarim.jpg" },
-                { name: "Ece Salman", role: "Tasarım Üyesi", img: "people-pictures/ece-salman-tasarim-ve-medya.jpg" },
-                { name: "Ela Nur Yerli", role: "Tasarım Üyesi", img: "people-pictures/ela-nur-yerli-sosyal-medya-ve-tasarim.jpg" },
-                { name: "Simay Balaban", role: "Medya Üyesi", img: "people-pictures/simay-balaban-medya.jpg" },
-                { name: "Zeynep Öztürk", role: "Tasarım Üyesi", img: "people-pictures/zeynep-ozturk-tasarim.jpg" }
+                { name: "Duru Baykan", role: "Tasarım Üyesi", img: "people-pictures/duru-baykan-sosyal-medya-ve-tasarim.jpg", linkedin: "https://www.linkedin.com/in/duru-baykan-877242325/" },
+                { name: "Ece Salman", role: "Tasarım Üyesi", img: "people-pictures/ece-salman-tasarim-ve-medya.jpg", linkedin: "javascript:void(0)" },
+                { name: "Ela Nur Yerli", role: "Tasarım Üyesi", img: "people-pictures/ela-nur-yerli-sosyal-medya-ve-tasarim.jpg", linkedin: "https://www.linkedin.com/in/ela-nur-yerli-927ab7324/" },
+                { name: "Simay Balaban", role: "Medya Üyesi", img: "people-pictures/simay-balaban-medya.jpg", linkedin: "https://www.linkedin.com/in/simay-balaban-72a40438a/" },
+                { name: "Zeynep Öztürk", role: "Tasarım Üyesi", img: "people-pictures/zeynep-ozturk-tasarim.jpg", linkedin: "https://www.linkedin.com/in/zeynep-%C3%B6zt%C3%BCrk-9bbba7302/" }
             ]
         }
     };
@@ -137,12 +187,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if(presOffice) {
         presOffice.innerHTML = `
             <div class="president-box">
-                <div class="gb-avatar" style="background-image: url('people-pictures/umut-uygur-baskan.jpg');"></div>
+                <div class="gb-avatar" style="background-image: url('people-pictures/umut-uygur-baskan.jpg');">
+                    <a href="https://www.linkedin.com/in/umut-uygur/" target="_blank" class="member-linkedin" title="LinkedIn Profile">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                    </a>
+                </div>
                 <h3 class="gb-name">Umut Uygur</h3>
                 <p class="gb-role">Genel Başkan</p>
             </div>
             <div class="president-box">
-                <div class="gb-avatar" style="background-image: url('people-pictures/dilasude-ozdogan-genel-baskan-yardimcisi.jpg');"></div>
+                <div class="gb-avatar" style="background-image: url('people-pictures/dilasude-ozdogan-genel-baskan-yardimcisi.jpg');">
+                    <a href="javascript:void(0)" class="member-linkedin" title="LinkedIn Profile">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                    </a>
+                </div>
                 <h3 class="gb-name">Dilasude Özdoğan</h3>
                 <p class="gb-role">Genel Başkan Yardımcısı</p>
             </div>
@@ -155,18 +217,89 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Leader
         const leaderEl = document.getElementById(`${key}-leader`);
-        if(leaderEl) leaderEl.innerHTML = generateLeaderHTML(data.leader.name, data.leader.img);
+        if(leaderEl) leaderEl.innerHTML = generateLeaderHTML(data.leader.name, data.leader.img, data.leader.linkedin);
         
         // Carousel
         const carouselEl = document.getElementById(`${key}-board`);
         if(carouselEl) {
             let html = "";
             data.members.forEach(m => {
-                html += generateCollinsCarouselCard(m.name, m.img);
+                html += generateCollinsCarouselCard(m.name, m.img, m.linkedin);
             });
             carouselEl.innerHTML = html;
         }
     });
+
+    // 3. Instagram Feed Loader
+    const instagramFeed = [
+        {
+            id: "post1",
+            url: "https://www.instagram.com/p/C9tH4Z-tmq0/", // Example link, user should update
+            img: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=600&auto=format&fit=crop", // Placeholder
+            caption: "Kariyer Söyleşileri: Mühendislikte Yeni Ufuklar"
+        },
+        {
+            id: "post2",
+            url: "https://www.instagram.com/p/C9q8X7xtO-N/", 
+            img: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=600&auto=format&fit=crop",
+            caption: "Robotics and Automation Society: Atölye Çalışmaları"
+        },
+        {
+            id: "post3",
+            url: "https://www.instagram.com/p/C9oA1T9tmK6/",
+            img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop",
+            caption: "IEEE TEDU General Assembly 2024"
+        },
+        {
+            id: "post4",
+            url: "https://www.instagram.com/p/C9l5J4xtm_3/",
+            img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=600&auto=format&fit=crop",
+            caption: "Computer Society: Kodlama Yarışması"
+        },
+        {
+            id: "post5",
+            url: "https://www.instagram.com/p/C9jN2Vxtm_w/",
+            img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&auto=format&fit=crop",
+            caption: "Teknik Gezi: Savunma Sanayii Ziyareti"
+        },
+        {
+            id: "post6",
+            url: "https://www.instagram.com/p/C9hG1T9tm_o/",
+            img: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=600&auto=format&fit=crop",
+            caption: "Women in Engineering: İlham Veren Kadınlar"
+        }
+    ];
+
+    function loadInstagramFeed() {
+        const grid = document.getElementById('instagram-feed-grid');
+        if (!grid) return;
+
+        // In a real scenario, you'd fetch this from an API like Behold.so or a proxy
+        let html = "";
+        instagramFeed.forEach(post => {
+            html += `
+                <a href="${post.url}" target="_blank" class="instagram-post reveal">
+                    <img src="${post.img}" alt="${post.caption}" loading="lazy">
+                    <div class="instagram-overlay">
+                        <div class="instagram-overlay-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+            `;
+        });
+        grid.innerHTML = html;
+        
+        // Re-observe new elements for reveal animation
+        const newReveals = grid.querySelectorAll('.reveal');
+        newReveals.forEach(r => revealOnScroll.observe(r));
+    }
+
+    // loadInstagramFeed(); // Disable for screenshots
 
     const tabs = document.querySelectorAll('.team-tab-wrapper');
     tabs.forEach(tab => {
@@ -192,108 +325,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Carousel Slider Controls
-    function updateArrowVisibility(carousel, prevBtn, nextBtn) {
-        if(!carousel || !prevBtn || !nextBtn) return;
-        const scrollLeft = carousel.scrollLeft;
-        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-        
-        if(maxScroll <= 0) {
-            prevBtn.style.visibility = 'hidden';
-            nextBtn.style.visibility = 'hidden';
-            return;
-        }
+    // 3b. Activities Carousel Navigation (Restored)
+    const actCarousel = document.getElementById('activities-carousel');
+    const actNextBtn = document.getElementById('activities-next-btn');
+    if (actCarousel && actNextBtn) {
+        actNextBtn.addEventListener('click', () => {
+            const firstCard = actCarousel.querySelector('.activity-card');
+            if (firstCard) {
+                const scrollAmount = firstCard.offsetWidth + 32; // card width + gap
+                actCarousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        });
 
-        if(scrollLeft <= 5) {
-            prevBtn.style.visibility = 'hidden';
-            prevBtn.style.opacity = '0';
-        } else {
-            prevBtn.style.visibility = 'visible';
-            prevBtn.style.opacity = '1';
-        }
-        
-        if(scrollLeft >= maxScroll - 5) {
-            nextBtn.style.visibility = 'hidden';
-            nextBtn.style.opacity = '0';
-        } else {
-            nextBtn.style.visibility = 'visible';
-            nextBtn.style.opacity = '1';
-        }
-    }
-
-    const activitiesCarousel = document.getElementById('activities-carousel-track');
-    const actPrev = document.getElementById('activities-prev');
-    const actNext = document.getElementById('activities-next');
-    if(activitiesCarousel && actPrev && actNext) {
-        // Force reset to true beginning
-        activitiesCarousel.scrollLeft = 0;
-        updateArrowVisibility(activitiesCarousel, actPrev, actNext);
-        activitiesCarousel.addEventListener('scroll', () => updateArrowVisibility(activitiesCarousel, actPrev, actNext));
-
-        actPrev.addEventListener('click', () => activitiesCarousel.scrollBy({ left: -400, behavior: 'smooth' }));
-        actNext.addEventListener('click', () => activitiesCarousel.scrollBy({ left: 400, behavior: 'smooth' }));
-
-        // 3b. Activity Card Direct Click (Mobile)
-        const activityCards = document.querySelectorAll('.activity-card');
-        activityCards.forEach(card => {
-            let startX, startY;
-            card.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-            }, {passive: true});
-            
-            card.addEventListener('touchend', (e) => {
-                const endX = e.changedTouches[0].clientX;
-                const endY = e.changedTouches[0].clientY;
-                const diffX = Math.abs(endX - startX);
-                const diffY = Math.abs(endY - startY);
-                
-                if (diffX < 10 && diffY < 10) {
-                    const link = card.querySelector('a');
-                    if (link) window.location.href = link.href;
-                }
-            }, {passive: true});
+        // Hide button if at the end of scroll
+        actCarousel.addEventListener('scroll', () => {
+            const maxScroll = actCarousel.scrollWidth - actCarousel.clientWidth;
+            if (actCarousel.scrollLeft >= maxScroll - 10) {
+                actNextBtn.style.opacity = '0';
+                actNextBtn.style.pointerEvents = 'none';
+            } else {
+                actNextBtn.style.opacity = '1';
+                actNextBtn.style.pointerEvents = 'auto';
+            }
         });
     }
 
 
     // Force all team carousels to start at position 0
-    document.querySelectorAll('.collins-carousel').forEach(c => { c.scrollLeft = 0; });
 
-    const teamPrev = document.getElementById('team-prev');
-    const teamNext = document.getElementById('team-next');
-    if(teamPrev && teamNext) {
-        const getActiveCarousel = () => {
-            const carousels = document.querySelectorAll('.carousels-wrapper .collins-carousel');
-            for(let c of carousels) {
-                if(window.getComputedStyle(c).display === 'flex') return c;
-            }
-            return null;
-        };
-
-        const updateTeamArrows = () => {
-            const c = getActiveCarousel();
-            if(c) updateArrowVisibility(c, teamPrev, teamNext);
-        };
-        
-        // Listen to active tab shifts and active carousel scrolls
-        document.querySelectorAll('.carousels-wrapper .collins-carousel').forEach(c => {
-            c.addEventListener('scroll', updateTeamArrows);
-        });
-        document.querySelectorAll('.team-tab-wrapper').forEach(t => {
-            t.addEventListener('click', () => setTimeout(updateTeamArrows, 150)); // let active class apply
-        });
-        setTimeout(updateTeamArrows, 200);
-
-        teamPrev.addEventListener('click', () => {
-            const c = getActiveCarousel();
-            if(c) c.scrollBy({ left: -350, behavior: 'smooth' });
-        });
-        teamNext.addEventListener('click', () => {
-            const c = getActiveCarousel();
-            if(c) c.scrollBy({ left: 350, behavior: 'smooth' });
-        });
-    }
 
     // 4. Dynamic Floating Button Colors and Hide Logic
     const floatingBtn = document.getElementById('floating-contact');
