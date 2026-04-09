@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "IEEE Student Branch Website",
   "scripts": {
-    "dev": "npx live-server",
-    "build": "echo \"No build step required for static site\""
+    "dev": "npx live-server"
   },
   "dependencies": {}
 }
