@@ -378,12 +378,20 @@ h1, h2, h3, h4, .huge-text {
     transform: translateY(20px);
     transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
+    /* Added to prevent text clipping if it still exceeds */
+    overflow-y: auto;
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+}
+
+.card-description::-webkit-scrollbar {
+    display: none;
 }
 
 .card-description p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
 }
 
 /* HOVER STATES */
@@ -437,10 +445,13 @@ h1, h2, h3, h4, .huge-text {
     display: flex;
     gap: 2rem;
     overflow-x: auto;
-    padding: 2rem 0;
+    padding: 2rem 5%;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;  /* IE and Edge */
     scroll-behavior: smooth;
+    width: max-content;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
 .activities-carousel::-webkit-scrollbar {
@@ -499,10 +510,9 @@ h1, h2, h3, h4, .huge-text {
     margin: 0;
 }
 
-/* Navigation Arrow Button */
-.activities-nav-next {
+/* Navigation Arrow Buttons */
+.activities-nav-next, .activities-nav-prev {
     position: absolute;
-    right: -20px;
     top: 50%;
     transform: translateY(-50%);
     width: 56px;
@@ -520,7 +530,15 @@ h1, h2, h3, h4, .huge-text {
     transition: all 0.3s ease;
 }
 
-.activities-nav-next:hover {
+.activities-nav-next {
+    right: 20px;
+}
+
+.activities-nav-prev {
+    left: 20px;
+}
+
+.activities-nav-next:hover, .activities-nav-prev:hover {
     transform: translateY(-50%) scale(1.1);
     box-shadow: 0 15px 40px rgba(0,0,0,0.15);
 }
@@ -530,7 +548,7 @@ h1, h2, h3, h4, .huge-text {
         flex: 0 0 85%;
         padding: 2rem;
     }
-    .activities-nav-next {
+    .activities-nav-next, .activities-nav-prev {
         display: none;
     }
 }
@@ -640,6 +658,16 @@ h1, h2, h3, h4, .huge-text {
 .team-tab-wrapper.active .tab-box {
     background: rgba(4, 9, 20, 0.05); /* Slight dark navy tint active */
 }
+.team-tab-wrapper.active .tab-box::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 15px 15px 0 15px;
+    border-style: solid;
+    border-color: var(--ted-red) transparent transparent transparent;
+}
 .leader-avatar {
     width: 220px; /* Explicit width to prevent flex collapse when empty */
     max-width: 100%;
@@ -689,7 +717,8 @@ h1, h2, h3, h4, .huge-text {
 
 
 .collins-card {
-    flex: 0 0 clamp(200px, 18vw, 300px);
+    flex: 1 1 0px;
+    min-width: 120px;
     display: flex;
     flex-direction: column;
     scroll-snap-align: start;

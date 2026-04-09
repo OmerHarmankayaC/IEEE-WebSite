@@ -157,7 +157,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 { name: "Ali Rahima", role: "RAS Üyesi", img: "people-pictures/ali-rahima-ras.jpg", linkedin: "https://www.linkedin.com/in/ali-rahima-5b1a8729b/" },
                 { name: "Harun Emre Erten", role: "RAS Üyesi", img: "people-pictures/harun-emre-erten-ras.jpg", linkedin: "https://www.linkedin.com/in/harun-emre-erten-083653300/" },
                 { name: "İbrahim Efe Yılmaz", role: "RAS Üyesi", img: "people-pictures/ibrahim-efe-yilmaz-ras.jpg", linkedin: "https://www.linkedin.com/in/ibrahim-efe-y%C4%B1lmaz-52a880318/" },
-                { name: "Kayra Üstten", role: "RAS Üyesi", img: "people-pictures/kayra-ustten-ras.jpg", linkedin: "https://www.linkedin.com/in/kayra-ustten-650268313/" }
+                { name: "Kayra Üstten", role: "RAS Üyesi", img: "people-pictures/kayra-ustten-ras.jpg", linkedin: "https://www.linkedin.com/in/kayra-ustten-650268313/" },
+                { name: "Batuhan Mert Korkmaz", role: "RAS Üyesi", img: "people-pictures/Batuhan Mert Korkmaz-RAS.jpeg", linkedin: "https://www.linkedin.com/in/batuhanmertkorkmaz/" },
+                { name: "Furkan Aldemir", role: "RAS Üyesi", img: "people-pictures/Furkan Aldemir RAS.jpeg", linkedin: "https://www.linkedin.com/in/furkan-aldemir-a07907302/" },
+                { name: "Selin Mafizer", role: "RAS Üyesi", img: "people-pictures/Selin_Mafizer_RAS.jpg", linkedin: "https://www.linkedin.com/in/selin-mafizer-691b33291/" }
             ]
         },
         "wie": {
@@ -199,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="president-box">
                 <div class="gb-avatar" style="background-image: url('people-pictures/dilasude-ozdogan-genel-baskan-yardimcisi.jpg');">
-                    <a href="javascript:void(0)" class="member-linkedin" title="LinkedIn Profile">
+                    <a href="https://www.linkedin.com/in/dilasude-%C3%B6zdo%C4%9Fan-b11b303b1/" target="_blank" class="member-linkedin" title="LinkedIn Profile">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                         </svg>
@@ -328,7 +331,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3b. Activities Carousel Navigation (Restored)
     const actCarousel = document.getElementById('activities-carousel');
     const actNextBtn = document.getElementById('activities-next-btn');
-    if (actCarousel && actNextBtn) {
+    const actPrevBtn = document.getElementById('activities-prev-btn');
+    
+    if (actCarousel && actNextBtn && actPrevBtn) {
         actNextBtn.addEventListener('click', () => {
             const firstCard = actCarousel.querySelector('.activity-card');
             if (firstCard) {
@@ -337,17 +342,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Hide button if at the end of scroll
-        actCarousel.addEventListener('scroll', () => {
-            const maxScroll = actCarousel.scrollWidth - actCarousel.clientWidth;
-            if (actCarousel.scrollLeft >= maxScroll - 10) {
-                actNextBtn.style.opacity = '0';
-                actNextBtn.style.pointerEvents = 'none';
-            } else {
-                actNextBtn.style.opacity = '1';
-                actNextBtn.style.pointerEvents = 'auto';
+        actPrevBtn.addEventListener('click', () => {
+            const firstCard = actCarousel.querySelector('.activity-card');
+            if (firstCard) {
+                const scrollAmount = firstCard.offsetWidth + 32; 
+                actCarousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
             }
         });
+
+        const toggleBtnVisibility = () => {
+            const maxScroll = actCarousel.scrollWidth - actCarousel.clientWidth;
+            if (maxScroll <= 10) {
+                actNextBtn.style.display = 'none';
+                actPrevBtn.style.display = 'none';
+            } else {
+                actNextBtn.style.display = 'flex';
+                actPrevBtn.style.display = 'flex';
+                
+                if (actCarousel.scrollLeft >= maxScroll - 10) {
+                    actNextBtn.style.opacity = '0';
+                    actNextBtn.style.pointerEvents = 'none';
+                } else {
+                    actNextBtn.style.opacity = '1';
+                    actNextBtn.style.pointerEvents = 'auto';
+                }
+
+                if (actCarousel.scrollLeft <= 10) {
+                    actPrevBtn.style.opacity = '0';
+                    actPrevBtn.style.pointerEvents = 'none';
+                } else {
+                    actPrevBtn.style.opacity = '1';
+                    actPrevBtn.style.pointerEvents = 'auto';
+                }
+            }
+        };
+
+        // Hide buttons if at the ends of scroll or if not scrollable
+        actCarousel.addEventListener('scroll', toggleBtnVisibility);
+        window.addEventListener('resize', toggleBtnVisibility);
+        // Initial check
+        setTimeout(toggleBtnVisibility, 100);
     }
 
 
