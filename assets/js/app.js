@@ -325,8 +325,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Reset scroll to left when appearing
                 targetCarousel.scrollLeft = 0;
             }
+            
+            if (typeof toggleTeamBtnVisibility === 'function') {
+                setTimeout(toggleTeamBtnVisibility, 50);
+            }
         });
     });
+
+    const teamNextBtn = document.getElementById('team-next-btn');
+    const teamPrevBtn = document.getElementById('team-prev-btn');
 
     // 3b. Activities Carousel Navigation (Restored)
     const actCarousel = document.getElementById('activities-carousel');
@@ -385,7 +392,64 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // Force all team carousels to start at position 0
+    // Team carousel arrows – only visible when RAS tab is active
+    function toggleTeamBtnVisibility() {
+        if (!teamNextBtn || !teamPrevBtn) return;
+
+        const rasBoard = document.getElementById('ras-board');
+        const rasIsVisible = rasBoard && rasBoard.style.display === 'flex';
+
+        if (!rasIsVisible) {
+            teamNextBtn.style.display = 'none';
+            teamPrevBtn.style.display = 'none';
+            return;
+        }
+
+        const maxScroll = rasBoard.scrollWidth - rasBoard.clientWidth;
+        
+        // If everything fits on screen, no arrows at all
+        if (maxScroll <= 10) {
+            teamNextBtn.style.display = 'none';
+            teamPrevBtn.style.display = 'none';
+            return;
+        }
+
+        const scrollPos = Math.round(rasBoard.scrollLeft);
+
+        // Left arrow: hidden when at the very start
+        teamPrevBtn.style.display = scrollPos <= 5 ? 'none' : 'flex';
+
+        // Right arrow: hidden when at the very end
+        teamNextBtn.style.display = scrollPos >= maxScroll - 5 ? 'none' : 'flex';
+    }
+
+    if (teamNextBtn && teamPrevBtn) {
+        const rasBoard = document.getElementById('ras-board');
+
+        teamNextBtn.addEventListener('click', () => {
+            if (rasBoard) {
+                const firstCard = rasBoard.querySelector('.collins-card');
+                if (firstCard) {
+                    rasBoard.scrollBy({ left: firstCard.offsetWidth + 24, behavior: 'smooth' });
+                }
+            }
+        });
+
+        teamPrevBtn.addEventListener('click', () => {
+            if (rasBoard) {
+                const firstCard = rasBoard.querySelector('.collins-card');
+                if (firstCard) {
+                    rasBoard.scrollBy({ left: -(firstCard.offsetWidth + 24), behavior: 'smooth' });
+                }
+            }
+        });
+
+        if (rasBoard) {
+            rasBoard.addEventListener('scroll', toggleTeamBtnVisibility);
+        }
+        window.addEventListener('resize', toggleTeamBtnVisibility);
+        setTimeout(toggleTeamBtnVisibility, 200);
+    }
 
 
     // 4. Dynamic Floating Button Colors and Hide Logic

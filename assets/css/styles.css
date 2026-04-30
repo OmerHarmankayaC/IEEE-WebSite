@@ -556,6 +556,11 @@ h1, h2, h3, h4, .huge-text {
 .team-section {
     padding: 8rem 0;
     overflow: hidden;
+    background-color: #FFFFFF !important; /* Force pure white, override bg-light */
+}
+
+.carousels-wrapper {
+    background-color: #FFFFFF;
 }
 
 .mb-4 { margin-bottom: 4rem; }
@@ -706,29 +711,74 @@ h1, h2, h3, h4, .huge-text {
     opacity: 1;
 }
 
+/* Default: centered, NO scrolling */
 .collins-carousel {
     display: flex;
     flex-wrap: nowrap !important; 
     gap: 1.5rem;
     padding: 0 5vw 4rem 5vw;
-    justify-content: flex-start; /* Changed from center to allow scroll */
-    overflow-x: auto; /* Allow scrolling */
+    justify-content: center;
+    overflow: hidden;
+    background-color: #FFFFFF;
+}
+
+/* RAS only: scrollable */
+#ras-board {
+    justify-content: flex-start;
+    overflow-x: auto;
     scroll-snap-type: x mandatory;
-    scrollbar-width: none; /* Hide scrollbar */
+    scroll-padding-left: 5vw;
+    scrollbar-width: none;
     -ms-overflow-style: none;
 }
 
-.collins-carousel::-webkit-scrollbar {
+#ras-board::-webkit-scrollbar {
     display: none;
 }
 
+/* Ensure padding doesn't collapse during scroll */
+#ras-board .collins-card:first-child {
+    margin-left: 0; /* padding on parent handles it */
+}
+#ras-board .collins-card:last-child {
+    margin-right: 5vw; /* extra space at the end so last card isn't flush */
+}
+
 .collins-card {
-    flex: 0 0 clamp(200px, 20vw, 260px); /* Fixed width for all cards */
+    flex: 0 0 clamp(200px, 20vw, 260px);
     display: flex;
     flex-direction: column;
     scroll-snap-align: start;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     background: transparent;
+}
+
+/* Team Navigation Arrows (RAS only, managed by JS) */
+.team-nav-next, .team-nav-prev {
+    position: absolute;
+    top: 35%;
+    transform: translateY(-50%);
+    width: 56px;
+    height: 56px;
+    background-color: var(--white);
+    border: none;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: var(--ted-navy);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    cursor: pointer;
+    z-index: 10;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.team-nav-next { right: 20px; }
+.team-nav-prev { left: 20px; }
+
+.team-nav-next:hover, .team-nav-prev:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
 }
 
 .collins-card:hover {
