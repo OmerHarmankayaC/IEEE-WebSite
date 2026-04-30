@@ -14,16 +14,19 @@ This is a static, frontend-only project built with core web technologies for max
 
 The repository is organized as follows:
 
-```
+```text
 ├── index.html           # Main landing page
 ├── contact.html         # Contact and reach-out page
 ├── blog.html            # Blog listing page
 ├── blog-*.html          # Individual blog post pages
-├── styles.css           # Global stylesheet and responsive rules
-├── app.js               # Global scripts, animations, and interactivity
 ├── package.json         # Project metadata and scripts
 ├── vercel.json          # Deployment configuration for Vercel
-└── people-pictures/     # Images and assets for team members
+└── assets/              # Static assets
+    ├── css/
+    │   └── styles.css   # Global stylesheet and responsive rules
+    ├── js/
+    │   └── app.js       # Global scripts, animations, and interactivity
+    └── images/          # Images, logos, and team member pictures
 ```
 
 ## Local Development

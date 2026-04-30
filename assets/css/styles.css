@@ -711,14 +711,19 @@ h1, h2, h3, h4, .huge-text {
     flex-wrap: nowrap !important; 
     gap: 1.5rem;
     padding: 0 5vw 4rem 5vw;
-    justify-content: center;
-    overflow-x: hidden; /* Fit everyone on one line without sliding */
+    justify-content: flex-start; /* Changed from center to allow scroll */
+    overflow-x: auto; /* Allow scrolling */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Hide scrollbar */
+    -ms-overflow-style: none;
 }
 
+.collins-carousel::-webkit-scrollbar {
+    display: none;
+}
 
 .collins-card {
-    flex: 1 1 0px;
-    min-width: 120px;
+    flex: 0 0 clamp(200px, 20vw, 260px); /* Fixed width for all cards */
     display: flex;
     flex-direction: column;
     scroll-snap-align: start;
@@ -798,32 +803,31 @@ h1, h2, h3, h4, .huge-text {
         gap: 1rem;
     }
     .collins-card {
-        min-width: 150px;
+        /* let the clamp handle sizing */
     }
 }
 
 @media (max-width: 768px) {
     .collins-carousel {
-        gap: 0.5rem;
-        padding-left: 2vw;
-        padding-right: 2vw;
+        gap: 1rem;
+        padding-left: 5vw;
+        padding-right: 5vw;
     }
     .collins-card {
-        min-width: 0;
-        flex: 1 1 0px !important;
+        flex: 0 0 clamp(160px, 45vw, 220px) !important; /* Fixed width for mobile, 2 visible at a time */
     }
     .collins-card-bg {
         border-radius: 10px;
     }
     .member-linkedin {
-        width: 20px;
-        height: 20px;
-        bottom: 5px;
-        right: 5px;
+        width: 24px;
+        height: 24px;
+        bottom: 8px;
+        right: 8px;
     }
     .member-linkedin svg {
-        width: 12px;
-        height: 12px;
+        width: 14px;
+        height: 14px;
     }
 }
 

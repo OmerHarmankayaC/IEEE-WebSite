@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const carouselEl = document.getElementById(`${key}-board`);
         if(carouselEl) {
             let html = "";
-            data.members.forEach(m => {
+            [...data.members].sort((a, b) => a.name.localeCompare(b.name, 'tr')).forEach(m => {
                 html += generateCollinsCarouselCard(m.name, m.img, m.linkedin);
             });
             carouselEl.innerHTML = html;
