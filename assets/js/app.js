@@ -142,45 +142,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const teamData = {
         "cs": {
-            leader: { name: "Eylül Akpınar", img: "people-pictures/eylul-akpinar-cs-baskan.jpg", linkedin: "https://www.linkedin.com/in/eyl%C3%BCl-akp%C4%B1nar-887634343/" },
+            leader: { name: "Eylül Akpınar", img: "assets/images/people-pictures/eylul-akpinar-cs-baskan.jpg", linkedin: "https://www.linkedin.com/in/eyl%C3%BCl-akp%C4%B1nar-887634343/" },
             members: [
-                { name: "Enes Taşçı", role: "CS Üyesi", img: "people-pictures/enes-tasci-cs.jpg", linkedin: "https://www.linkedin.com/in/enestsc/" },
-                { name: "Esra Eda Kılıç", role: "CS Üyesi", img: "people-pictures/esra-eda-kilic-cs.jpg", linkedin: "https://www.linkedin.com/in/esraedak%C4%B1l%C4%B1%C3%A7/" },
-                { name: "İdil Yavuzer", role: "CS Üyesi", img: "people-pictures/idil-yavuzer-cs.jpg", linkedin: "https://www.linkedin.com/in/idil-duru-yavuzer-3047a8322/" },
-                { name: "Yusuf Atakan Ünal", role: "CS Üyesi", img: "people-pictures/yusuf-atakan-unal-wie-cs.jpg", linkedin: "https://www.linkedin.com/in/yusufatakanunal/" },
-                { name: "Ömer Harmankaya", role: "CS Üyesi", img: "people-pictures/omer-harmankaya-cs.jpg", linkedin: "http://www.linkedin.com/in/omer-harmankaya" }
+                { name: "Enes Taşçı", role: "CS Üyesi", img: "assets/images/people-pictures/enes-tasci-cs.jpg", linkedin: "https://www.linkedin.com/in/enestsc/" },
+                { name: "Esra Eda Kılıç", role: "CS Üyesi", img: "assets/images/people-pictures/esra-eda-kilic-cs.jpg", linkedin: "https://www.linkedin.com/in/esraedak%C4%B1l%C4%B1%C3%A7/" },
+                { name: "İdil Yavuzer", role: "CS Üyesi", img: "assets/images/people-pictures/idil-yavuzer-cs.jpg", linkedin: "https://www.linkedin.com/in/idil-duru-yavuzer-3047a8322/" },
+                { name: "Yusuf Atakan Ünal", role: "CS Üyesi", img: "assets/images/people-pictures/yusuf-atakan-unal-wie-cs.jpg", linkedin: "https://www.linkedin.com/in/yusufatakanunal/" },
+                { name: "Ömer Harmankaya", role: "CS Üyesi", img: "assets/images/people-pictures/omer-harmankaya-cs.jpg", linkedin: "http://www.linkedin.com/in/omer-harmankaya" }
             ]
         },
         "ras": {
-            leader: { name: "Boran Bozkurt", img: "people-pictures/boran-bozkurt-ras-baskan.jpg", linkedin: "https://www.linkedin.com/in/boran-bozkurt-b45a1a27b/" },
+            leader: { name: "Boran Bozkurt", img: "assets/images/people-pictures/boran-bozkurt-ras-baskan.jpg", linkedin: "https://www.linkedin.com/in/boran-bozkurt-b45a1a27b/" },
             members: [
-                { name: "Ali Rahima", role: "RAS Üyesi", img: "people-pictures/ali-rahima-ras.jpg", linkedin: "https://www.linkedin.com/in/ali-rahima-5b1a8729b/" },
-                { name: "Harun Emre Erten", role: "RAS Üyesi", img: "people-pictures/harun-emre-erten-ras.jpg", linkedin: "https://www.linkedin.com/in/harun-emre-erten-083653300/" },
-                { name: "İbrahim Efe Yılmaz", role: "RAS Üyesi", img: "people-pictures/ibrahim-efe-yilmaz-ras.jpg", linkedin: "https://www.linkedin.com/in/ibrahim-efe-y%C4%B1lmaz-52a880318/" },
-                { name: "Kayra Üstten", role: "RAS Üyesi", img: "people-pictures/kayra-ustten-ras.jpg", linkedin: "https://www.linkedin.com/in/kayra-ustten-650268313/" },
-                { name: "Batuhan Mert Korkmaz", role: "RAS Üyesi", img: "people-pictures/Batuhan Mert Korkmaz-RAS.jpeg", linkedin: "https://www.linkedin.com/in/batuhanmertkorkmaz/" },
-                { name: "Furkan Aldemir", role: "RAS Üyesi", img: "people-pictures/Furkan Aldemir RAS.jpeg", linkedin: "https://www.linkedin.com/in/furkan-aldemir-a07907302/" },
-                { name: "Selin Mafizer", role: "RAS Üyesi", img: "people-pictures/Selin_Mafizer_RAS.jpg", linkedin: "https://www.linkedin.com/in/selin-mafizer-691b33291/" }
+                { name: "Ali Rahima", role: "RAS Üyesi", img: "assets/images/people-pictures/ali-rahima-ras.jpg", linkedin: "https://www.linkedin.com/in/ali-rahima-5b1a8729b/" },
+                { name: "Harun Emre Erten", role: "RAS Üyesi", img: "assets/images/people-pictures/harun-emre-erten-ras.jpg", linkedin: "https://www.linkedin.com/in/harun-emre-erten-083653300/" },
+                { name: "İbrahim Efe Yılmaz", role: "RAS Üyesi", img: "assets/images/people-pictures/ibrahim-efe-yilmaz-ras.jpg", linkedin: "https://www.linkedin.com/in/ibrahim-efe-y%C4%B1lmaz-52a880318/" },
+                { name: "Kayra Üstten", role: "RAS Üyesi", img: "assets/images/people-pictures/kayra-ustten-ras.jpg", linkedin: "https://www.linkedin.com/in/kayra-ustten-650268313/" },
+                { name: "Batuhan Mert Korkmaz", role: "RAS Üyesi", img: "assets/images/people-pictures/Batuhan Mert Korkmaz-RAS.jpeg", linkedin: "https://www.linkedin.com/in/batuhanmertkorkmaz/" },
+                { name: "Furkan Aldemir", role: "RAS Üyesi", img: "assets/images/people-pictures/Furkan Aldemir RAS.jpeg", linkedin: "https://www.linkedin.com/in/furkan-aldemir-a07907302/" },
+                { name: "Selin Mafizer", role: "RAS Üyesi", img: "assets/images/people-pictures/Selin_Mafizer_RAS.jpg", linkedin: "https://www.linkedin.com/in/selin-mafizer-691b33291/" }
             ]
         },
         "wie": {
-            leader: { name: "İrem Akıl", img: "people-pictures/irem-akil-wie-baskan.jpg", linkedin: "https://www.linkedin.com/in/irem-ak%C4%B1l-9202a829a/" },
+            leader: { name: "İrem Akıl", img: "assets/images/people-pictures/irem-akil-wie-baskan.jpg", linkedin: "https://www.linkedin.com/in/irem-ak%C4%B1l-9202a829a/" },
             members: [
-                { name: "Aysu Ece Atalay", role: "WIE Üyesi", img: "people-pictures/aysu-ece-atalay-wie.jpg", linkedin: "https://www.linkedin.com/in/aysu-ece-atalay-619bb139b/" },
-                { name: "Serra Yelmenoğlu", role: "WIE Üyesi", img: "people-pictures/serra-yelmenoglu-wie.jpg", linkedin: "https://www.linkedin.com/in/serra-yelmeno%C4%9Flu-2680743b4/" },
-                { name: "Zeynep Nil Usluoğlu", role: "WIE Üyesi", img: "people-pictures/zeynep-nil-usluoglu-wie.jpg", linkedin: "https://www.linkedin.com/in/zeynep-nil-usluo%C4%9Flu-72a729328/" },
-                { name: "İpek Özdemir", role: "WIE Üyesi", img: "people-pictures/ipek-ozdemir-wie.jpg", linkedin: "https://www.linkedin.com/in/ipek-%C3%B6zdemir-b1350b299/" },
-                { name: "İrem Aköz", role: "WIE Üyesi", img: "people-pictures/irem-akoz-wie.jpg", linkedin: "https://www.linkedin.com/in/irem-ak%C3%B6z-aa7450247/" }
+                { name: "Aysu Ece Atalay", role: "WIE Üyesi", img: "assets/images/people-pictures/aysu-ece-atalay-wie.jpg", linkedin: "https://www.linkedin.com/in/aysu-ece-atalay-619bb139b/" },
+                { name: "Serra Yelmenoğlu", role: "WIE Üyesi", img: "assets/images/people-pictures/serra-yelmenoglu-wie.jpg", linkedin: "https://www.linkedin.com/in/serra-yelmeno%C4%9Flu-2680743b4/" },
+                { name: "Zeynep Nil Usluoğlu", role: "WIE Üyesi", img: "assets/images/people-pictures/zeynep-nil-usluoglu-wie.jpg", linkedin: "https://www.linkedin.com/in/zeynep-nil-usluo%C4%9Flu-72a729328/" },
+                { name: "İpek Özdemir", role: "WIE Üyesi", img: "assets/images/people-pictures/ipek-ozdemir-wie.jpg", linkedin: "https://www.linkedin.com/in/ipek-%C3%B6zdemir-b1350b299/" },
+                { name: "İrem Aköz", role: "WIE Üyesi", img: "assets/images/people-pictures/irem-akoz-wie.jpg", linkedin: "https://www.linkedin.com/in/irem-ak%C3%B6z-aa7450247/" }
             ]
         },
         "medya": {
-            leader: { name: "Duru Türkmen", img: "people-pictures/duru-turkmen-sosyal-medya-ve-tasarim-baskan.jpg", linkedin: "https://www.linkedin.com/in/duru-t%C3%BCrkmen-756a7733a/" },
+            leader: { name: "Duru Türkmen", img: "assets/images/people-pictures/duru-turkmen-sosyal-medya-ve-tasarim-baskan.jpg", linkedin: "https://www.linkedin.com/in/duru-t%C3%BCrkmen-756a7733a/" },
             members: [
-                { name: "Duru Baykan", role: "Tasarım Üyesi", img: "people-pictures/duru-baykan-sosyal-medya-ve-tasarim.jpg", linkedin: "https://www.linkedin.com/in/duru-baykan-877242325/" },
-                { name: "Ece Salman", role: "Tasarım Üyesi", img: "people-pictures/ece-salman-tasarim-ve-medya.jpg", linkedin: "javascript:void(0)" },
-                { name: "Ela Nur Yerli", role: "Tasarım Üyesi", img: "people-pictures/ela-nur-yerli-sosyal-medya-ve-tasarim.jpg", linkedin: "https://www.linkedin.com/in/ela-nur-yerli-927ab7324/" },
-                { name: "Simay Balaban", role: "Medya Üyesi", img: "people-pictures/simay-balaban-medya.jpg", linkedin: "https://www.linkedin.com/in/simay-balaban-72a40438a/" },
-                { name: "Zeynep Öztürk", role: "Tasarım Üyesi", img: "people-pictures/zeynep-ozturk-tasarim.jpg", linkedin: "https://www.linkedin.com/in/zeynep-%C3%B6zt%C3%BCrk-9bbba7302/" }
+                { name: "Duru Baykan", role: "Tasarım Üyesi", img: "assets/images/people-pictures/duru-baykan-sosyal-medya-ve-tasarim.jpg", linkedin: "https://www.linkedin.com/in/duru-baykan-877242325/" },
+                { name: "Ece Salman", role: "Tasarım Üyesi", img: "assets/images/people-pictures/ece-salman-tasarim-ve-medya.jpg", linkedin: "javascript:void(0)" },
+                { name: "Ela Nur Yerli", role: "Tasarım Üyesi", img: "assets/images/people-pictures/ela-nur-yerli-sosyal-medya-ve-tasarim.jpg", linkedin: "https://www.linkedin.com/in/ela-nur-yerli-927ab7324/" },
+                { name: "Simay Balaban", role: "Medya Üyesi", img: "assets/images/people-pictures/simay-balaban-medya.jpg", linkedin: "https://www.linkedin.com/in/simay-balaban-72a40438a/" },
+                { name: "Zeynep Öztürk", role: "Tasarım Üyesi", img: "assets/images/people-pictures/zeynep-ozturk-tasarim.jpg", linkedin: "https://www.linkedin.com/in/zeynep-%C3%B6zt%C3%BCrk-9bbba7302/" }
             ]
         }
     };
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(presOffice) {
         presOffice.innerHTML = `
             <div class="president-box">
-                <div class="gb-avatar" style="background-image: url('people-pictures/umut-uygur-baskan.jpg');">
+                <div class="gb-avatar" style="background-image: url('assets/images/people-pictures/umut-uygur-baskan.jpg');">
                     <a href="https://www.linkedin.com/in/umut-uygur/" target="_blank" class="member-linkedin" title="LinkedIn Profile">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p class="gb-role">Genel Başkan</p>
             </div>
             <div class="president-box">
-                <div class="gb-avatar" style="background-image: url('people-pictures/dilasude-ozdogan-genel-baskan-yardimcisi.jpg');">
+                <div class="gb-avatar" style="background-image: url('assets/images/people-pictures/dilasude-ozdogan-genel-baskan-yardimcisi.jpg');">
                     <a href="https://www.linkedin.com/in/dilasude-%C3%B6zdo%C4%9Fan-b11b303b1/" target="_blank" class="member-linkedin" title="LinkedIn Profile">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
