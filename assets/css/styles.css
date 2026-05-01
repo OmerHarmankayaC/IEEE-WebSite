@@ -1684,3 +1684,40 @@ h1, h2, h3, h4, .huge-text {
         min-width: 0 !important;
     }
 }
+
+/* Year Switcher Styles */
+.year-switcher-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+}
+
+.year-btn {
+    background: transparent;
+    border: 2px solid var(--ted-navy);
+    color: var(--ted-navy);
+    padding: 0.5rem 1.5rem;
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.year-btn:hover {
+    background: rgba(18, 30, 48, 0.1);
+}
+
+.year-btn.active {
+    background: var(--ted-navy);
+    color: var(--white);
+}
+
+/* Fade transition for team elements */
+#presidential-office-container, .team-tabs-container, .carousels-wrapper {
+    transition: opacity 0.2s ease-in-out;
+}
+
