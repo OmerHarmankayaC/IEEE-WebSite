@@ -173,6 +173,7 @@ h1, h2, h3, h4, .huge-text {
     display: flex;
     gap: 2.5rem;
     list-style: none;
+    margin-left: auto;
 }
 
 .nav-links a {
@@ -196,6 +197,133 @@ h1, h2, h3, h4, .huge-text {
 
 .nav-links a:hover::after {
     width: 100%;
+}
+
+/* Language switch (TR / EN) — markup in every page, behaviour in assets/js/i18n.js */
+.lang-switch {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 2rem;
+    border: 1.5px solid var(--ted-navy);
+    border-radius: 50px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.lang-switch button {
+    background: transparent;
+    border: none;
+    padding: 0.35rem 0.75rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    color: var(--ted-navy);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.lang-switch button:hover {
+    color: var(--ted-red);
+}
+
+.lang-switch button.active {
+    background: var(--ted-navy);
+    color: var(--white);
+}
+
+.lang-switch button:focus-visible {
+    outline: 2px solid var(--ted-red);
+    outline-offset: -2px;
+}
+
+/* Laptops: tighten the navbar so links + language switch fit */
+@media (max-width: 1400px) {
+    .nav-links {
+        gap: 1.75rem;
+    }
+    .nav-links a {
+        white-space: nowrap;
+    }
+    .nav-logo {
+        height: 80px;
+    }
+    .navbar.scrolled .nav-logo {
+        height: 70px;
+    }
+    .lang-switch {
+        margin-left: 1.5rem;
+    }
+}
+
+/* Tablets and small laptops: switch to the compact mobile navbar */
+@media (max-width: 1100px) {
+    .nav-links {
+        display: none !important;
+    }
+    .mobile-nav-links {
+        display: flex;
+    }
+    .lang-switch {
+        margin-left: 0;
+    }
+    .nav-logo,
+    .navbar.scrolled .nav-logo {
+        height: 50px;
+    }
+}
+
+/* Pages without a navbar (contact, blog posts) */
+.lang-switch--floating {
+    position: fixed;
+    top: 40px;
+    right: 5vw;
+    margin-left: 0;
+    z-index: 1001;
+    background: rgba(246, 246, 248, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+@media (max-width: 768px) {
+    .lang-switch--floating {
+        top: 16px;
+        right: 1.5rem;
+    }
+}
+
+/* Phone copy of the switch (index.html, blog.html) — hidden on larger screens */
+.lang-switch--phone {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .navbar .lang-switch {
+        display: none;
+    }
+    .lang-switch--phone {
+        display: inline-flex;
+        top: auto;
+        right: auto;
+        bottom: 20px;
+        left: 20px;
+        box-shadow: 0 10px 30px rgba(4, 9, 20, 0.15);
+    }
+    .lang-switch--phone button {
+        padding: 0.6rem 0.9rem;
+    }
+    /* White ring keeps the pill visible over navy sections */
+    .lang-switch--phone {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 10px 30px rgba(4, 9, 20, 0.15);
+    }
+    /* Make the logo + Blog + Contact links fit on a 375px screen */
+    .navbar .nav-logo,
+    .navbar.scrolled .nav-logo {
+        height: 40px !important;
+    }
+    .mobile-nav-links {
+        gap: 1rem;
+        margin-right: 0;
+    }
 }
 
 /* Hero Section */
@@ -252,7 +380,7 @@ h1, h2, h3, h4, .huge-text {
     color: rgba(255,255,255,0.8);
 }
 
-/* Committees Section - Vertical Stack with Flip Logo */
+
 /* Committees Section - New 3-Column Design */
 .committees-section {
     padding: 10rem 0;
@@ -435,7 +563,7 @@ h1, h2, h3, h4, .huge-text {
 
 
 /* Activities / Blog Section */
-/* Visual Restoration Styles */
+/* Activity cards carousel */
 .activities-section {
     padding: 10rem 0 6rem 0;
     overflow: hidden;
@@ -552,7 +680,7 @@ h1, h2, h3, h4, .huge-text {
         display: none;
     }
 }
-/* Team Section - Collins Carousel */
+/* Team Section - board carousels */
 .team-section {
     padding: 8rem 0;
     overflow: hidden;
@@ -565,7 +693,7 @@ h1, h2, h3, h4, .huge-text {
 
 .mb-4 { margin-bottom: 4rem; }
 
-/* Genel Baskan & Tabs */
+/* Presidential office (President & Vice President) and committee tabs */
 .presidential-office {
     display: flex;
     justify-content: center;
@@ -1005,100 +1133,6 @@ h1, h2, h3, h4, .huge-text {
 }
 
 /* =============================================
-   HAMBURGER MENU
-   ============================================= */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    width: 40px;
-    height: 40px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    z-index: 1100;
-}
-.hamburger span {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background: var(--ted-navy);
-    border-radius: 2px;
-    transition: all 0.3s ease;
-    transform-origin: center;
-}
-.hamburger.open span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-}
-.hamburger.open span:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0);
-}
-.hamburger.open span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-}
-
-/* Mobile slide-in menu */
-.mobile-menu {
-    display: none;
-    position: fixed;
-    top: 0; right: 0;
-    width: 75vw;
-    max-width: 320px;
-    height: 100%;
-    background: var(--white);
-    z-index: 1050;
-    padding: 6rem 2.5rem 3rem 2.5rem;
-    box-shadow: -10px 0 40px rgba(0,0,0,0.12);
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-    overflow-y: auto;
-}
-.mobile-menu.open {
-    transform: translateX(0);
-}
-.mobile-menu ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-.mobile-menu ul li {
-    border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-.mobile-menu ul li a {
-    display: block;
-    padding: 1.1rem 0;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 1.3rem;
-    color: var(--ted-navy);
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: -0.5px;
-    transition: color 0.2s;
-}
-.mobile-menu ul li a:hover {
-    color: var(--ted-red);
-}
-
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 1040;
-    opacity: 0;
-    transition: opacity 0.35s ease;
-}
-.mobile-menu-overlay.open {
-    opacity: 1;
-}
-
-/* =============================================
    RESPONSIVE — 900px and below
    ============================================= */
 @media (max-width: 900px) {
@@ -1107,19 +1141,15 @@ h1, h2, h3, h4, .huge-text {
         gap: 2rem;
     }
 
-    /* Hide desktop nav links, hide hamburger, show mobile links */
+    /* Hide desktop nav links, show the compact mobile links */
     .nav-links {
-        display: none !important;
-    }
-    .hamburger {
         display: none !important;
     }
     .mobile-nav-links {
         display: flex;
     }
-    .mobile-menu,
-    .mobile-menu-overlay {
-        display: none !important;
+    .lang-switch {
+        margin-left: 0;
     }
     .nav-logo {
         height: 50px !important;

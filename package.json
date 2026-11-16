@@ -1,9 +1,15 @@
 {
-  "name": "ieee-website",
+  "name": "ieee-tedu-website",
   "version": "1.0.0",
-  "description": "IEEE Student Branch Website",
+  "private": true,
+  "description": "Website of the IEEE Student Branch at TED University (Turkish / English).",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OmerHarmankayaC/IEEE-WebSite.git"
+  },
   "scripts": {
-    "dev": "npx live-server"
+    "dev": "npx live-server --port=8080",
+    "check:i18n": "node scripts/check-i18n.js"
   },
   "dependencies": {}
 }

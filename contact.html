@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İletişim | IEEE TEDU</title>
+    <title data-i18n="meta.title.contact">İletişim | IEEE TEDU</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
@@ -101,6 +101,17 @@
         .back-link:hover {
             color: var(--ted-red);
         }
+        .contact-btn {
+            text-transform: uppercase;
+        }
+        .contact-note {
+            margin-top: 1rem;
+            text-align: center;
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--ted-navy);
+            opacity: 0.6;
+        }
 
         @media (max-width: 768px) {
             .contact-page {
@@ -148,43 +159,45 @@
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">← Geri Dön</a>
+    <a href="index.html" class="back-link" data-i18n="contact.back">← Geri Dön</a>
+    <div class="lang-switch lang-switch--floating" role="group" data-i18n-attr="aria-label:lang.label" aria-label="Dil seçimi">
+        <button type="button" data-set-lang="tr" lang="tr">TR</button>
+        <button type="button" data-set-lang="en" lang="en">EN</button>
+    </div>
 
     <div class="contact-page">
         <div class="contact-container reveal">
             <div class="contact-header">
-                <h1 class="contact-title">İletişime Geçin</h1>
-                <p class="contact-subtitle">İşbirlikleri, projeler ve sorularınız için bize ulaşın.</p>
+                <h1 class="contact-title" data-i18n="contact.title">İletişime Geçin</h1>
+                <p class="contact-subtitle" data-i18n="contact.subtitle">İşbirlikleri, projeler ve sorularınız için bize ulaşın.</p>
             </div>
             
-            <form action="#" method="POST" id="contact-form">
+            <!-- Submitting opens the visitor's email app with a prefilled message (see app.js, section 7). -->
+            <form action="mailto:ieee@tedu.edu.tr" method="POST" id="contact-form">
                 <div class="form-group">
-                    <label class="form-label" for="name">Adınız Soyadınız</label>
-                    <input type="text" id="name" class="form-control" placeholder="Örn. Ahmet Yılmaz" required>
+                    <label class="form-label" for="name" data-i18n="contact.name">Adınız Soyadınız</label>
+                    <input type="text" id="name" class="form-control" placeholder="Örn. Ahmet Yılmaz" data-i18n-attr="placeholder:contact.namePlaceholder" autocomplete="name" required>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label" for="email">E-Posta Adresiniz</label>
-                    <input type="email" id="email" class="form-control" placeholder="ornek@sirket.com" required>
+                    <label class="form-label" for="email" data-i18n="contact.email">E-Posta Adresiniz</label>
+                    <input type="email" id="email" class="form-control" placeholder="ornek@sirket.com" data-i18n-attr="placeholder:contact.emailPlaceholder" autocomplete="email" required>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label" for="message">Mesajınız</label>
-                    <textarea id="message" class="form-control" placeholder="Detayları buraya yazabilirsiniz..." required></textarea>
+                    <label class="form-label" for="message" data-i18n="contact.message">Mesajınız</label>
+                    <textarea id="message" class="form-control" placeholder="Detayları buraya yazabilirsiniz..." data-i18n-attr="placeholder:contact.messagePlaceholder" required></textarea>
                 </div>
                 
-                <button type="submit" class="btn btn-primary contact-btn">MESAJI GÖNDER</button>
+                <button type="submit" class="btn btn-primary contact-btn" data-i18n="contact.submit">Mesajı Gönder</button>
+                <p class="contact-note" data-i18n="contact.mailNote">Gönder'e bastığınızda e-posta uygulamanız mesajınız hazır şekilde açılır.</p>
             </form>
         </div>
     </div>
 
+    <script src="assets/js/i18n/tr.js"></script>
+    <script src="assets/js/i18n/en.js"></script>
+    <script src="assets/js/i18n.js"></script>
     <script src="assets/js/app.js"></script>
-    <script>
-        document.getElementById('contact-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Mesajınız başarıyla alınmıştır. En kısa sürede ieee@tedu.edu.tr üzerinden dönüş sağlayacağız.');
-            window.location.href = 'index.html';
-        });
-    </script>
 </body>
 </html>

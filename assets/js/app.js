@@ -1,553 +1,380 @@
+/**
+ * Site-wide behaviour for every page.
+ *
+ * Each section below checks that its elements exist first, so the same file
+ * can be loaded on the homepage, the blog pages and the contact page.
+ *
+ * Depends on:
+ *   - assets/js/i18n.js       → window.I18n (always loaded before this file)
+ *   - assets/js/data/team.js  → window.IEEE_TEAM (homepage only)
+ */
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Scroll Animations (Intersection Observer)
-    const reveals = document.querySelectorAll('.reveal');
-    const revealOptions = {
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px"
-    };
+    const t = key => (window.I18n ? window.I18n.t(key) : key);
 
-    const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+    /** Escapes a value for safe use inside HTML text or a quoted attribute. */
+    const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[ch]);
+
+    // ---------------------------------------------------------------------
+    // 1. Reveal-on-scroll animations
+    // ---------------------------------------------------------------------
+    const revealObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
                 observer.unobserve(entry.target);
             }
         });
-    }, revealOptions);
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
 
-    reveals.forEach(reveal => revealOnScroll.observe(reveal));
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-    // 2. Navbar shrink effect
+    // ---------------------------------------------------------------------
+    // 2. Navbar shrinks after the user scrolls down
+    // ---------------------------------------------------------------------
     const navbar = document.querySelector('.navbar');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) navbar.classList.add('scrolled');
-        else navbar.classList.remove('scrolled');
-    });
-
-    // 2b. Hamburger Menu
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileOverlay = document.getElementById('mobile-menu-overlay');
-
-    function openMobileMenu() {
-        hamburger.classList.add('open');
-        mobileMenu.classList.add('open');
-        mobileOverlay.classList.add('open');
-        hamburger.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-    }
-    function closeMobileMenu() {
-        hamburger.classList.remove('open');
-        mobileMenu.classList.remove('open');
-        mobileOverlay.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-    }
-
-    if (hamburger) {
-        hamburger.addEventListener('click', () => {
-            if (mobileMenu.classList.contains('open')) closeMobileMenu();
-            else openMobileMenu();
-        });
-    }
-    if (mobileOverlay) mobileOverlay.addEventListener('click', closeMobileMenu);
-
-    // Close mobile menu when any link is tapped
-    if (mobileMenu) {
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', closeMobileMenu);
+    if (navbar) {
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
         });
     }
 
-    // 2c. Committee Switcher (Mobile)
-    const comTabs = document.querySelectorAll('.com-tab');
+    // ---------------------------------------------------------------------
+    // 3. Committee switcher (mobile): tabs + swipe left/right
+    // ---------------------------------------------------------------------
+    const comTabs = Array.from(document.querySelectorAll('.com-tab'));
     const comWrappers = document.querySelectorAll('.committee-wrapper');
 
     comTabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            const targetId = tab.getAttribute('data-target');
-            comTabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            comWrappers.forEach(w => {
-                if (w.id === targetId) w.classList.add('active');
-                else w.classList.remove('active');
-            });
-            // Center the active tab in switcher
+            const targetId = tab.dataset.target;
+            comTabs.forEach(t => t.classList.toggle('active', t === tab));
+            comWrappers.forEach(w => w.classList.toggle('active', w.id === targetId));
             tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         });
     });
 
-    // Swipe Functionality for Committees (Mobile)
-    const comContainer = document.querySelector('.committees-container');
-    if (comContainer) {
+    const comContainer = document.querySelector('.committees-grid');
+    if (comContainer && comTabs.length) {
+        const SWIPE_THRESHOLD = 60;
         let touchStartX = 0;
-        let touchEndX = 0;
 
         comContainer.addEventListener('touchstart', e => {
             touchStartX = e.changedTouches[0].screenX;
         }, { passive: true });
 
         comContainer.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleComSwipe();
-        }, { passive: true });
+            const deltaX = e.changedTouches[0].screenX - touchStartX;
+            const currentIndex = comTabs.findIndex(tab => tab.classList.contains('active'));
+            if (currentIndex === -1) return;
 
-        function handleComSwipe() {
-            const threshold = 60;
-            const currentTab = document.querySelector('.com-tab.active');
-            if (!currentTab) return;
-
-            const tabsArray = Array.from(comTabs);
-            const currentIndex = tabsArray.indexOf(currentTab);
-
-            if (touchEndX < touchStartX - threshold) {
-                // Swipe Left -> Next
-                if (currentIndex < tabsArray.length - 1) {
-                    tabsArray[currentIndex + 1].click();
-                }
-            } else if (touchEndX > touchStartX + threshold) {
-                // Swipe Right -> Prev
-                if (currentIndex > 0) {
-                    tabsArray[currentIndex - 1].click();
-                }
+            if (deltaX < -SWIPE_THRESHOLD && currentIndex < comTabs.length - 1) {
+                comTabs[currentIndex + 1].click(); // swipe left → next committee
+            } else if (deltaX > SWIPE_THRESHOLD && currentIndex > 0) {
+                comTabs[currentIndex - 1].click(); // swipe right → previous committee
             }
-        }
+        }, { passive: true });
     }
 
-    const generateCollinsCarouselCard = (name = "İsim Soyisim", imgSrc = "", linkedin = "#") => `
+    // ---------------------------------------------------------------------
+    // 4. Board of Directors (data lives in assets/js/data/team.js)
+    // ---------------------------------------------------------------------
+    const LINKEDIN_ICON = `
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+        </svg>`;
+
+    const displayName = person => person.name || t('team.tba');
+
+    const linkedinLink = url => url
+        ? `<a href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer" class="member-linkedin" title="${escapeHTML(t('team.linkedin'))}" aria-label="${escapeHTML(t('team.linkedin'))}">${LINKEDIN_ICON}</a>`
+        : '';
+
+    const avatarStyle = (img, extra = '') => img
+        ? `style="background-image: url('${escapeHTML(img)}');${extra}"`
+        : '';
+
+    const renderPresident = person => `
+        <div class="president-box">
+            <div class="gb-avatar" ${person.img ? avatarStyle(person.img) : 'style="background-color: var(--ted-navy);"'}>
+                ${linkedinLink(person.linkedin)}
+            </div>
+            <h3 class="gb-name">${escapeHTML(displayName(person))}</h3>
+            <p class="gb-role">${escapeHTML(t(person.roleKey))}</p>
+        </div>`;
+
+    const renderLeader = person => `
+        <div class="leader-avatar" ${avatarStyle(person.img, ' background-size: cover; background-position: center;')}>
+            ${linkedinLink(person.linkedin)}
+        </div>
+        <p class="leader-name">${escapeHTML(displayName(person))}</p>`;
+
+    const renderMemberCard = person => `
         <div class="collins-card">
-            <div class="collins-card-bg" ${imgSrc ? `style="background-image: url('${imgSrc}');"` : ''}>
-                <a href="${linkedin}" target="_blank" class="member-linkedin" title="LinkedIn Profile">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                    </svg>
-                </a>
+            <div class="collins-card-bg" ${avatarStyle(person.img)}>
+                ${linkedinLink(person.linkedin)}
             </div>
             <div class="collins-card-content">
-                <h4 class="collins-card-name">${name}</h4>
+                <h4 class="collins-card-name">${escapeHTML(displayName(person))}</h4>
             </div>
-        </div>
-    `;
+        </div>`;
 
-    const generateLeaderHTML = (name, imgSrc = "", linkedin = "#") => `
-        <div class="leader-avatar" ${imgSrc ? `style="background-image: url('${imgSrc}'); background-size: cover; background-position: center;"` : ''}>
-            <a href="${linkedin}" target="_blank" class="member-linkedin" title="LinkedIn Profile">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                </svg>
-            </a>
-        </div>
-        <p class="leader-name">${name}</p>
-    `;
+    const TBA_PLACEHOLDER_CARDS = 3;
+    const teamData = window.IEEE_TEAM || {};
+    const yearButtons = document.querySelectorAll('.year-btn');
+    let selectedYear = (document.querySelector('.year-btn.active') || {}).dataset?.year || Object.keys(teamData)[0];
 
-    const allYearsData = {
-        "2025-2026": {
-            presidential: `
-                <div class="president-box">
-                    <div class="gb-avatar" style="background-image: url('assets/images/people-pictures/umut-uygur-baskan.jpg');">
-                        <a href="https://www.linkedin.com/in/umut-uygur/" target="_blank" class="member-linkedin" title="LinkedIn Profile">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                            </svg>
-                        </a>
-                    </div>
-                    <h3 class="gb-name">Umut Uygur</h3>
-                    <p class="gb-role">Genel Başkan</p>
-                </div>
-                <div class="president-box">
-                    <div class="gb-avatar" style="background-image: url('assets/images/people-pictures/dilasude-ozdogan-genel-baskan-yardimcisi.jpg');">
-                        <a href="https://www.linkedin.com/in/dilasude-%C3%B6zdo%C4%9Fan-b11b303b1/" target="_blank" class="member-linkedin" title="LinkedIn Profile">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                            </svg>
-                        </a>
-                    </div>
-                    <h3 class="gb-name">Dilasude Özdoğan</h3>
-                    <p class="gb-role">Genel Başkan Yardımcısı</p>
-                </div>
-            `,
-            teamData: {
-                "cs": {
-                    leader: { name: "Eylül Akpınar", img: "assets/images/people-pictures/eylul-akpinar-cs-baskan.jpg", linkedin: "https://www.linkedin.com/in/eyl%C3%BCl-akp%C4%B1nar-887634343/" },
-                    members: [
-                        { name: "Enes Taşçı", role: "CS Üyesi", img: "assets/images/people-pictures/enes-tasci-cs.jpg", linkedin: "https://www.linkedin.com/in/enestsc/" },
-                        { name: "Esra Eda Kılıç", role: "CS Üyesi", img: "assets/images/people-pictures/esra-eda-kilic-cs.jpg", linkedin: "https://www.linkedin.com/in/esraedak%C4%B1l%C4%B1%C3%A7/" },
-                        { name: "İdil Yavuzer", role: "CS Üyesi", img: "assets/images/people-pictures/idil-yavuzer-cs.jpg", linkedin: "https://www.linkedin.com/in/idil-duru-yavuzer-3047a8322/" },
-                        { name: "Yusuf Atakan Ünal", role: "CS Üyesi", img: "assets/images/people-pictures/yusuf-atakan-unal-wie-cs.jpg", linkedin: "https://www.linkedin.com/in/yusufatakanunal/" },
-                        { name: "Ömer Harmankaya", role: "CS Üyesi", img: "assets/images/people-pictures/omer-harmankaya-cs.jpg", linkedin: "http://www.linkedin.com/in/omer-harmankaya" }
-                    ]
-                },
-                "ras": {
-                    leader: { name: "Boran Bozkurt", img: "assets/images/people-pictures/boran-bozkurt-ras-baskan.jpg", linkedin: "https://www.linkedin.com/in/boran-bozkurt-b45a1a27b/" },
-                    members: [
-                        { name: "Ali Rahima", role: "RAS Üyesi", img: "assets/images/people-pictures/ali-rahima-ras.jpg", linkedin: "https://www.linkedin.com/in/ali-rahima-5b1a8729b/" },
-                        { name: "Harun Emre Erten", role: "RAS Üyesi", img: "assets/images/people-pictures/harun-emre-erten-ras.jpg", linkedin: "https://www.linkedin.com/in/harun-emre-erten-083653300/" },
-                        { name: "İbrahim Efe Yılmaz", role: "RAS Üyesi", img: "assets/images/people-pictures/ibrahim-efe-yilmaz-ras.jpg", linkedin: "https://www.linkedin.com/in/ibrahim-efe-y%C4%B1lmaz-52a880318/" },
-                        { name: "Kayra Üstten", role: "RAS Üyesi", img: "assets/images/people-pictures/kayra-ustten-ras.jpg", linkedin: "https://www.linkedin.com/in/kayra-ustten-650268313/" },
-                        { name: "Batuhan Mert Korkmaz", role: "RAS Üyesi", img: "assets/images/people-pictures/Batuhan Mert Korkmaz-RAS.jpeg", linkedin: "https://www.linkedin.com/in/batuhanmertkorkmaz/" },
-                        { name: "Furkan Aldemir", role: "RAS Üyesi", img: "assets/images/people-pictures/Furkan Aldemir RAS.jpeg", linkedin: "https://www.linkedin.com/in/furkan-aldemir-a07907302/" },
-                        { name: "Selin Mafizer", role: "RAS Üyesi", img: "assets/images/people-pictures/Selin_Mafizer_RAS.jpg", linkedin: "https://www.linkedin.com/in/selin-mafizer-691b33291/" }
-                    ]
-                },
-                "wie": {
-                    leader: { name: "İrem Akıl", img: "assets/images/people-pictures/irem-akil-wie-baskan.jpg", linkedin: "https://www.linkedin.com/in/irem-ak%C4%B1l-9202a829a/" },
-                    members: [
-                        { name: "Aysu Ece Atalay", role: "WIE Üyesi", img: "assets/images/people-pictures/aysu-ece-atalay-wie.jpg", linkedin: "https://www.linkedin.com/in/aysu-ece-atalay-619bb139b/" },
-                        { name: "Serra Yelmenoğlu", role: "WIE Üyesi", img: "assets/images/people-pictures/serra-yelmenoglu-wie.jpg", linkedin: "https://www.linkedin.com/in/serra-yelmeno%C4%9Flu-2680743b4/" },
-                        { name: "Zeynep Nil Usluoğlu", role: "WIE Üyesi", img: "assets/images/people-pictures/zeynep-nil-usluoglu-wie.jpg", linkedin: "https://www.linkedin.com/in/zeynep-nil-usluo%C4%9Flu-72a729328/" },
-                        { name: "İpek Özdemir", role: "WIE Üyesi", img: "assets/images/people-pictures/ipek-ozdemir-wie.jpg", linkedin: "https://www.linkedin.com/in/ipek-%C3%B6zdemir-b1350b299/" },
-                        { name: "İrem Aköz", role: "WIE Üyesi", img: "assets/images/people-pictures/irem-akoz-wie.jpg", linkedin: "https://www.linkedin.com/in/irem-ak%C3%B6z-aa7450247/" }
-                    ]
-                },
-                "medya": {
-                    leader: { name: "Duru Türkmen", img: "assets/images/people-pictures/duru-turkmen-sosyal-medya-ve-tasarim-baskan.jpg", linkedin: "https://www.linkedin.com/in/duru-t%C3%BCrkmen-756a7733a/" },
-                    members: [
-                        { name: "Duru Baykan", role: "Tasarım Üyesi", img: "assets/images/people-pictures/duru-baykan-sosyal-medya-ve-tasarim.jpg", linkedin: "https://www.linkedin.com/in/duru-baykan-877242325/" },
-                        { name: "Ece Salman", role: "Tasarım Üyesi", img: "assets/images/people-pictures/ece-salman-tasarim-ve-medya.jpg", linkedin: "javascript:void(0)" },
-                        { name: "Ela Nur Yerli", role: "Tasarım Üyesi", img: "assets/images/people-pictures/ela-nur-yerli-sosyal-medya-ve-tasarim.jpg", linkedin: "https://www.linkedin.com/in/ela-nur-yerli-927ab7324/" },
-                        { name: "Simay Balaban", role: "Medya Üyesi", img: "assets/images/people-pictures/simay-balaban-medya.jpg", linkedin: "https://www.linkedin.com/in/simay-balaban-72a40438a/" },
-                        { name: "Zeynep Öztürk", role: "Tasarım Üyesi", img: "assets/images/people-pictures/zeynep-ozturk-tasarim.jpg", linkedin: "https://www.linkedin.com/in/zeynep-%C3%B6zt%C3%BCrk-9bbba7302/" }
-                    ]
-                }
-            }
-        },
-        "2026-2027": {
-            presidential: `
-                <div class="president-box">
-                    <div class="gb-avatar" style="background-image: url(''); background-color: var(--ted-navy);">
-                    </div>
-                    <h3 class="gb-name">Açıklanacak</h3>
-                    <p class="gb-role">Genel Başkan</p>
-                </div>
-                <div class="president-box">
-                    <div class="gb-avatar" style="background-image: url(''); background-color: var(--ted-navy);">
-                    </div>
-                    <h3 class="gb-name">Açıklanacak</h3>
-                    <p class="gb-role">Genel Başkan Yardımcısı</p>
-                </div>
-            `,
-            teamData: {
-                "cs": { leader: { name: "Açıklanacak", img: "", linkedin: "javascript:void(0)" }, members: [] },
-                "ras": { leader: { name: "Açıklanacak", img: "", linkedin: "javascript:void(0)" }, members: [] },
-                "wie": { leader: { name: "Açıklanacak", img: "", linkedin: "javascript:void(0)" }, members: [] },
-                "medya": { leader: { name: "Açıklanacak", img: "", linkedin: "javascript:void(0)" }, members: [] }
-            }
-        }
-    };
-
-    const loadTeamForYear = (year) => {
-        const yearData = allYearsData[year];
+    function renderTeam(year) {
+        const yearData = teamData[year];
         if (!yearData) return;
 
-        // Populate Presidential Duo
-        const presOffice = document.getElementById('presidential-office-container');
-        if (presOffice) {
-            presOffice.innerHTML = yearData.presidential;
+        const presidentialEl = document.getElementById('presidential-office-container');
+        if (presidentialEl) {
+            presidentialEl.innerHTML = yearData.presidential.map(renderPresident).join('');
         }
 
-        // Populate Leaders and Carousels
-        Object.keys(yearData.teamData).forEach(key => {
-            const data = yearData.teamData[key];
-            
-            // Leader
+        Object.entries(yearData.committees).forEach(([key, committee]) => {
             const leaderEl = document.getElementById(`${key}-leader`);
-            if (leaderEl) {
-                leaderEl.innerHTML = generateLeaderHTML(data.leader.name, data.leader.img, data.leader.linkedin);
-            }
-            
-            // Carousel
-            const carouselEl = document.getElementById(`${key}-board`);
-            if (carouselEl) {
-                let html = "";
-                if (data.members.length > 0) {
-                    [...data.members].sort((a, b) => a.name.localeCompare(b.name, 'tr')).forEach(m => {
-                        html += generateCollinsCarouselCard(m.name, m.img, m.linkedin);
-                    });
-                } else {
-                    // Add some placeholder cards
-                    html += generateCollinsCarouselCard("Açıklanacak", "", "javascript:void(0)");
-                    html += generateCollinsCarouselCard("Açıklanacak", "", "javascript:void(0)");
-                    html += generateCollinsCarouselCard("Açıklanacak", "", "javascript:void(0)");
-                }
-                carouselEl.innerHTML = html;
-            }
+            if (leaderEl) leaderEl.innerHTML = renderLeader(committee.leader);
+
+            const boardEl = document.getElementById(`${key}-board`);
+            if (!boardEl) return;
+
+            const members = committee.members.length
+                ? [...committee.members].sort((a, b) => a.name.localeCompare(b.name, 'tr'))
+                : Array.from({ length: TBA_PLACEHOLDER_CARDS }, () => ({ name: null }));
+            boardEl.innerHTML = members.map(renderMemberCard).join('');
         });
-        
-        // Re-check navigation buttons for team carousel
-        if (typeof toggleTeamBtnVisibility === 'function') {
-            setTimeout(toggleTeamBtnVisibility, 50);
-        }
-    };
 
-    // Initial load
-    loadTeamForYear('2025-2026');
+        setTimeout(toggleTeamNavVisibility, 50);
+    }
 
-    // Year Switcher Logic
-    const yearBtns = document.querySelectorAll('.year-btn');
-    yearBtns.forEach(btn => {
+    if (document.getElementById('presidential-office-container')) {
+        renderTeam(selectedYear);
+        document.addEventListener('languagechange', () => renderTeam(selectedYear));
+    }
+
+    // Academic year switcher (fades the board out, swaps data, fades back in)
+    yearButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            yearBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const selectedYear = btn.getAttribute('data-year');
-            
-            const teamContentContainers = document.querySelectorAll('#presidential-office-container, .team-tabs-container, .carousels-wrapper');
-            teamContentContainers.forEach(el => el.style.opacity = '0');
-            
+            yearButtons.forEach(b => b.classList.toggle('active', b === btn));
+            selectedYear = btn.dataset.year;
+
+            const fadeTargets = document.querySelectorAll('#presidential-office-container, .team-tabs-container, .carousels-wrapper');
+            fadeTargets.forEach(el => { el.style.opacity = '0'; });
+
             setTimeout(() => {
-                loadTeamForYear(selectedYear);
-                teamContentContainers.forEach(el => el.style.opacity = '1');
+                renderTeam(selectedYear);
+                fadeTargets.forEach(el => { el.style.opacity = '1'; });
             }, 200);
         });
     });
 
-    // 3. Instagram Feed Loader
-    const instagramFeed = [
-        {
-            id: "post1",
-            url: "https://www.instagram.com/p/C9tH4Z-tmq0/", // Example link, user should update
-            img: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=600&auto=format&fit=crop", // Placeholder
-            caption: "Kariyer Söyleşileri: Mühendislikte Yeni Ufuklar"
-        },
-        {
-            id: "post2",
-            url: "https://www.instagram.com/p/C9q8X7xtO-N/", 
-            img: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=600&auto=format&fit=crop",
-            caption: "Robotics and Automation Society: Atölye Çalışmaları"
-        },
-        {
-            id: "post3",
-            url: "https://www.instagram.com/p/C9oA1T9tmK6/",
-            img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop",
-            caption: "IEEE TEDU General Assembly 2024"
-        },
-        {
-            id: "post4",
-            url: "https://www.instagram.com/p/C9l5J4xtm_3/",
-            img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=600&auto=format&fit=crop",
-            caption: "Computer Society: Kodlama Yarışması"
-        },
-        {
-            id: "post5",
-            url: "https://www.instagram.com/p/C9jN2Vxtm_w/",
-            img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&auto=format&fit=crop",
-            caption: "Teknik Gezi: Savunma Sanayii Ziyareti"
-        },
-        {
-            id: "post6",
-            url: "https://www.instagram.com/p/C9hG1T9tm_o/",
-            img: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=600&auto=format&fit=crop",
-            caption: "Women in Engineering: İlham Veren Kadınlar"
-        }
-    ];
-
-    function loadInstagramFeed() {
-        const grid = document.getElementById('instagram-feed-grid');
-        if (!grid) return;
-
-        // In a real scenario, you'd fetch this from an API like Behold.so or a proxy
-        let html = "";
-        instagramFeed.forEach(post => {
-            html += `
-                <a href="${post.url}" target="_blank" class="instagram-post reveal">
-                    <img src="${post.img}" alt="${post.caption}" loading="lazy">
-                    <div class="instagram-overlay">
-                        <div class="instagram-overlay-icon">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                            </svg>
-                        </div>
-                    </div>
-                </a>
-            `;
-        });
-        grid.innerHTML = html;
-        
-        // Re-observe new elements for reveal animation
-        const newReveals = grid.querySelectorAll('.reveal');
-        newReveals.forEach(r => revealOnScroll.observe(r));
-    }
-
-    // loadInstagramFeed(); // Disable for screenshots
-
-    const tabs = document.querySelectorAll('.team-tab-wrapper');
-    tabs.forEach(tab => {
+    // Committee tabs above the board carousels
+    const teamTabs = document.querySelectorAll('.team-tab-wrapper');
+    teamTabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            // Remove active style from all tabs
-            tabs.forEach(t => t.classList.remove('active'));
-            // Set active on clicked tab
-            tab.classList.add('active');
-            
-            // Hide all carousels
+            teamTabs.forEach(t => t.classList.toggle('active', t === tab));
+
             document.querySelectorAll('.carousels-wrapper .collins-carousel').forEach(c => {
                 c.style.display = 'none';
             });
-            
-            // Show the target carousel
-            const targetId = tab.getAttribute('data-target');
-            const targetCarousel = document.getElementById(targetId);
-            if(targetCarousel) {
+
+            const targetCarousel = document.getElementById(tab.dataset.target);
+            if (targetCarousel) {
                 targetCarousel.style.display = 'flex';
-                // Reset scroll to left when appearing
                 targetCarousel.scrollLeft = 0;
             }
-            
-            if (typeof toggleTeamBtnVisibility === 'function') {
-                setTimeout(toggleTeamBtnVisibility, 50);
-            }
+
+            setTimeout(toggleTeamNavVisibility, 50);
         });
     });
 
+    // Prev/next arrows for the team carousel. Only the RAS board has enough
+    // members to scroll, so the arrows are shown for RAS only.
     const teamNextBtn = document.getElementById('team-next-btn');
     const teamPrevBtn = document.getElementById('team-prev-btn');
+    const rasBoard = document.getElementById('ras-board');
+    const TEAM_CARD_GAP = 24;
 
-    // 3b. Activities Carousel Navigation (Restored)
-    const actCarousel = document.getElementById('activities-carousel');
-    const actNextBtn = document.getElementById('activities-next-btn');
-    const actPrevBtn = document.getElementById('activities-prev-btn');
-    
-    if (actCarousel && actNextBtn && actPrevBtn) {
-        actNextBtn.addEventListener('click', () => {
-            const firstCard = actCarousel.querySelector('.activity-card');
-            if (firstCard) {
-                const scrollAmount = firstCard.offsetWidth + 32; // card width + gap
-                actCarousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            }
-        });
-
-        actPrevBtn.addEventListener('click', () => {
-            const firstCard = actCarousel.querySelector('.activity-card');
-            if (firstCard) {
-                const scrollAmount = firstCard.offsetWidth + 32; 
-                actCarousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-            }
-        });
-
-        const toggleBtnVisibility = () => {
-            const maxScroll = actCarousel.scrollWidth - actCarousel.clientWidth;
-            if (maxScroll <= 10) {
-                actNextBtn.style.display = 'none';
-                actPrevBtn.style.display = 'none';
-            } else {
-                actNextBtn.style.display = 'flex';
-                actPrevBtn.style.display = 'flex';
-                
-                if (actCarousel.scrollLeft >= maxScroll - 10) {
-                    actNextBtn.style.opacity = '0';
-                    actNextBtn.style.pointerEvents = 'none';
-                } else {
-                    actNextBtn.style.opacity = '1';
-                    actNextBtn.style.pointerEvents = 'auto';
-                }
-
-                if (actCarousel.scrollLeft <= 10) {
-                    actPrevBtn.style.opacity = '0';
-                    actPrevBtn.style.pointerEvents = 'none';
-                } else {
-                    actPrevBtn.style.opacity = '1';
-                    actPrevBtn.style.pointerEvents = 'auto';
-                }
-            }
-        };
-
-        // Hide buttons if at the ends of scroll or if not scrollable
-        actCarousel.addEventListener('scroll', toggleBtnVisibility);
-        window.addEventListener('resize', toggleBtnVisibility);
-        // Initial check
-        setTimeout(toggleBtnVisibility, 100);
-    }
-
-
-    // Team carousel arrows – only visible when RAS tab is active
-    function toggleTeamBtnVisibility() {
-        if (!teamNextBtn || !teamPrevBtn) return;
-
-        const rasBoard = document.getElementById('ras-board');
-        const rasIsVisible = rasBoard && rasBoard.style.display === 'flex';
-
-        if (!rasIsVisible) {
-            teamNextBtn.style.display = 'none';
-            teamPrevBtn.style.display = 'none';
-            return;
-        }
+    function toggleTeamNavVisibility() {
+        if (!teamNextBtn || !teamPrevBtn || !rasBoard) return;
 
         const maxScroll = rasBoard.scrollWidth - rasBoard.clientWidth;
-        
-        // If everything fits on screen, no arrows at all
-        if (maxScroll <= 10) {
+        if (rasBoard.style.display !== 'flex' || maxScroll <= 10) {
             teamNextBtn.style.display = 'none';
             teamPrevBtn.style.display = 'none';
             return;
         }
 
         const scrollPos = Math.round(rasBoard.scrollLeft);
-
-        // Left arrow: hidden when at the very start
         teamPrevBtn.style.display = scrollPos <= 5 ? 'none' : 'flex';
-
-        // Right arrow: hidden when at the very end
         teamNextBtn.style.display = scrollPos >= maxScroll - 5 ? 'none' : 'flex';
     }
 
-    if (teamNextBtn && teamPrevBtn) {
-        const rasBoard = document.getElementById('ras-board');
-
-        teamNextBtn.addEventListener('click', () => {
-            if (rasBoard) {
-                const firstCard = rasBoard.querySelector('.collins-card');
-                if (firstCard) {
-                    rasBoard.scrollBy({ left: firstCard.offsetWidth + 24, behavior: 'smooth' });
-                }
+    if (teamNextBtn && teamPrevBtn && rasBoard) {
+        const scrollTeam = direction => {
+            const firstCard = rasBoard.querySelector('.collins-card');
+            if (firstCard) {
+                rasBoard.scrollBy({ left: direction * (firstCard.offsetWidth + TEAM_CARD_GAP), behavior: 'smooth' });
             }
-        });
-
-        teamPrevBtn.addEventListener('click', () => {
-            if (rasBoard) {
-                const firstCard = rasBoard.querySelector('.collins-card');
-                if (firstCard) {
-                    rasBoard.scrollBy({ left: -(firstCard.offsetWidth + 24), behavior: 'smooth' });
-                }
-            }
-        });
-
-        if (rasBoard) {
-            rasBoard.addEventListener('scroll', toggleTeamBtnVisibility);
-        }
-        window.addEventListener('resize', toggleTeamBtnVisibility);
-        setTimeout(toggleTeamBtnVisibility, 200);
+        };
+        teamNextBtn.addEventListener('click', () => scrollTeam(1));
+        teamPrevBtn.addEventListener('click', () => scrollTeam(-1));
+        rasBoard.addEventListener('scroll', toggleTeamNavVisibility);
+        window.addEventListener('resize', toggleTeamNavVisibility);
+        setTimeout(toggleTeamNavVisibility, 200);
     }
 
+    // ---------------------------------------------------------------------
+    // 5. "Ideas & Projects" carousel + optional live Instagram feed
+    // ---------------------------------------------------------------------
+    const actCarousel = document.getElementById('activities-carousel');
+    const actNextBtn = document.getElementById('activities-next-btn');
+    const actPrevBtn = document.getElementById('activities-prev-btn');
+    const ACTIVITY_CARD_GAP = 32;
 
-    // 4. Dynamic Floating Button Colors and Hide Logic
+    function toggleActivitiesNavVisibility() {
+        if (!actCarousel || !actNextBtn || !actPrevBtn) return;
+
+        const maxScroll = actCarousel.scrollWidth - actCarousel.clientWidth;
+        if (maxScroll <= 10) {
+            actNextBtn.style.display = 'none';
+            actPrevBtn.style.display = 'none';
+            return;
+        }
+
+        actNextBtn.style.display = 'flex';
+        actPrevBtn.style.display = 'flex';
+
+        const atEnd = actCarousel.scrollLeft >= maxScroll - 10;
+        const atStart = actCarousel.scrollLeft <= 10;
+        actNextBtn.style.opacity = atEnd ? '0' : '1';
+        actNextBtn.style.pointerEvents = atEnd ? 'none' : 'auto';
+        actPrevBtn.style.opacity = atStart ? '0' : '1';
+        actPrevBtn.style.pointerEvents = atStart ? 'none' : 'auto';
+    }
+
+    if (actCarousel && actNextBtn && actPrevBtn) {
+        const scrollActivities = direction => {
+            const firstCard = actCarousel.querySelector('.activity-card');
+            if (firstCard) {
+                actCarousel.scrollBy({ left: direction * (firstCard.offsetWidth + ACTIVITY_CARD_GAP), behavior: 'smooth' });
+            }
+        };
+        actNextBtn.addEventListener('click', () => scrollActivities(1));
+        actPrevBtn.addEventListener('click', () => scrollActivities(-1));
+        actCarousel.addEventListener('scroll', toggleActivitiesNavVisibility);
+        window.addEventListener('resize', toggleActivitiesNavVisibility);
+        setTimeout(toggleActivitiesNavVisibility, 100);
+    }
+
+    /*
+     * Live Instagram feed (optional).
+     *
+     * Leave INSTAGRAM_FEED_URL empty to keep the static blog cards written in
+     * index.html. To show real posts instead, paste a JSON feed URL from a
+     * service such as Behold.so (e.g. "https://feeds.behold.so/YOUR_FEED_ID").
+     * If the request fails, the static cards stay in place.
+     */
+    const INSTAGRAM_FEED_URL = '';
+    const INSTAGRAM_MAX_POSTS = 10;
+    const INSTAGRAM_CAPTION_LENGTH = 80;
+    const CARD_COLORS = ['#fbe4d8', '#d4e6f1', '#e8daef', '#d8f7d1', '#f7d1d1', '#fff3cd', '#d1ecf1'];
+    let instagramPosts = [];
+
+    function renderInstagramFeed() {
+        if (!actCarousel || instagramPosts.length === 0) return;
+
+        actCarousel.innerHTML = instagramPosts.map((post, index) => {
+            const color = CARD_COLORS[index % CARD_COLORS.length];
+            const caption = post.caption
+                ? post.caption.substring(0, INSTAGRAM_CAPTION_LENGTH) + (post.caption.length > INSTAGRAM_CAPTION_LENGTH ? '...' : '')
+                : t('instagram.fallbackCaption');
+
+            let label = t('instagram.label');
+            const date = post.timestamp ? new Date(post.timestamp) : null;
+            if (date && !isNaN(date)) {
+                label = date.toLocaleDateString(window.I18n ? window.I18n.locale : 'tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+            }
+
+            const mediaUrl = post.mediaUrl || post.media_url;
+            return `
+                <a href="${escapeHTML(post.permalink)}" target="_blank" rel="noopener noreferrer" class="activity-card" style="background-color: ${color}; color: var(--text-dark); text-decoration: none; display: flex; flex-direction: column; overflow: hidden; position: relative;">
+                    <div class="ac-top-right" style="z-index: 2;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </div>
+                    ${mediaUrl ? `<div style="height: 60%; width: 100%; background-image: url('${escapeHTML(mediaUrl)}'); background-size: cover; background-position: center; border-radius: 20px 20px 0 0; margin: -2rem -2rem 1rem -2rem; opacity: 0.9;"></div>` : ''}
+                    <div class="ac-content" style="z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; flex-grow: 1;">
+                        <div class="ac-category" style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 0.5rem;">${escapeHTML(label)}</div>
+                        <h3 class="ac-title" style="font-size: 1.2rem; font-weight: 700; line-height: 1.4;">${escapeHTML(caption)}</h3>
+                    </div>
+                </a>`;
+        }).join('');
+
+        setTimeout(toggleActivitiesNavVisibility, 50);
+    }
+
+    async function loadInstagramFeed() {
+        if (!actCarousel || !INSTAGRAM_FEED_URL) return;
+
+        try {
+            const response = await fetch(INSTAGRAM_FEED_URL);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            // Providers wrap the array differently: [], { posts: [] } or { data: [] }.
+            const posts = Array.isArray(data) ? data : (data.posts || data.data || []);
+            instagramPosts = posts.filter(p => p && p.permalink).slice(0, INSTAGRAM_MAX_POSTS);
+            renderInstagramFeed();
+        } catch (error) {
+            console.error('Instagram feed could not be loaded; keeping the static cards.', error);
+        }
+    }
+
+    loadInstagramFeed();
+    document.addEventListener('languagechange', renderInstagramFeed);
+
+    // ---------------------------------------------------------------------
+    // 6. Floating "Contact" button: hidden at the top, inverts over dark sections
+    // ---------------------------------------------------------------------
     const floatingBtn = document.getElementById('floating-contact');
     if (floatingBtn) {
+        const DARK_SECTION_CLASSES = ['bg-navy', 'bg-dark-navy', 'footer-bg'];
+
         window.addEventListener('scroll', () => {
-            // Hide if at the very top of the document
-            if (window.scrollY < 100) {
-                floatingBtn.classList.add('hide-contact');
-            } else {
-                floatingBtn.classList.remove('hide-contact');
-            }
+            floatingBtn.classList.toggle('hide-contact', window.scrollY < 100);
 
             const rect = floatingBtn.getBoundingClientRect();
-            const x = rect.left + rect.width / 2;
-            const y = rect.top + rect.height / 2;
-            const elementsUnder = document.elementsFromPoint(x, y);
-            
-            // Check if any element behind the center of the button is a dark section
-            const isDark = elementsUnder.some(el => 
-                el.classList && 
-                (el.classList.contains('bg-navy') || el.classList.contains('bg-dark-navy') || el.classList.contains('footer-bg'))
+            const elementsUnder = document.elementsFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            const isOverDark = elementsUnder.some(el =>
+                el.classList && DARK_SECTION_CLASSES.some(cls => el.classList.contains(cls))
             );
-            
-            if (isDark) {
-                floatingBtn.classList.add('dark-bg-mode');
-            } else {
-                floatingBtn.classList.remove('dark-bg-mode');
-            }
+            floatingBtn.classList.toggle('dark-bg-mode', isOverDark);
         });
-        // Trigger initial check
+
         window.dispatchEvent(new Event('scroll'));
+    }
+
+    // ---------------------------------------------------------------------
+    // 7. Contact form → opens the visitor's email app with the message prefilled
+    // ---------------------------------------------------------------------
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        const CONTACT_EMAIL = 'ieee@tedu.edu.tr';
+
+        contactForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const name = contactForm.querySelector('#name').value.trim();
+            const email = contactForm.querySelector('#email').value.trim();
+            const message = contactForm.querySelector('#message').value.trim();
+
+            const subject = `${t('contact.mailSubject')} — ${name}`;
+            const body = `${message}\n\n— ${name} <${email}>`;
+            window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        });
     }
 });
