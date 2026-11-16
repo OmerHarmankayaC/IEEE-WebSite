@@ -3,6 +3,8 @@
 The official website of the **IEEE Student Branch at TED University** (Ankara, Türkiye).
 It introduces the branch and its committees — **Computer Society (CS)**, **Robotics and Automation Society (RAS)** and **Women in Engineering (WIE)** — and showcases the board of directors, events, projects and blog posts.
 
+**Live:** [ieee-tedu.vercel.app](https://ieee-tedu.vercel.app)
+
 The site is available in **Turkish and English**; visitors switch languages with the **TR / EN** toggle.
 
 ## Features
@@ -16,9 +18,14 @@ The site is available in **Turkish and English**; visitors switch languages with
 
 ## Tech stack
 
-Plain **HTML5**, **CSS3** and **vanilla JavaScript**. There is no framework and no build step — the files in this repository are served as-is. Deployment is on **Vercel**.
+Plain **HTML5**, **CSS3** and **vanilla JavaScript** — on purpose. There is no framework and no build step, so a new committee member can edit a page without setting up a toolchain first. The files in this repository are served as-is on **Vercel**.
 
 ## Getting started
+
+```bash
+git clone https://github.com/OmerHarmankayaC/IEEE-WebSite.git
+cd IEEE-WebSite
+```
 
 You only need a static file server. Pick one:
 
