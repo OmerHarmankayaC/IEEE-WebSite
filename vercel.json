@@ -1,4 +1,10 @@
 {
-  "outputDirectory": ".",
-  "buildCommand": null
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "crons": [
+    {
+      "path": "/api/keepalive",
+      "schedule": "0 6 * * *"
+    }
+  ]
 }
