@@ -14,9 +14,9 @@
   --on-dark-muted: rgba(255, 255, 255, 0.72);
   --on-dark-hair: rgba(255, 255, 255, 0.18);
 
-  --font-display: "Space Grotesk Variable", "Helvetica Neue", Arial, sans-serif;
-  --font-body: "Inter Variable", "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, Menlo, monospace;
+  --font-display: var(--font-space-grotesk), "Helvetica Neue", Arial, sans-serif;
+  --font-body: var(--font-inter), "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, Menlo, monospace;
 
   --gutter: clamp(20px, 5vw, 64px);
   --section-pad: clamp(56px, 9vw, 120px);
@@ -341,7 +341,7 @@ button {
   border: 1px solid var(--hair-strong);
 }
 
-.lang-switch button {
+.lang-switch a {
   width: 44px;
   height: 44px;
   border: 0;
@@ -349,10 +349,18 @@ button {
   color: var(--ink);
   font-family: var(--font-mono);
   font-size: 12px;
-  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
-.lang-switch button[aria-pressed="true"] {
+.lang-switch a:hover {
+  color: var(--ink);
+  background: rgba(10, 26, 48, 0.06);
+}
+
+.lang-switch a[aria-current="true"] {
   background: var(--ink);
   color: var(--white);
 }
@@ -362,12 +370,17 @@ button {
   align-self: flex-start;
 }
 
-.lang-switch--dark button {
+.lang-switch--dark a,
+.lang-switch--dark a:hover {
   width: 52px;
   color: var(--white);
 }
 
-.lang-switch--dark button[aria-pressed="true"] {
+.lang-switch--dark a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lang-switch--dark a[aria-current="true"] {
   background: var(--white);
   color: var(--navy);
 }

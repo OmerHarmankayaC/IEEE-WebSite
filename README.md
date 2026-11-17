@@ -6,7 +6,7 @@ The website of the **IEEE Student Branch at TED University** (Ankara, Türkiye).
 
 ## Features
 
-- **Bilingual (TR / EN).** Turkish is the default. Visitors switch with the TR / EN buttons; adding `?lang=en` to any link opens it in English.
+- **Bilingual (TR / EN).** Turkish pages live at the root (`/blog`), English ones under `/en` (`/en/blog`). The TR / EN buttons open the same page in the other language; old `?lang=en` links still work.
 - **Blog with an admin panel** at `/admin`: write posts in a rich text editor, add images by dragging them in, set a cover image, a category and a publish date, mark one post as featured, and keep drafts. English versions are optional; when a post has none, the Turkish text is shown.
 - **Images are shrunk in the browser** (WebP, at most 1600 px) before upload, so free storage lasts.
 - **Board of directors by academic year,** kept in a single data file.
@@ -18,7 +18,7 @@ The website of the **IEEE Student Branch at TED University** (Ankara, Türkiye).
 - [Next.js](https://nextjs.org) 16 (App Router) and React 19, deployed on **Vercel**
 - [Supabase](https://supabase.com): Postgres database, authentication and image storage, all protected by row level security
 - [Tiptap](https://tiptap.dev) for the post editor
-- Plain CSS with design tokens (`app/globals.css`), self-hosted fonts: Inter, Space Grotesk, JetBrains Mono
+- Plain CSS with design tokens (`app/globals.css`) and fonts through `next/font`: Inter, Space Grotesk, JetBrains Mono
 
 ## Getting started
 
@@ -74,8 +74,9 @@ To add a wide club photo under the hero, put the image in `public/images/` and s
 
 ```text
 app/
-  (site)/             Public pages: homepage, /blog, /blog/[slug]
-  admin/              Login, password reset, post list, editor, preview
+  [locale]/           Public pages in both languages: homepage, /blog, /blog/[slug]
+  admin/              Login, password reset, post list, editor, preview (own root layout)
+  global-not-found.tsx  404 page for addresses that match nothing
   api/keepalive/      Daily request that keeps the free Supabase project awake
 components/
   site/               Header, mobile menu, team section, article, cards
@@ -83,12 +84,14 @@ components/
 lib/                  Data access, i18n, team data, Supabase clients, helpers
 public/images/        Logos and team photos
 supabase/migrations/  Database schema (tables, policies, storage bucket)
-proxy.ts              Language switch through ?lang= and admin session refresh
+proxy.ts              Admin session refresh and redirects for old ?lang= links
 ```
 
 ## How caching works
 
-Public pages read the database through the Next.js data cache (one hour). Every save or delete in the admin panel clears that cache immediately, so changes appear right away without hitting the database on every visit.
+Public pages are rendered ahead of time for both languages and served from Vercel's edge cache, so visitors never wait for the database. Turkish addresses reach the `tr` pages through rewrites in `next.config.ts`, which run in Vercel's routing layer and keep the cache intact. Every save or delete in the admin panel expires the cached pages immediately; otherwise they refresh once an hour. Newly published posts are rendered on their first visit and cached from then on.
+
+Server code runs in Frankfurt (`fra1` in `vercel.json`), next to the Supabase database.
 
 Free Supabase projects pause after a week without activity. `vercel.json` schedules `/api/keepalive` once a day to prevent that.
 

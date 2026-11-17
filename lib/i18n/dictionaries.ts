@@ -1,7 +1,6 @@
 export type Locale = "tr" | "en";
 
 export const LOCALES: Locale[] = ["tr", "en"];
-export const LOCALE_COOKIE = "lang";
 
 const tr = {
   meta: {

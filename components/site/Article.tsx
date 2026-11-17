@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Dictionary, Locale } from "@/lib/i18n/dictionaries";
-import { upper } from "@/lib/i18n/locale";
+import { localePath, upper } from "@/lib/i18n/locale";
 import type { Post, PostSummary } from "@/lib/posts";
 import { sanitizePostHtml } from "@/lib/sanitize";
 import { Cover } from "./Cover";
@@ -11,7 +11,7 @@ export function Article({
   more,
   t,
   locale,
-  backHref = "/blog",
+  backHref,
 }: {
   post: Post;
   more: PostSummary[];
@@ -25,7 +25,7 @@ export function Article({
         <div className="container">
           <div className="article__inner">
             <div className="section-head">
-              <Link href={backHref} className="section-head__side" style={{ color: "var(--ink)", fontWeight: 500 }}>
+              <Link href={backHref ?? localePath(locale, "/blog")} className="section-head__side" style={{ color: "var(--ink)", fontWeight: 500 }}>
                 {t.post.back}
               </Link>
               <PostMeta post={post} locale={locale} />
@@ -43,14 +43,14 @@ export function Article({
           <div className="container stack">
             <div className="section-head">
               <span>{upper(t.post.more, locale)}</span>
-              <Link href="/blog" className="section-head__side">
+              <Link href={localePath(locale, "/blog")} className="section-head__side">
                 {upper(t.blog.all, locale)} →
               </Link>
             </div>
             <ul className="post-grid">
               {more.map((item) => (
                 <li key={item.id}>
-                  <Link href={`/blog/${item.slug}`} className="post-card">
+                  <Link href={localePath(locale, `/blog/${item.slug}`)} className="post-card">
                     <Cover src={item.coverUrl} alt="" sizes="(max-width: 720px) 100vw, 300px" />
                     {item.category && <span className="mono mono--accent">{upper(item.category.name, locale)}</span>}
                     <span className="post-title">{item.title}</span>

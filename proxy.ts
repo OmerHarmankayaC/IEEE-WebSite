@@ -1,21 +1,23 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { SUPABASE_KEY, SUPABASE_URL } from "@/lib/env";
+import { switchLocalePath } from "@/lib/i18n/locale";
 
 // Admin pages that can be opened without a session.
 const PUBLIC_ADMIN_PATHS = ["/admin/giris", "/admin/sifremi-unuttum", "/admin/auth"];
 
+// Runs only for /admin and for links that carry ?lang= (see config below), so public
+// pages never wait for it and stay fully cached.
 export async function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
 
-  // "?lang=en" or "?lang=tr" in any link switches the language and is then removed from the URL.
+  // Links from the old site used "?lang=en". Send them to the matching address.
   const lang = searchParams.get("lang");
-  if (lang === "tr" || lang === "en") {
+  if ((lang === "tr" || lang === "en") && !pathname.startsWith("/admin")) {
     const url = request.nextUrl.clone();
     url.searchParams.delete("lang");
-    const response = NextResponse.redirect(url);
-    response.cookies.set("lang", lang, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
-    return response;
+    url.pathname = switchLocalePath(pathname, lang);
+    return NextResponse.redirect(url, 308);
   }
 
   if (!pathname.startsWith("/admin")) return NextResponse.next();
@@ -49,5 +51,8 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|images/|api/|icon.png|apple-icon.png|sitemap.xml|robots.txt).*)"],
+  matcher: [
+    "/admin/:path*",
+    { source: "/((?!_next/|images/|api/).*)", has: [{ type: "query", key: "lang" }] },
+  ],
 };

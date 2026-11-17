@@ -9,11 +9,12 @@ import { LangSwitch } from "./LangSwitch";
 
 type Props = {
   locale: Locale;
+  joinHref: string;
   links: { href: string; label: string }[];
   labels: { open: string; close: string; menu: string; language: string; join: string };
 };
 
-export function MobileMenu({ locale, links, labels }: Props) {
+export function MobileMenu({ locale, joinHref, links, labels }: Props) {
   const [open, setOpen] = useState(false);
 
   // Lock page scroll and listen for Escape while the menu is open.
@@ -51,7 +52,7 @@ export function MobileMenu({ locale, links, labels }: Props) {
           </nav>
           <div className="mobile-menu__bottom">
             <LangSwitch locale={locale} label={labels.language} dark />
-            <Link href="/#katil" className="btn btn--light" onClick={() => setOpen(false)}>
+            <Link href={joinHref} className="btn btn--light" onClick={() => setOpen(false)}>
               {labels.join}
             </Link>
             <span className="mono mono--muted">@IEEE.TEDU · {site.email.toUpperCase()}</span>

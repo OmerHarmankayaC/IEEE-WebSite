@@ -6,12 +6,16 @@ import { PostMeta } from "@/components/site/PostMeta";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { TeamSection } from "@/components/site/TeamSection";
-import { getI18n } from "@/lib/i18n/locale";
+import { getDictionary, type Locale } from "@/lib/i18n/dictionaries";
+import { localePath } from "@/lib/i18n/locale";
 import { getPublishedPosts, orderForDisplay } from "@/lib/posts";
 import { site } from "@/lib/site";
 
-export default async function HomePage() {
-  const { t, locale } = await getI18n();
+export const revalidate = 3600;
+
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const locale = (await params).locale as Locale;
+  const t = getDictionary(locale);
   const posts = orderForDisplay(await getPublishedPosts(locale));
   const [featured, ...rest] = posts;
   const latest = rest.slice(0, 3);
@@ -168,7 +172,7 @@ export default async function HomePage() {
             <div className="title-row">
               <h2 className="section-title">{t.blog.title}</h2>
               {featured && (
-                <Link href="/blog" className="text-link">
+                <Link href={localePath(locale, "/blog")} className="text-link">
                   {t.blog.all}
                   <ArrowRight />
                 </Link>
@@ -176,7 +180,7 @@ export default async function HomePage() {
             </div>
             {featured ? (
               <div className="latest">
-                <Link href={`/blog/${featured.slug}`} className="latest__featured">
+                <Link href={localePath(locale, `/blog/${featured.slug}`)} className="latest__featured">
                   <Cover src={featured.coverUrl} alt={featured.title} sizes="(max-width: 960px) 100vw, 720px" />
                   <PostMeta post={featured} locale={locale} accent />
                   <span className="post-title">{featured.title}</span>
@@ -186,7 +190,7 @@ export default async function HomePage() {
                   <ul className="latest__list">
                     {latest.map((post) => (
                       <li key={post.id}>
-                        <Link href={`/blog/${post.slug}`} className="post-row">
+                        <Link href={localePath(locale, `/blog/${post.slug}`)} className="post-row">
                           <Cover src={post.coverUrl} alt="" sizes="112px" />
                           <span className="post-row__text">
                             <PostMeta post={post} locale={locale} />
@@ -246,7 +250,7 @@ export default async function HomePage() {
                 ))}
               </ul>
             </div>
-            <SiteFooter t={t} />
+            <SiteFooter t={t} locale={locale} />
           </div>
         </section>
       </main>

@@ -43,7 +43,7 @@ export default async function PreviewPage({ params, searchParams }: { params: Pr
       <main>
         <Article post={post} more={[]} t={t} locale={locale} />
       </main>
-      <FooterBand t={t} />
+      <FooterBand t={t} locale={locale} />
     </>
   );
 }
