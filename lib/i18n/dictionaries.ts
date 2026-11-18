@@ -1,0 +1,223 @@
+export type Locale = "tr" | "en";
+
+export const LOCALES: Locale[] = ["tr", "en"];
+
+const tr = {
+  meta: {
+    title: "IEEE TEDU | TED Üniversitesi IEEE Öğrenci Kolu",
+    description:
+      "TED Üniversitesi IEEE Öğrenci Kolu: Computer Society, Robotics and Automation Society ve Women in Engineering komiteleriyle eğitimler, teknik geziler, atölyeler ve projeler.",
+    blogTitle: "Blog",
+    blogDescription: "IEEE TEDU etkinliklerinden, projelerinden ve atölyelerinden notlar.",
+  },
+  nav: {
+    mainMenu: "Ana menü",
+    footerMenu: "Alt menü",
+    home: "Ana sayfa",
+    about: "Hakkımızda",
+    committees: "Komiteler",
+    blog: "Blog",
+    team: "Ekip",
+    contact: "İletişim",
+    join: "Bize katıl",
+    menu: "Menü",
+    openMenu: "Menüyü aç",
+    closeMenu: "Menüyü kapat",
+    close: "Kapat",
+    language: "Dil seçimi",
+    homeLink: "IEEE TEDU ana sayfa",
+    adminLogin: "Yönetici girişi",
+  },
+  hero: {
+    tagline: "TED Üniversitesi IEEE Öğrenci Kolu, Ankara",
+    title: "Mühendislikte her zaman bir adım ileriye.",
+    lead: "Teknoloji ve mühendislik topluluğu olarak IEEE'nin evrensel standartlarını kampüse taşıyoruz. Geleceği bizimle inşa et.",
+    cta: "Bize katıl",
+    secondary: "Son yazıları oku",
+  },
+  photo: {
+    label: "Kulüp fotoğrafı",
+  },
+  about: {
+    title: "Hakkımızda",
+    statement:
+      "IEEE TEDU, teknolojiyi insanlığın yararına geliştirmeyi amaçlayan bir öğrenci topluluğu. Derste öğrendiğimizi atölyelerde, projelerde ve yarışmalarda gerçek işe dönüştürüyoruz.",
+    p1: "IEEE, 160 ülkede 400.000'den fazla üyesiyle dünyanın en büyük kâr amacı gütmeyen teknik meslek kuruluşlarından biri. Elektrik ve elektroniğin yanında bilişim, otomasyon ve robotik gibi pek çok alanda çalışıyor.",
+    p2: "Biz de bu ağın TED Üniversitesi'ndeki öğrenci koluyuz. Komitelerimizle eğitimler, teknik geziler, atölyeler ve yarışmalar düzenliyor, mühendisliğe ilgi duyan herkese birlikte öğrenme ve üretme fırsatı sunuyoruz.",
+    items: ["Eğitimler", "Teknik geziler", "Atölyeler", "Proje ve yarışmalar"],
+  },
+  committees: {
+    title: "Komiteler",
+    cs: "Yazılım dünyasının hızını algoritmaların mantığıyla birleştiriyoruz. Yalnızca kod yazmıyor, dijital dünyanın her katmanını keşfediyor ve eğitimlerle bilgiyi pratiğe döküyoruz.",
+    ras: "Mekanik tasarımı kontrol sistemlerinin zekâsıyla bir araya getiriyoruz. Sensörlerden gömülü sistemlere kadar her adımda hayal ettiğimiz projeleri çalışan robotlara dönüştürüyoruz.",
+    wie: "Bilim ve teknolojideki cinsiyet engellerini kaldırarak herkes için kapsayıcı bir mühendislik kültürü kuruyoruz. STEM alanında kadınların sesini güçlendiriyoruz.",
+    logoAlt: "logosu",
+  },
+  blog: {
+    title: "Son yazılar",
+    all: "Tüm yazılar",
+    empty: "Henüz yayınlanmış bir yazı yok. İlk yazılar çok yakında burada.",
+    cover: "Kapak görseli",
+  },
+  blogPage: {
+    back: "Ana sayfa",
+    title: "Blog",
+    lead: "IEEE TEDU etkinliklerinden, projelerinden ve atölyelerinden notlar.",
+    filter: "Kategoriye göre süz",
+    allCategories: "Tümü",
+    featured: "Öne çıkan",
+    posts: "Yazılar",
+    empty: "Bu kategoride henüz yazı yok.",
+  },
+  post: {
+    back: "Blog",
+    more: "Diğer yazılar",
+    notFound: "Aradığın yazı bulunamadı.",
+  },
+  notFound: {
+    title: "Aradığın sayfa bulunamadı.",
+    lead: "Adres değişmiş ya da sayfa kaldırılmış olabilir. Ana sayfadan ya da blogdan devam edebilirsin.",
+    home: "Ana sayfaya dön",
+    blog: "Bloga git",
+  },
+  team: {
+    title: "Yönetim kurulu",
+    termGroup: "Dönem seçimi",
+    committeeGroup: "Komite seçimi",
+    tbaTerm: "dönemi",
+    tba: "Yeni yönetim kurulu yakında açıklanacak.",
+    linkedin: "LinkedIn",
+    tabs: { cs: "Computer Society", ras: "RAS", wie: "WIE", media: "Medya" },
+    roles: {
+      president: "Genel başkan",
+      vicePresident: "Genel başkan yardımcısı",
+      leader: "Komite başkanı",
+      csMember: "CS üyesi",
+      rasMember: "RAS üyesi",
+      wieMember: "WIE üyesi",
+      designMember: "Tasarım üyesi",
+      mediaMember: "Medya üyesi",
+    },
+  },
+  join: {
+    title: "Bize katıl.",
+    lead: "Etkinliklerimizden haberdar olmak, bir komitede yer almak ya da birlikte proje yapmak için bize yaz.",
+  },
+  footer: {
+    rights: "IEEE TEDU Öğrenci Kolu",
+  },
+};
+
+export type Dictionary = typeof tr;
+
+const en: Dictionary = {
+  meta: {
+    title: "IEEE TEDU | IEEE Student Branch at TED University",
+    description:
+      "IEEE Student Branch at TED University: trainings, technical trips, workshops and projects with our Computer Society, Robotics and Automation Society and Women in Engineering committees.",
+    blogTitle: "Blog",
+    blogDescription: "Notes from IEEE TEDU events, projects and workshops.",
+  },
+  nav: {
+    mainMenu: "Main menu",
+    footerMenu: "Footer menu",
+    home: "Home",
+    about: "About",
+    committees: "Committees",
+    blog: "Blog",
+    team: "Team",
+    contact: "Contact",
+    join: "Join us",
+    menu: "Menu",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    close: "Close",
+    language: "Language",
+    homeLink: "IEEE TEDU home",
+    adminLogin: "Admin login",
+  },
+  hero: {
+    tagline: "IEEE Student Branch at TED University, Ankara",
+    title: "Always one step ahead in engineering.",
+    lead: "As a technology and engineering community, we bring IEEE's global standards to campus. Build the future with us.",
+    cta: "Join us",
+    secondary: "Read the latest posts",
+  },
+  photo: {
+    label: "Club photo",
+  },
+  about: {
+    title: "About",
+    statement:
+      "IEEE TEDU is a student community that develops technology for the benefit of humanity. We turn what we learn in class into real work through workshops, projects and competitions.",
+    p1: "With more than 400,000 members in 160 countries, IEEE is one of the world's largest non-profit technical professional organizations. Beyond electrical and electronics engineering, it works across computing, automation, robotics and many other fields.",
+    p2: "We are the student branch of this network at TED University. With our committees we organize trainings, technical trips, workshops and competitions, and give everyone interested in engineering a chance to learn and build together.",
+    items: ["Trainings", "Technical trips", "Workshops", "Projects and competitions"],
+  },
+  committees: {
+    title: "Committees",
+    cs: "We combine the pace of the software world with the logic of algorithms. We don't just write code: we explore every layer of the digital world and turn knowledge into practice through trainings.",
+    ras: "We bring mechanical design together with the intelligence of control systems. From sensors to embedded systems, we turn the projects we imagine into working robots.",
+    wie: "By removing gender barriers in science and technology, we build an inclusive engineering culture for everyone and strengthen the voice of women in STEM.",
+    logoAlt: "logo",
+  },
+  blog: {
+    title: "Latest posts",
+    all: "All posts",
+    empty: "No posts have been published yet. The first ones are coming soon.",
+    cover: "Cover image",
+  },
+  blogPage: {
+    back: "Home",
+    title: "Blog",
+    lead: "Notes from IEEE TEDU events, projects and workshops.",
+    filter: "Filter by category",
+    allCategories: "All",
+    featured: "Featured",
+    posts: "Posts",
+    empty: "There are no posts in this category yet.",
+  },
+  post: {
+    back: "Blog",
+    more: "More posts",
+    notFound: "We couldn't find that post.",
+  },
+  notFound: {
+    title: "We couldn't find that page.",
+    lead: "The address may have changed or the page may have been removed. You can continue from the homepage or the blog.",
+    home: "Back to the homepage",
+    blog: "Go to the blog",
+  },
+  team: {
+    title: "Board of directors",
+    termGroup: "Choose a term",
+    committeeGroup: "Choose a committee",
+    tbaTerm: "term",
+    tba: "The new board will be announced soon.",
+    linkedin: "LinkedIn",
+    tabs: { cs: "Computer Society", ras: "RAS", wie: "WIE", media: "Media" },
+    roles: {
+      president: "President",
+      vicePresident: "Vice president",
+      leader: "Committee chair",
+      csMember: "CS member",
+      rasMember: "RAS member",
+      wieMember: "WIE member",
+      designMember: "Design member",
+      mediaMember: "Media member",
+    },
+  },
+  join: {
+    title: "Join us.",
+    lead: "Write to us to hear about our events, join a committee or build a project together.",
+  },
+  footer: {
+    rights: "IEEE TEDU Student Branch",
+  },
+};
+
+const dictionaries: Record<Locale, Dictionary> = { tr, en };
+
+export function getDictionary(locale: Locale): Dictionary {
+  return dictionaries[locale];
+}
