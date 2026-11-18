@@ -15,7 +15,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
     <AuthShell
       title="Giriş yap"
       lead="Blog yazılarını eklemek ve düzenlemek için yönetici hesabınla giriş yap."
-      footnote="YALNIZCA YÖNETİCİ HESABI GİRİŞ YAPABİLİR. YENİ HESAP AÇILMAZ."
+      footnote="Yalnızca yönetici hesapları giriş yapabilir. Yeni hesap açılmaz."
     >
       <LoginForm notice={hata === "baglanti" ? "Bağlantının süresi dolmuş ya da geçersiz. Yeniden dene." : undefined} />
     </AuthShell>

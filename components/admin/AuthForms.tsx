@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ArrowRight } from "@/components/icons";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 
 export function LoginForm({ notice }: { notice?: string }) {
@@ -33,11 +32,11 @@ export function LoginForm({ notice }: { notice?: string }) {
     <form className="stack" style={{ gap: 24 }} onSubmit={submit}>
       <div className="stack" style={{ gap: 16 }}>
         <label className="field">
-          <span className="field__label">E-POSTA</span>
+          <span className="field__label">E-posta</span>
           <input className="input input--large" name="email" type="email" autoComplete="username" required placeholder="ornek@tedu.edu.tr" />
         </label>
         <label className="field">
-          <span className="field__label">ŞİFRE</span>
+          <span className="field__label">Şifre</span>
           <input className="input input--large" name="password" type="password" autoComplete="current-password" required />
         </label>
       </div>
@@ -46,9 +45,8 @@ export function LoginForm({ notice }: { notice?: string }) {
           {error}
         </p>
       )}
-      <button type="submit" className="btn btn--primary" disabled={busy}>
+      <button type="submit" className="btn btn--sun" disabled={busy}>
         {busy ? "Giriş yapılıyor…" : "Giriş yap"}
-        {!busy && <ArrowRight />}
       </button>
       <Link href="/admin/sifremi-unuttum" className="auth-link">
         Şifremi unuttum
@@ -86,7 +84,7 @@ export function ForgotPasswordForm() {
   return (
     <form className="stack" style={{ gap: 24 }} onSubmit={submit}>
       <label className="field">
-        <span className="field__label">E-POSTA</span>
+        <span className="field__label">E-posta</span>
         <input className="input input--large" name="email" type="email" autoComplete="username" required placeholder="ornek@tedu.edu.tr" />
       </label>
       {error && (
@@ -94,7 +92,7 @@ export function ForgotPasswordForm() {
           {error}
         </p>
       )}
-      <button type="submit" className="btn btn--primary" disabled={busy}>
+      <button type="submit" className="btn btn--sun" disabled={busy}>
         {busy ? "Gönderiliyor…" : "Bağlantıyı gönder"}
       </button>
       <Link href="/admin/giris" className="auth-link">
@@ -131,11 +129,11 @@ export function NewPasswordForm() {
     <form className="stack" style={{ gap: 24 }} onSubmit={submit}>
       <div className="stack" style={{ gap: 16 }}>
         <label className="field">
-          <span className="field__label">YENİ ŞİFRE</span>
+          <span className="field__label">Yeni şifre</span>
           <input className="input input--large" name="password" type="password" autoComplete="new-password" minLength={8} required />
         </label>
         <label className="field">
-          <span className="field__label">YENİ ŞİFRE (TEKRAR)</span>
+          <span className="field__label">Yeni şifre (tekrar)</span>
           <input className="input input--large" name="repeat" type="password" autoComplete="new-password" minLength={8} required />
         </label>
       </div>
@@ -144,7 +142,7 @@ export function NewPasswordForm() {
           {error}
         </p>
       )}
-      <button type="submit" className="btn btn--primary" disabled={busy}>
+      <button type="submit" className="btn btn--sun" disabled={busy}>
         {busy ? "Kaydediliyor…" : "Şifreyi kaydet"}
       </button>
     </form>

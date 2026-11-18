@@ -1,19 +1,15 @@
 import type { Locale } from "@/lib/i18n/dictionaries";
-import { formatDate, upper } from "@/lib/i18n/locale";
+import { formatDate } from "@/lib/i18n/locale";
 import type { PostSummary } from "@/lib/posts";
 
-/** "ATÖLYE · 17 KASIM 2026" style label. */
-export function PostMeta({
-  post,
-  locale,
-  prefix,
-  accent = false,
-}: {
-  post: PostSummary;
-  locale: Locale;
-  prefix?: string;
-  accent?: boolean;
-}) {
-  const parts = [prefix, post.category?.name, formatDate(post.publishedAt, locale)].filter(Boolean) as string[];
-  return <span className={accent ? "mono mono--accent" : "mono mono--muted"}>{upper(parts.join(" · "), locale)}</span>;
+/** Category and date, side by side. */
+export function PostMeta({ post, locale, accent = false }: { post: PostSummary; locale: Locale; accent?: boolean }) {
+  const date = formatDate(post.publishedAt, locale);
+  if (!post.category && !date) return null;
+  return (
+    <span className={accent ? "meta meta--accent" : "meta meta--muted"}>
+      {post.category && <span>{post.category.name}</span>}
+      {date && <span>{date}</span>}
+    </span>
+  );
 }

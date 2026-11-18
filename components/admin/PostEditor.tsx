@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import type { Editor } from "@tiptap/react";
 import { createCategory, deletePost, savePost, type PostInput } from "@/app/admin/actions";
-import { ArrowRight } from "@/components/icons";
 import { publicImageUrl } from "@/lib/env";
 import { slugify } from "@/lib/slug";
 import { uploadImage } from "@/lib/upload";
@@ -22,8 +21,7 @@ const lengthOf = (value: string) => value.trim().length;
 function formatSaved(iso: string | null) {
   if (!iso) return null;
   return new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Istanbul" })
-    .format(new Date(iso))
-    .toLocaleUpperCase("tr-TR");
+    .format(new Date(iso));
 }
 
 export function PostEditor({ post, categories: initialCategories }: { post: EditorPost; categories: CategoryOption[] }) {
@@ -129,14 +127,14 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
         <div className="stack" style={{ gap: 8 }}>
           <span className="mono mono--muted">
             <Link href="/admin" style={{ textDecoration: "none" }}>
-              YAZILAR
+              Yazılar
             </Link>{" "}
-            / {form.id ? "DÜZENLE" : "YENİ YAZI"}
+            / {form.id ? "Düzenle" : "Yeni yazı"}
           </span>
           <span className="status-line">
-            <span className={published ? "badge badge--published" : "badge badge--draft"}>{published ? "YAYINDA" : "TASLAK"}</span>
+            <span className={published ? "badge badge--published" : "badge badge--draft"}>{published ? "Yayında" : "Taslak"}</span>
             <span className="mono mono--muted">
-              {dirty ? "KAYDEDİLMEMİŞ DEĞİŞİKLİKLER VAR" : savedAt ? `SON KAYIT: ${formatSaved(savedAt)}` : "HENÜZ KAYDEDİLMEDİ"}
+              {dirty ? "Kaydedilmemiş değişiklikler var" : savedAt ? `Son kayıt: ${formatSaved(savedAt)}` : "Henüz kaydedilmedi"}
             </span>
           </span>
         </div>
@@ -146,9 +144,8 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
               Önizle
             </a>
           )}
-          <button type="button" className="btn btn--primary btn--small" onClick={save} disabled={saving}>
+          <button type="button" className="btn btn--sun btn--small" onClick={save} disabled={saving}>
             {saving ? "Kaydediliyor…" : published ? "Kaydet ve yayınla" : "Taslağı kaydet"}
-            {!saving && <ArrowRight />}
           </button>
         </div>
       </div>
@@ -163,21 +160,21 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
         <div className="editor-main">
           <div className="chip-row" role="group" aria-label="Yazının dili">
             <button type="button" className="chip" aria-pressed={lang === "tr"} onClick={() => setLang("tr")}>
-              TÜRKÇE
+              Türkçe
             </button>
             <button type="button" className="chip" aria-pressed={lang === "en"} onClick={() => setLang("en")}>
-              ENGLISH · İSTEĞE BAĞLI
+              English (isteğe bağlı)
             </button>
           </div>
 
           {/* Both languages stay mounted so switching tabs keeps the editors' state. */}
           <div className="stack" style={{ gap: 24 }} hidden={lang !== "tr"}>
             <label className="field">
-              <span className="field__label">BAŞLIK</span>
+              <span className="field__label">Başlık</span>
               <input className="input input--title" type="text" value={form.titleTr} onChange={(e) => setTitleTr(e.target.value)} placeholder="Yazının başlığı" maxLength={200} required />
             </label>
             <label className="field">
-              <span className="field__label">ADRES</span>
+              <span className="field__label">Adres</span>
               <span className="slug-input">
                 <span className="slug-input__prefix">/blog/</span>
                 <input
@@ -194,7 +191,7 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
             </label>
             <label className="field">
               <span className="field__label field__label--split">
-                <span>KISA ÖZET</span>
+                <span>Kısa özet</span>
                 <span className={lengthOf(form.excerptTr) > EXCERPT_MAX ? "counter counter--over" : "counter"}>
                   {lengthOf(form.excerptTr)} / {EXCERPT_MAX}
                 </span>
@@ -203,20 +200,20 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
               <span className="field__help">Blog listesinde ve paylaşılan bağlantıların önizlemesinde görünür.</span>
             </label>
             <div className="field">
-              <span className="field__label">İÇERİK</span>
+              <span className="field__label">İçerik</span>
               <RichTextEditor lang="tr" initialHtml={post.contentTr} placeholder="Yazmaya başla…" onChange={(html) => update("contentTr", html)} />
             </div>
           </div>
 
           <div className="stack" style={{ gap: 24 }} hidden={lang !== "en"} lang="en">
-            <p className="info-box mono">İNGİLİZCE SÜRÜM BOŞ KALIRSA SİTENİN İNGİLİZCE HALİNDE TÜRKÇE METİN GÖSTERİLİR.</p>
+            <p className="info-box mono">İngilizce sürüm boş kalırsa sitenin İngilizce halinde Türkçe metin gösterilir.</p>
             <label className="field">
-              <span className="field__label">TITLE</span>
+              <span className="field__label">Title</span>
               <input className="input input--title" type="text" value={form.titleEn} onChange={(e) => update("titleEn", e.target.value)} placeholder="Post title" maxLength={200} />
             </label>
             <label className="field">
               <span className="field__label field__label--split">
-                <span>SUMMARY</span>
+                <span>Summary</span>
                 <span className={lengthOf(form.excerptEn) > EXCERPT_MAX ? "counter counter--over" : "counter"}>
                   {lengthOf(form.excerptEn)} / {EXCERPT_MAX}
                 </span>
@@ -225,7 +222,7 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
             </label>
             <div className="field">
               <span className="field__label field__label--split">
-                <span>CONTENT</span>
+                <span>Content</span>
                 <button
                   type="button"
                   className="link-button"
@@ -245,7 +242,7 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
         <aside className="editor-side">
           <section className="panel" aria-labelledby="panel-publish">
             <h2 className="panel__bar" id="panel-publish">
-              YAYIN
+              Yayın
             </h2>
             <div className="panel__body">
               <fieldset className="radio-group">
@@ -273,7 +270,7 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
 
           <section className="panel" aria-labelledby="panel-category">
             <h2 className="panel__bar" id="panel-category">
-              KATEGORİ
+              Kategori
             </h2>
             <div className="panel__body">
               <label className="field">
@@ -320,12 +317,12 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
 
           <section className="panel" aria-labelledby="panel-cover">
             <h2 className="panel__bar" id="panel-cover">
-              KAPAK GÖRSELİ
+              Kapak görseli
             </h2>
             <div className="panel__body">
               <div className={coverUrl ? "cover-preview" : "cover-preview hatch"}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                {coverUrl ? <img src={coverUrl} alt="Kapak görseli önizlemesi" /> : <span className="mono">{coverBusy ? "YÜKLENİYOR…" : "[KAPAK GÖRSELİ YOK]"}</span>}
+                {coverUrl ? <img src={coverUrl} alt="Kapak görseli önizlemesi" /> : <span className="mono">{coverBusy ? "Yükleniyor…" : "Kapak görseli yok"}</span>}
               </div>
               <label className="btn btn--outline btn--small file-button">
                 {coverUrl ? "Görseli değiştir" : "Görsel yükle"}

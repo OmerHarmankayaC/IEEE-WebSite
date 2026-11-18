@@ -54,16 +54,16 @@ export function PostsTable({ posts }: { posts: AdminPostRow[] }) {
   };
 
   const filters: { id: Filter; label: string }[] = [
-    { id: "all", label: `TÜMÜ · ${counts.all}` },
-    { id: "published", label: `YAYINDA · ${counts.published}` },
-    { id: "draft", label: `TASLAK · ${counts.draft}` },
+    { id: "all", label: `Tümü (${counts.all})` },
+    { id: "published", label: `Yayında (${counts.published})` },
+    { id: "draft", label: `Taslak (${counts.draft})` },
   ];
 
   return (
     <>
       <div className="toolbar-row">
         <label className="field" style={{ flex: "0 1 360px" }}>
-          <span className="field__label">YAZILARDA ARA</span>
+          <span className="field__label">Yazılarda ara</span>
           <input className="input" type="search" placeholder="Başlık ya da kategori" value={query} onChange={(e) => setQuery(e.target.value)} />
         </label>
         <div className="chip-row" role="group" aria-label="Duruma göre süz">
@@ -84,11 +84,11 @@ export function PostsTable({ posts }: { posts: AdminPostRow[] }) {
       <div className="table-box">
         <div className="posts-table">
           <div className="posts-table__row posts-table__head" aria-hidden="true">
-            <span>BAŞLIK</span>
-            <span>KATEGORİ</span>
-            <span>DURUM</span>
-            <span>TARİH</span>
-            <span style={{ textAlign: "right" }}>İŞLEMLER</span>
+            <span>Başlık</span>
+            <span>Kategori</span>
+            <span>Durum</span>
+            <span>Tarih</span>
+            <span style={{ textAlign: "right" }}>İşlemler</span>
           </div>
           {shown.length === 0 ? (
             <p className="posts-table__empty">{posts.length === 0 ? "Henüz yazı yok. İlk yazını eklemek için Yeni yazı'ya bas." : "Bu aramaya uyan yazı yok."}</p>
@@ -106,18 +106,18 @@ export function PostsTable({ posts }: { posts: AdminPostRow[] }) {
                     <span className="stack" style={{ gap: 4, minWidth: 0 }}>
                       <Link href={`/admin/yazi/${post.id}`} className="posts-table__name">
                         {post.title}
-                        {post.featured && <span className="mono mono--accent"> · ÖNE ÇIKAN</span>}
+                        {post.featured && <span className="badge badge--featured">Öne çıkan</span>}
                       </Link>
                       <span className="mono mono--muted posts-table__slug">/blog/{post.slug}</span>
                     </span>
                   </span>
-                  <span className="posts-table__cell">{post.category ?? <span className="mono mono--muted">YOK</span>}</span>
+                  <span className="posts-table__cell">{post.category ?? <span className="mono mono--muted">Yok</span>}</span>
                   <span className="posts-table__cell">
                     <span className={post.status === "published" ? "badge badge--published" : "badge badge--draft"}>
-                      {post.status === "published" ? "YAYINDA" : "TASLAK"}
+                      {post.status === "published" ? "Yayında" : "Taslak"}
                     </span>
                   </span>
-                  <span className="posts-table__cell mono mono--muted">{post.date ?? "YAYINLANMADI"}</span>
+                  <span className="posts-table__cell mono mono--muted">{post.date ?? "Yayınlanmadı"}</span>
                   <span className="posts-table__actions">
                     <Link href={`/admin/yazi/${post.id}`} className="btn btn--outline btn--small">
                       Düzenle
@@ -132,9 +132,9 @@ export function PostsTable({ posts }: { posts: AdminPostRow[] }) {
           )}
           <div className="posts-table__foot mono mono--muted">
             <span>
-              {posts.length} YAZIDAN {shown.length} TANESİ GÖSTERİLİYOR
+              {posts.length} yazıdan {shown.length} tanesi gösteriliyor
             </span>
-            <span>GÖRSELLER YÜKLENİRKEN OTOMATİK KÜÇÜLTÜLÜR</span>
+            <span>Görseller yüklenirken otomatik küçültülür.</span>
           </div>
         </div>
       </div>

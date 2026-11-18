@@ -34,7 +34,7 @@ export default async function PostsPage() {
     status: row.status,
     featured: row.featured,
     category: row.category?.name_tr ?? null,
-    date: row.published_at ? formatter.format(new Date(row.published_at)).toLocaleUpperCase("tr-TR") : null,
+    date: row.published_at ? formatter.format(new Date(row.published_at)) : null,
     coverUrl: publicImageUrl(row.cover_path),
   }));
 
@@ -42,10 +42,9 @@ export default async function PostsPage() {
     <div className="admin-page">
       <div className="admin-head">
         <div className="stack" style={{ gap: 10 }}>
-          <span className="mono mono--muted">BLOG / YAZILAR</span>
-          <h1 className="admin-title">Yazılar</h1>
+                    <h1 className="admin-title">Yazılar</h1>
         </div>
-        <Link href="/admin/yazi/yeni" className="btn btn--primary btn--small">
+        <Link href="/admin/yazi/yeni" className="btn btn--sun btn--small">
           <PlusIcon />
           Yeni yazı
         </Link>

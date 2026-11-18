@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { ChevronLeft } from "@/components/icons";
 import { BlogList, BlogListView, CategoryChips, CategoryChipsView } from "@/components/site/BlogList";
 import { FooterBand } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
@@ -33,30 +34,25 @@ export default async function BlogPage({ params }: Props) {
       <SiteHeader t={t} locale={locale} current="blog" />
       <main>
         <section className="page-head">
+          <div className="sun" aria-hidden="true" />
           <div className="container page-head__inner">
-            <div className="section-head">
-              <span>{t.blogPage.head}</span>
-              <Link href={localePath(locale, "/")} className="section-head__side">
-                {t.blogPage.back}
-              </Link>
-            </div>
-            <div className="title-row">
-              <h1 className="page-title">{t.blogPage.title}</h1>
-              <p className="page-lead">{t.blogPage.lead}</p>
-            </div>
+            <Link href={localePath(locale, "/")} className="back-link">
+              <ChevronLeft />
+              {t.blogPage.back}
+            </Link>
+            <h1 className="page-title">{t.blogPage.title}</h1>
+            <p className="page-lead">{t.blogPage.lead}</p>
             <Suspense fallback={<CategoryChipsView posts={posts} locale={locale} t={listText} active={null} />}>
               <CategoryChips posts={posts} locale={locale} t={listText} />
             </Suspense>
           </div>
         </section>
 
-        <section className="section" aria-label={t.blogPage.posts} style={{ paddingTop: 56 }}>
-          <div className="container stack" style={{ gap: 64 }}>
-            {/* Until the browser reads ?kategori, every post is shown. */}
-            <Suspense fallback={<BlogListView posts={posts} locale={locale} t={listText} active={null} />}>
-              <BlogList posts={posts} locale={locale} t={listText} />
-            </Suspense>
-          </div>
+        <section className="container blog-body" aria-label={t.blogPage.posts}>
+          {/* Until the browser reads ?kategori, every post is shown. */}
+          <Suspense fallback={<BlogListView posts={posts} locale={locale} t={listText} active={null} />}>
+            <BlogList posts={posts} locale={locale} t={listText} />
+          </Suspense>
         </section>
       </main>
       <FooterBand t={t} locale={locale} />

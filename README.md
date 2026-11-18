@@ -18,7 +18,7 @@ The website of the **IEEE Student Branch at TED University** (Ankara, Türkiye).
 - [Next.js](https://nextjs.org) 16 (App Router) and React 19, deployed on **Vercel**
 - [Supabase](https://supabase.com): Postgres database, authentication and image storage, all protected by row level security
 - [Tiptap](https://tiptap.dev) for the post editor
-- Plain CSS with design tokens (`app/globals.css`) and fonts through `next/font`: Inter, Space Grotesk, JetBrains Mono
+- Plain CSS with design tokens (`app/globals.css`) and fonts through `next/font`: Dela Gothic One for headings, BIZ UDPMincho for reading text and BIZ UDPGothic for the interface. Colors come from the IEEE brand palette (IEEE Blue, PMS 295 dark blue and PMS 123 yellow).
 
 ## Getting started
 

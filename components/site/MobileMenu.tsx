@@ -4,14 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CloseIcon, MenuIcon } from "@/components/icons";
 import type { Locale } from "@/lib/i18n/dictionaries";
-import { site } from "@/lib/site";
 import { LangSwitch } from "./LangSwitch";
 
 type Props = {
   locale: Locale;
   joinHref: string;
   links: { href: string; label: string }[];
-  labels: { open: string; close: string; menu: string; language: string; join: string };
+  labels: { open: string; close: string; menu: string; language: string; join: string; menuButton: string; closeButton: string };
 };
 
 export function MobileMenu({ locale, joinHref, links, labels }: Props) {
@@ -39,23 +38,23 @@ export function MobileMenu({ locale, joinHref, links, labels }: Props) {
         onClick={() => setOpen((value) => !value)}
       >
         {open ? <CloseIcon /> : <MenuIcon />}
+        <span aria-hidden="true">{open ? labels.closeButton : labels.menuButton}</span>
       </button>
       {open && (
         <div id="mobile-menu" className="mobile-menu">
+          <div className="sun" aria-hidden="true" />
           <nav aria-label={labels.menu}>
-            {links.map((link, index) => (
+            {links.map((link) => (
               <Link key={link.href} href={link.href} onClick={() => setOpen(false)}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <span>{link.label}</span>
+                {link.label}
               </Link>
             ))}
           </nav>
           <div className="mobile-menu__bottom">
-            <LangSwitch locale={locale} label={labels.language} dark />
-            <Link href={joinHref} className="btn btn--light" onClick={() => setOpen(false)}>
+            <LangSwitch locale={locale} label={labels.language} />
+            <Link href={joinHref} className="btn btn--primary" onClick={() => setOpen(false)}>
               {labels.join}
             </Link>
-            <span className="mono mono--muted">@IEEE.TEDU · {site.email.toUpperCase()}</span>
           </div>
         </div>
       )}

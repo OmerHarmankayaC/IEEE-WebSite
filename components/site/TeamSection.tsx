@@ -9,16 +9,14 @@ type TeamText = Dictionary["team"];
 
 const COMMITTEES: CommitteeId[] = ["cs", "ras", "wie", "media"];
 
-function MemberCard({ member, t, accent }: { member: Member; t: TeamText; accent?: boolean }) {
+function MemberCard({ member, t, lead }: { member: Member; t: TeamText; lead?: boolean }) {
   const body = (
     <>
       <span className="photo">
         {member.photo && <Image src={member.photo} alt={member.name} fill sizes="(max-width: 720px) 45vw, 200px" />}
       </span>
-      <span style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        <span className="member__name">{member.name}</span>
-        <span className={accent ? "mono mono--accent" : "mono mono--muted"}>{t.roles[member.role]}</span>
-      </span>
+      <span className="member__name">{member.name}</span>
+      <span className={lead ? "member__role member__role--lead" : "member__role"}>{t.roles[member.role]}</span>
     </>
   );
   return member.linkedin ? (
@@ -39,33 +37,40 @@ export function TeamSection({ t }: { t: TeamText }) {
   const group = board?.committees[committee];
 
   return (
-    <div className="stack" style={{ gap: 40 }}>
-      <div className="title-row">
-        <h2 className="section-title">{t.title}</h2>
-        <div className="term-switch" role="group" aria-label={t.termGroup}>
-          {[...terms].reverse().map((term) => (
-            <button key={term.id} type="button" className="chip" aria-pressed={term.id === termId} onClick={() => setTermId(term.id)}>
-              {term.id}
-            </button>
-          ))}
-        </div>
+    <div className="stack">
+      <div className="segmented" role="group" aria-label={t.termGroup}>
+        {[...terms].reverse().map((term) => (
+          <button key={term.id} type="button" aria-pressed={term.id === termId} onClick={() => setTermId(term.id)}>
+            {term.id}
+          </button>
+        ))}
       </div>
 
       {board && group ? (
-        <div className="stack" style={{ gap: 40 }}>
+        <>
           <div className="president-grid">
-            {board.presidential.map((member) => (
-              <a key={member.name} className="president-card" href={member.linkedin} target="_blank" rel="noopener noreferrer">
-                <span className="photo">
-                  {member.photo && <Image src={member.photo} alt={member.name} fill sizes="112px" />}
-                </span>
-                <span className="president-card__text">
-                  <span className="mono mono--muted">{t.roles[member.role]}</span>
-                  <span className="president-card__name">{member.name}</span>
-                  {member.linkedin && <span className="mono mono--accent">{t.linkedin}</span>}
-                </span>
-              </a>
-            ))}
+            {board.presidential.map((member) => {
+              const body = (
+                <>
+                  <span className="photo">
+                    {member.photo && <Image src={member.photo} alt={member.name} fill sizes="176px" />}
+                  </span>
+                  <span className="president-card__text">
+                    <span className="meta meta--accent">{t.roles[member.role]}</span>
+                    <span className="president-card__name">{member.name}</span>
+                  </span>
+                </>
+              );
+              return member.linkedin ? (
+                <a key={member.name} className="president-card" href={member.linkedin} target="_blank" rel="noopener noreferrer">
+                  {body}
+                </a>
+              ) : (
+                <div key={member.name} className="president-card">
+                  {body}
+                </div>
+              );
+            })}
           </div>
 
           <div className="committee-tabs" role="group" aria-label={t.committeeGroup}>
@@ -78,7 +83,7 @@ export function TeamSection({ t }: { t: TeamText }) {
 
           <ul className="member-grid">
             <li>
-              <MemberCard member={group.leader} t={t} accent />
+              <MemberCard member={group.leader} t={t} lead />
             </li>
             {sortByName(group.members).map((member) => (
               <li key={member.name}>
@@ -86,15 +91,13 @@ export function TeamSection({ t }: { t: TeamText }) {
               </li>
             ))}
           </ul>
-        </div>
+        </>
       ) : (
-        <div className="tba hatch">
-          <div className="tba__card">
-            <span className="mono mono--muted">
-              {termId} {t.tbaTerm}
-            </span>
-            <strong>{t.tba}</strong>
-          </div>
+        <div className="tba">
+          <span className="meta meta--muted">
+            {termId} {t.tbaTerm}
+          </span>
+          <strong>{t.tba}</strong>
         </div>
       )}
     </div>

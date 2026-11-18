@@ -31,7 +31,7 @@ export function ConfirmDialog({ title, body, confirmLabel, busy = false, onCance
         if (!busy) onCancel();
       }}
     >
-      <div className="dialog__bar">YAZIYI SİL</div>
+      <div className="dialog__bar">Yazıyı sil</div>
       <div className="dialog__body">
         <h2 id="dialog-title">{title}</h2>
         <p>{body}</p>

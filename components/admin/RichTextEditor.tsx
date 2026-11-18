@@ -195,7 +195,7 @@ export function RichTextEditor({ initialHtml, placeholder, lang, onChange, onRea
       {state?.image && (
         <div className="editor__subbar">
           <label htmlFor={`alt-${lang}`} className="mono mono--muted" style={{ whiteSpace: "nowrap" }}>
-            GÖRSEL AÇIKLAMASI
+            Görsel açıklaması
           </label>
           <input
             id={`alt-${lang}`}
@@ -220,14 +220,14 @@ export function RichTextEditor({ initialHtml, placeholder, lang, onChange, onRea
         }}
       >
         {uploading ? (
-          <span className="mono">GÖRSEL YÜKLENİYOR…</span>
+          <span className="mono">Görsel yükleniyor…</span>
         ) : (
           <>
             <span style={{ fontWeight: 400 }}>Görseli buraya sürükle ya da</span>
             <button type="button" className="btn btn--outline btn--small" onClick={() => fileInput.current?.click()}>
               Bilgisayarından seç
             </button>
-            <span className="mono mono--muted">JPG, PNG, WEBP · YÜKLENİRKEN OTOMATİK KÜÇÜLTÜLÜR</span>
+            <span className="mono mono--muted">JPG, PNG ve WEBP yüklenirken otomatik küçültülür.</span>
           </>
         )}
         {error && (

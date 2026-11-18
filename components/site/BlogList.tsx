@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { Dictionary, Locale } from "@/lib/i18n/dictionaries";
-import { localePath, upper } from "@/lib/i18n/locale";
+import { localePath } from "@/lib/i18n/locale";
 import type { PostSummary } from "@/lib/posts";
 import { Cover } from "./Cover";
 import { PostMeta } from "./PostMeta";
@@ -29,7 +29,7 @@ export function CategoryChipsView({ posts, locale, t, active }: ViewProps) {
   const base = localePath(locale, "/blog");
 
   return (
-    <nav className="chip-row" aria-label={t.blogPage.filter} style={{ paddingTop: 12 }}>
+    <nav className="chip-row" aria-label={t.blogPage.filter} style={{ paddingTop: 8 }}>
       <Link href={base} className="chip" aria-current={!active ? "page" : undefined} scroll={false}>
         {t.blogPage.allCategories}
       </Link>
@@ -41,7 +41,7 @@ export function CategoryChipsView({ posts, locale, t, active }: ViewProps) {
           aria-current={active === category.slug ? "page" : undefined}
           scroll={false}
         >
-          {upper(category.name, locale)}
+          {category.name}
         </Link>
       ))}
     </nav>
@@ -65,27 +65,22 @@ export function BlogListView({ posts: allPosts, locale, t, active }: ViewProps) 
       <Link href={localePath(locale, `/blog/${featured.slug}`)} className="featured-card">
         <Cover src={featured.coverUrl} alt={featured.title} sizes="(max-width: 960px) 100vw, 760px" priority />
         <span className="featured-card__text">
-          <PostMeta post={{ ...featured, publishedAt: null }} locale={locale} prefix={t.blogPage.featured} accent />
+          {featured.featured && <span className="badge-sun">{t.blogPage.featured}</span>}
+          <PostMeta post={featured} locale={locale} accent />
           <span className="post-title">{featured.title}</span>
           {featured.excerpt && <span className="excerpt">{featured.excerpt}</span>}
-          <span className="featured-card__foot mono mono--muted">
-            <PostMeta post={{ ...featured, category: null }} locale={locale} />
-            <span style={{ color: "var(--ink)", fontWeight: 500 }}>{t.blog.read}</span>
-          </span>
         </span>
       </Link>
 
       {rest.length > 0 && (
         <ul className="post-grid">
-          {rest.map((post, index) => (
+          {rest.map((post) => (
             <li key={post.id}>
               <Link href={localePath(locale, `/blog/${post.slug}`)} className="post-card">
-                <span className="mono mono--muted">{String(index + 1).padStart(2, "0")}</span>
                 <Cover src={post.coverUrl} alt="" sizes="(max-width: 720px) 100vw, 300px" />
-                {post.category && <span className="mono mono--accent">{upper(post.category.name, locale)}</span>}
+                <PostMeta post={post} locale={locale} accent />
                 <span className="post-title">{post.title}</span>
                 {post.excerpt && <span className="post-card__excerpt">{post.excerpt}</span>}
-                <PostMeta post={{ ...post, category: null }} locale={locale} />
               </Link>
             </li>
           ))}

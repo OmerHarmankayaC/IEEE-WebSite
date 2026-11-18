@@ -29,8 +29,3 @@ export function formatDate(iso: string | null, locale: Locale): string | null {
     timeZone: "Europe/Istanbul",
   }).format(new Date(iso));
 }
-
-/** Upper case that respects Turkish dotted and dotless i. */
-export function upper(text: string, locale: Locale): string {
-  return text.toLocaleUpperCase(locale === "en" ? "en-US" : "tr-TR");
-}

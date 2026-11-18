@@ -32,11 +32,11 @@ export default async function PreviewPage({ params, searchParams }: { params: Pr
     <>
       <div className="preview-bar">
         <span>
-          ÖNİZLEME · {data.status === "published" ? "YAYINDA" : "TASLAK"} · SON KAYDEDİLEN HALİ
+          Önizleme: son kaydedilen hali ({data.status === "published" ? "yayında" : "taslak"})
         </span>
         <span className="chip-row" style={{ gap: 16 }}>
-          <Link href={`/admin/onizle/${id}?dil=${locale === "en" ? "tr" : "en"}`}>{locale === "en" ? "TÜRKÇESİNİ GÖR" : "İNGİLİZCESİNİ GÖR"}</Link>
-          <Link href={`/admin/yazi/${id}`}>DÜZENLEMEYE DÖN →</Link>
+          <Link href={`/admin/onizle/${id}?dil=${locale === "en" ? "tr" : "en"}`}>{locale === "en" ? "Türkçesini gör" : "İngilizcesini gör"}</Link>
+          <Link href={`/admin/yazi/${id}`}>Düzenlemeye dön</Link>
         </span>
       </div>
       <SiteHeader t={t} locale={locale} current="blog" />

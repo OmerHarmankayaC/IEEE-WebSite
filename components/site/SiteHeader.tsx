@@ -30,7 +30,7 @@ export function SiteHeader({ t, locale, current }: { t: Dictionary; locale: Loca
         </nav>
         <div className="site-header__actions">
           <LangSwitch locale={locale} label={t.nav.language} />
-          <Link href={joinHref} className="btn btn--primary btn--small">
+          <Link href={joinHref} className="btn btn--sun btn--small">
             {t.nav.join}
           </Link>
         </div>
@@ -38,7 +38,7 @@ export function SiteHeader({ t, locale, current }: { t: Dictionary; locale: Loca
           locale={locale}
           joinHref={joinHref}
           links={links.map(({ href, label }) => ({ href, label }))}
-          labels={{ open: t.nav.openMenu, close: t.nav.closeMenu, menu: t.nav.mainMenu, language: t.nav.language, join: t.nav.join }}
+          labels={{ open: t.nav.openMenu, close: t.nav.closeMenu, menu: t.nav.mainMenu, language: t.nav.language, join: t.nav.join, menuButton: t.nav.menu, closeButton: t.nav.close }}
         />
       </div>
     </header>

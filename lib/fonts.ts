@@ -1,9 +1,10 @@
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { BIZ_UDPGothic, BIZ_UDPMincho, Dela_Gothic_One } from "next/font/google";
 
-// Self-hosted by Next.js at build time, preloaded, with size-matched fallbacks so the
-// layout does not jump when the real fonts arrive. latin-ext covers ğ, ş, İ and ı.
-const inter = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-inter", display: "swap" });
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin", "latin-ext"], variable: "--font-space-grotesk", display: "swap" });
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin", "latin-ext"], variable: "--font-jetbrains-mono", display: "swap" });
+// Japanese typefaces whose Latin sets cover Turkish (ğ, ş, İ, ı). Self-hosted by
+// Next.js at build time; only the latin and latin-ext slices are preloaded.
+// Dela Gothic One: display headings. BIZ UDPMincho: reading text. BIZ UDPGothic: interface text.
+const dela = Dela_Gothic_One({ weight: "400", subsets: ["latin", "latin-ext"], variable: "--font-dela", display: "swap" });
+const mincho = BIZ_UDPMincho({ weight: ["400", "700"], subsets: ["latin", "latin-ext"], variable: "--font-mincho", display: "swap" });
+const gothic = BIZ_UDPGothic({ weight: ["400", "700"], subsets: ["latin", "latin-ext"], variable: "--font-gothic", display: "swap" });
 
-export const fontVariables = `${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`;
+export const fontVariables = `${dela.variable} ${mincho.variable} ${gothic.variable}`;
