@@ -5,13 +5,14 @@ import { localePath } from "@/lib/i18n/locale";
 import { LangSwitch } from "./LangSwitch";
 import { MobileMenu } from "./MobileMenu";
 
-export function SiteHeader({ t, locale, current }: { t: Dictionary; locale: Locale; current?: "blog" }) {
+export function SiteHeader({ t, locale, current }: { t: Dictionary; locale: Locale; current?: "blog" | "workshops" | "contact" }) {
   const links = [
     { href: localePath(locale, "/#hakkimizda"), label: t.nav.about },
     { href: localePath(locale, "/#komiteler"), label: t.nav.committees },
     { href: localePath(locale, "/blog"), label: t.nav.blog, current: current === "blog" },
+    { href: localePath(locale, "/atolyeler"), label: t.nav.workshops, current: current === "workshops" },
     { href: localePath(locale, "/#ekip"), label: t.nav.team },
-    { href: localePath(locale, "/#katil"), label: t.nav.contact },
+    { href: localePath(locale, "/iletisim"), label: t.nav.contact, current: current === "contact" },
   ];
   const joinHref = localePath(locale, "/#katil");
 
