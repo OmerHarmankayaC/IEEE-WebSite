@@ -880,13 +880,58 @@ a.president-card:hover .president-card__name {
   border-top: 2px solid var(--navy);
 }
 
-.member-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr));
-  gap: 32px 20px;
+.member-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.member-strip__list {
   margin: 0;
-  padding: 0;
+  padding: 0 0 14px;
   list-style: none;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(170px, 18%, 210px);
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--navy) transparent;
+}
+
+.member-strip__list > li {
+  scroll-snap-align: start;
+}
+
+.member .badge-sun {
+  align-self: flex-start;
+}
+
+.member-strip__nav {
+  display: flex;
+  gap: 8px;
+}
+
+.member-strip__nav button {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--navy);
+  background: var(--white);
+  color: var(--navy);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.member-strip__nav button:hover:not(:disabled) {
+  background: var(--sun);
+}
+
+.member-strip__nav button:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
 .member {
@@ -927,11 +972,6 @@ a.member:hover .member__name {
   font-size: 14px;
   line-height: 1.4;
   color: var(--muted);
-}
-
-.member__role--lead {
-  color: var(--accent);
-  font-weight: 700;
 }
 
 .tba {
@@ -1459,7 +1499,7 @@ a.member:hover .member__name {
   border-left: 6px solid var(--sun);
 }
 
-.tool-list {
+.ws-tool-list {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1468,7 +1508,7 @@ a.member:hover .member__name {
   gap: 56px;
 }
 
-.tool {
+.ws-tool {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -1476,13 +1516,13 @@ a.member:hover .member__name {
   border-top: 3px solid var(--navy);
 }
 
-.tool__head {
+.ws-tool__head {
   display: flex;
   align-items: flex-start;
   gap: 18px;
 }
 
-.tool__num {
+.ws-tool__num {
   flex: none;
   width: 52px;
   height: 52px;
@@ -1495,7 +1535,7 @@ a.member:hover .member__name {
   font-size: 22px;
 }
 
-.tool__icon {
+.ws-tool__icon {
   flex: none;
   width: 44px;
   height: 44px;
@@ -1503,11 +1543,11 @@ a.member:hover .member__name {
   object-fit: contain;
 }
 
-.tool__title {
+.ws-tool__title {
   min-width: 0;
 }
 
-.tool__title h2 {
+.ws-tool__title h2 {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 400;
@@ -1515,29 +1555,29 @@ a.member:hover .member__name {
   line-height: 1.2;
 }
 
-.tool__title p {
+.ws-tool__title p {
   margin: 6px 0 0;
   color: var(--muted);
 }
 
-.tool__links {
+.ws-tool__links {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 24px;
 }
 
-.tool__part {
+.ws-tool__part {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.tool__part p {
+.ws-tool__part p {
   margin: 0;
 }
 
-.tool__label {
+.ws-tool__label {
   margin: 0;
   font-family: var(--font-ui);
   font-size: 15px;
@@ -1566,12 +1606,12 @@ a.member:hover .member__name {
   font-weight: 700;
 }
 
-.tool__note {
+.ws-tool__note {
   padding: 18px 20px;
   background: var(--tint);
 }
 
-.tool__check {
+.ws-tool__check {
   padding: 18px 20px;
   border: 2px solid var(--navy);
 }
@@ -1831,16 +1871,16 @@ a.member:hover .member__name {
     font-size: 24px;
   }
 
-  .member-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 28px 14px;
+  .member-strip__list {
+    grid-auto-columns: 46vw;
+    gap: 14px;
   }
 
   .join__copy .btn {
     align-self: stretch;
   }
 
-  .tool__icon {
+  .ws-tool__icon {
     display: none;
   }
 

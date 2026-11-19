@@ -90,6 +90,8 @@ const tr = {
     tbaTerm: "dönemi",
     tba: "Yeni yönetim kurulu yakında açıklanacak.",
     linkedin: "LinkedIn",
+    previous: "Önceki üyeler",
+    next: "Sonraki üyeler",
     tabs: { cs: "Computer Society", ras: "RAS", wie: "WIE", media: "Medya" },
     roles: {
       president: "Genel başkan",
@@ -238,6 +240,8 @@ const en: Dictionary = {
     tbaTerm: "term",
     tba: "The new board will be announced soon.",
     linkedin: "LinkedIn",
+    previous: "Previous members",
+    next: "Next members",
     tabs: { cs: "Computer Society", ras: "RAS", wie: "WIE", media: "Media" },
     roles: {
       president: "President",

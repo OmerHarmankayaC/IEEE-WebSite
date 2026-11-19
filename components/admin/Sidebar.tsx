@@ -49,7 +49,9 @@ export function Sidebar({ email, postCount, unread }: { email: string | null; po
         </a>
         <div className="admin-side__session">
           <span className="mono">Oturum</span>
-          <span>{email ?? "Yönetici"}</span>
+          <span className="admin-side__email" title={email ?? undefined}>
+            {email ?? "Yönetici"}
+          </span>
         </div>
         <form action={signOut}>
           <button type="submit" className="admin-side__signout">

@@ -97,20 +97,20 @@ function ToolSection({ tool, index, os, t }: { tool: Tool; index: number; os: OS
   const verifyBlocks: Block[] = verify === undefined ? [] : typeof verify === "string" ? [verify] : verify;
 
   return (
-    <li className="tool">
-      <div className="tool__head">
-        <span className="tool__num" aria-hidden="true">
+    <li className="ws-tool">
+      <div className="ws-tool__head">
+        <span className="ws-tool__num" aria-hidden="true">
           {index + 1}
         </span>
-        {tool.icon && <Image className="tool__icon" src={tool.icon} alt="" width={44} height={44} unoptimized />}
-        <div className="tool__title">
+        {tool.icon && <Image className="ws-tool__icon" src={tool.icon} alt="" width={44} height={44} unoptimized />}
+        <div className="ws-tool__title">
           <h2>{tool.name}</h2>
           <p>{tool.description}</p>
         </div>
       </div>
 
       {(tool.url || tool.extraLinks?.length) && (
-        <div className="tool__links">
+        <div className="ws-tool__links">
           {tool.url && (
             <a className="btn btn--outline btn--small" href={tool.url} target="_blank" rel="noopener noreferrer">
               {tool.urlLabel ?? tool.name}
@@ -125,8 +125,8 @@ function ToolSection({ tool, index, os, t }: { tool: Tool; index: number; os: OS
       )}
 
       {install.length > 0 && (
-        <div className="tool__part">
-          <h3 className="tool__label">{t.install}</h3>
+        <div className="ws-tool__part">
+          <h3 className="ws-tool__label">{t.install}</h3>
           <ol className="steps">
             {toSteps(install).map((step, i) => (
               <li key={i}>
@@ -142,8 +142,8 @@ function ToolSection({ tool, index, os, t }: { tool: Tool; index: number; os: OS
       {video && <Video video={video} t={t} />}
 
       {tips && tips.length > 0 && (
-        <div className="tool__part tool__note">
-          <h3 className="tool__label">{t.tip}</h3>
+        <div className="ws-tool__part ws-tool__note">
+          <h3 className="ws-tool__label">{t.tip}</h3>
           {tips.map((block, i) => (
             <BlockView key={i} block={block} t={t} />
           ))}
@@ -151,8 +151,8 @@ function ToolSection({ tool, index, os, t }: { tool: Tool; index: number; os: OS
       )}
 
       {verifyBlocks.length > 0 && (
-        <div className="tool__part tool__check">
-          <h3 className="tool__label">{t.verify}</h3>
+        <div className="ws-tool__part ws-tool__check">
+          <h3 className="ws-tool__label">{t.verify}</h3>
           {verifyBlocks.map((block, i) => (
             <BlockView key={i} block={block} t={t} />
           ))}
@@ -181,7 +181,7 @@ export function WorkshopGuide({ workshop, t }: { workshop: Workshop; t: Text }) 
           ))}
         </div>
       </div>
-      <ol className="tool-list" lang="tr">
+      <ol className="ws-tool-list" lang="tr">
         {workshop.tools.map((tool, index) => (
           <ToolSection key={tool.id} tool={tool} index={index} os={os} t={t} />
         ))}
