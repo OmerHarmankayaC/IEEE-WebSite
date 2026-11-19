@@ -20,7 +20,7 @@ export function SiteHeader({ t, locale, current }: { t: Dictionary; locale: Loca
     <header className="site-header">
       <div className="container site-header__inner">
         <Link href={localePath(locale, "/")} className="brand" aria-label={t.nav.homeLink}>
-          <Image src="/images/brand/ieee-tedu-logo.png" alt="IEEE TED University Student Branch" width={1278} height={150} priority />
+          <Image src="/images/brand/ieee-tedu-logo.png" alt="IEEE TED University Student Branch" width={1278} height={150} unoptimized priority />
         </Link>
         <nav className="site-nav" aria-label={t.nav.mainMenu}>
           {links.map((link) => (

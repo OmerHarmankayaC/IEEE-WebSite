@@ -920,12 +920,15 @@ body {
 
 .admin-side__brand {
   padding: 0;
-  gap: 8px;
+  gap: 12px;
+  align-items: flex-start;
 }
 
+/* The logo keeps its own proportions instead of stretching to the sidebar width. */
 .admin-side__brand img {
-  height: 22px;
-  width: auto;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
 }
 
 .admin-side__brand .mono,

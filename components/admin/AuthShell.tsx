@@ -13,7 +13,7 @@ export function AuthShell({ title, lead, children, footnote }: { title: string; 
       </div>
       <main className="auth-card">
         <div className="auth-card__body">
-          <Image src="/images/brand/ieee-tedu-logo.png" alt="IEEE TED University Student Branch" width={1278} height={150} className="auth-card__logo" priority />
+          <Image src="/images/brand/ieee-tedu-logo.png" alt="IEEE TED University Student Branch" width={1278} height={150} unoptimized className="auth-card__logo" priority />
           <div className="stack" style={{ gap: 8 }}>
             <h1 className="auth-card__title">{title}</h1>
             <p className="auth-card__lead">{lead}</p>

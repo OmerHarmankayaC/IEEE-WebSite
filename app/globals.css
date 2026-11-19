@@ -205,6 +205,7 @@ button {
   font-size: 16px;
   font-weight: 700;
   line-height: 1.3;
+  white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
 }
@@ -532,26 +533,17 @@ button {
 
 .hero {
   position: relative;
-  overflow: hidden;
-}
-
-.hero .sun {
-  right: -150px;
-  top: 28px;
-  width: min(640px, 92vw);
-  aspect-ratio: 1 / 1;
 }
 
 .hero__inner {
-  position: relative;
   padding-block: clamp(64px, 9vw, 120px) clamp(80px, 10vw, 144px);
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
   gap: 48px;
-  align-items: stretch;
 }
 
 .hero__copy {
-  flex: 1 1 auto;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -563,7 +555,7 @@ button {
   max-width: 10.5em;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(40px, 7vw, 100px);
+  font-size: clamp(40px, 6vw, 84px);
   line-height: 1.1;
   text-wrap: balance;
 }
@@ -582,16 +574,12 @@ button {
   gap: 12px 28px;
 }
 
-.hero__tagline {
-  margin: 0;
-  flex: none;
-  writing-mode: vertical-rl;
-  border-left: 2px solid var(--navy);
-  padding-left: 18px;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.6;
-  letter-spacing: 0.16em;
+/* The full yellow circle beside the headline */
+.hero__sun {
+  width: clamp(200px, 26vw, 380px);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: var(--sun);
 }
 
 /* Optional club photo under the hero */
@@ -644,20 +632,20 @@ button {
   margin: 0;
   padding: 0;
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
 .activity-list li {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  min-height: 52px;
-  padding: 0 20px;
+  min-height: 64px;
+  padding: 12px 20px;
   border: 3px solid var(--navy);
   font-family: var(--font-display);
   font-size: 19px;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 /* Committees */
@@ -1803,7 +1791,7 @@ a.member:hover .member__name {
 
 /* Small screens */
 
-@media (max-width: 1100px) {
+@media (max-width: 1220px) {
   :root {
     --header-h: 64px;
   }
@@ -1822,6 +1810,31 @@ a.member:hover .member__name {
   }
 }
 
+@media (max-width: 860px) {
+  .hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding-top: 40px;
+  }
+
+  .hero__sun {
+    order: -1;
+    justify-self: end;
+    width: clamp(112px, 30vw, 200px);
+  }
+}
+
+@media (max-width: 560px) {
+  .activity-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .activity-list li {
+    min-height: 56px;
+  }
+}
+
 @media (max-width: 720px) {
   .sec {
     grid-template-columns: minmax(0, 1fr);
@@ -1832,7 +1845,6 @@ a.member:hover .member__name {
     letter-spacing: 0;
   }
 
-  .hero__tagline,
   .page-head .sun,
   .article-head .sun,
   .sec__spacer {

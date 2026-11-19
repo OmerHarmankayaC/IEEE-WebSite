@@ -15,7 +15,7 @@ export function Sidebar({ email, postCount, unread }: { email: string | null; po
   return (
     <aside className="admin-side">
       <div className="admin-side__brand">
-        <Image src="/images/brand/ieee-tedu-logo.png" alt="IEEE TED University Student Branch" width={1278} height={150} />
+        <Image src="/images/brand/ieee-tedu-logo.png" alt="IEEE TED University Student Branch" width={1278} height={150} unoptimized />
         <span className="mono mono--muted">Yönetim paneli</span>
       </div>
       <nav className="admin-side__nav" aria-label="Panel menüsü">

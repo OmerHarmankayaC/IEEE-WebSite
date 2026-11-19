@@ -31,7 +31,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <main>
         {/* Hero */}
         <section className="hero" id="ust">
-          <div className="sun" aria-hidden="true" />
           <div className="container hero__inner">
             <div className="hero__copy">
               <h1 className="hero__title">{t.hero.title}</h1>
@@ -45,7 +44,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 </Link>
               </div>
             </div>
-            <p className="hero__tagline">{t.hero.tagline}</p>
+            <div className="hero__sun" aria-hidden="true" />
           </div>
         </section>
 

@@ -32,7 +32,6 @@ const tr = {
     adminLogin: "Yönetici girişi",
   },
   hero: {
-    tagline: "TED Üniversitesi IEEE Öğrenci Kolu, Ankara",
     title: "Mühendislikte her zaman bir adım ileriye.",
     lead: "Teknoloji ve mühendislik topluluğu olarak IEEE'nin evrensel standartlarını kampüse taşıyoruz. Geleceği bizimle inşa et.",
     cta: "Bize katıl",
@@ -182,7 +181,6 @@ const en: Dictionary = {
     adminLogin: "Admin login",
   },
   hero: {
-    tagline: "IEEE Student Branch at TED University, Ankara",
     title: "Always one step ahead in engineering.",
     lead: "As a technology and engineering community, we bring IEEE's global standards to campus. Build the future with us.",
     cta: "Join us",
