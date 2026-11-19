@@ -45,7 +45,7 @@ const nextConfig: NextConfig = {
       { source: "/index.html", destination: "/", permanent: true },
       { source: "/blog.html", destination: "/blog", permanent: true },
       { source: "/blog-post.html", destination: "/blog", permanent: true },
-      { source: "/contact.html", destination: "/#katil", permanent: true },
+      { source: "/contact.html", destination: "/iletisim", permanent: true },
       ...Object.entries(legacyPosts).map(([file, slug]) => ({
         source: `/${file}`,
         destination: `/blog/${slug}`,

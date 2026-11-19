@@ -9,13 +9,15 @@ import { getDictionary, type Locale } from "@/lib/i18n/dictionaries";
 import { localePath } from "@/lib/i18n/locale";
 import { getPublishedPosts, orderForDisplay } from "@/lib/posts";
 import { site } from "@/lib/site";
+import { getTerms } from "@/lib/team";
 
 export const revalidate = 3600;
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const locale = (await params).locale as Locale;
   const t = getDictionary(locale);
-  const posts = orderForDisplay(await getPublishedPosts(locale));
+  const [allPosts, terms] = await Promise.all([getPublishedPosts(locale), getTerms()]);
+  const posts = orderForDisplay(allPosts);
   const [featured, ...rest] = posts;
   const latest = rest.slice(0, 3);
 
@@ -141,7 +143,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <section className="section ruled tinted" id="ekip">
           <div className="container sec">
             <h2 className="vt">{t.team.title}</h2>
-            <TeamSection t={t.team} />
+            <TeamSection t={t.team} terms={terms} />
           </div>
         </section>
 
@@ -151,9 +153,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             <div className="join__copy">
               <h2 className="join__title">{t.join.title}</h2>
               <p className="join__lead">{t.join.lead}</p>
-              <a href={`mailto:${site.email}`} className="btn btn--primary">
-                {site.email}
-              </a>
+              <div className="hero__actions">
+                <Link href={localePath(locale, "/iletisim")} className="btn btn--primary">
+                  {t.contact.write}
+                </Link>
+                <a href={`mailto:${site.email}`} className="text-link">
+                  {site.email}
+                </a>
+              </div>
             </div>
             <ul className="channels">
               {site.socials.map((social) => (

@@ -1,10 +1,9 @@
-import { IMAGE_BUCKET, publicImageUrl } from "@/lib/env";
+import { IMAGE_BUCKET, SUPABASE_URL, TEAM_BUCKET } from "@/lib/env";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 
-const MAX_SIDE = 1600;
 
 /** Shrinks the image in the browser before upload so the 1 GB free storage lasts. */
-async function prepare(file: File): Promise<{ blob: Blob; ext: string; type: string }> {
+async function prepare(file: File, maxSide: number): Promise<{ blob: Blob; ext: string; type: string }> {
   // Animated GIFs would lose their animation on a canvas.
   if (file.type === "image/gif") return { blob: file, ext: "gif", type: "image/gif" };
 
@@ -14,7 +13,7 @@ async function prepare(file: File): Promise<{ blob: Blob; ext: string; type: str
   } catch {
     throw new Error("Bu görsel açılamadı. JPG, PNG ya da WEBP bir dosya dene.");
   }
-  const scale = Math.min(1, MAX_SIDE / Math.max(bitmap.width, bitmap.height));
+  const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
   const canvas = document.createElement("canvas");
   canvas.width = Math.round(bitmap.width * scale);
   canvas.height = Math.round(bitmap.height * scale);
@@ -30,18 +29,27 @@ async function prepare(file: File): Promise<{ blob: Blob; ext: string; type: str
   return { blob: jpeg, ext: "jpg", type: "image/jpeg" };
 }
 
-export async function uploadImage(file: File, folder: "covers" | "posts"): Promise<{ path: string; url: string }> {
+type Target = { bucket: string; folder: string; maxSide: number };
+
+const TARGETS: Record<"covers" | "posts" | "team", Target> = {
+  covers: { bucket: IMAGE_BUCKET, folder: "covers", maxSide: 1600 },
+  posts: { bucket: IMAGE_BUCKET, folder: "posts", maxSide: 1600 },
+  team: { bucket: TEAM_BUCKET, folder: "members", maxSide: 800 },
+};
+
+export async function uploadImage(file: File, kind: keyof typeof TARGETS): Promise<{ path: string; url: string }> {
+  const target = TARGETS[kind];
   if (!file.type.startsWith("image/")) throw new Error("Yalnızca görsel dosyaları yüklenebilir.");
   if (file.size > 25 * 1024 * 1024) throw new Error("Görsel en fazla 25 MB olabilir.");
 
-  const { blob, ext, type } = await prepare(file);
+  const { blob, ext, type } = await prepare(file, target.maxSide);
   if (blob.size > 5 * 1024 * 1024) throw new Error("Görsel küçültüldükten sonra bile 5 MB'tan büyük. Daha küçük bir dosya dene.");
 
-  const path = `${folder}/${new Date().getFullYear()}/${crypto.randomUUID()}.${ext}`;
+  const path = `${target.folder}/${new Date().getFullYear()}/${crypto.randomUUID()}.${ext}`;
   const { error } = await createBrowserSupabase()
-    .storage.from(IMAGE_BUCKET)
+    .storage.from(target.bucket)
     .upload(path, blob, { contentType: type, cacheControl: "31536000", upsert: false });
   if (error) throw new Error("Görsel yüklenemedi. Oturumun açık mı?");
 
-  return { path, url: publicImageUrl(path)! };
+  return { path, url: `${SUPABASE_URL}/storage/v1/object/public/${target.bucket}/${path}` };
 }

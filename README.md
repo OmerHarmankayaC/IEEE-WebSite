@@ -9,7 +9,9 @@ The website of the **IEEE Student Branch at TED University** (Ankara, Türkiye).
 - **Bilingual (TR / EN).** Turkish pages live at the root (`/blog`), English ones under `/en` (`/en/blog`). The TR / EN buttons open the same page in the other language; old `?lang=en` links still work.
 - **Blog with an admin panel** at `/admin`: write posts in a rich text editor, add images by dragging them in, set a cover image, a category and a publish date, mark one post as featured, and keep drafts. English versions are optional; when a post has none, the Turkish text is shown.
 - **Images are shrunk in the browser** (WebP, at most 1600 px) before upload, so free storage lasts.
-- **Board of directors by academic year,** kept in a single data file.
+- **Board of directors by academic year,** edited from the admin panel: add a term, keep it hidden while you fill it in, add members with photos, then publish it.
+- **Contact form** at `/iletisim`. Messages are stored in the database and read in the admin panel. A hidden trap field stops simple bots, and the database accepts at most 3 messages an hour from one address and 30 in total.
+- **Workshops** at `/atolyeler`: setup guides for hands-on events, with steps for Windows, macOS and Linux, commands to copy and optional videos. Each workshop is one data file in `content/workshops/`.
 - **Old addresses keep working:** links to the previous static pages (`blog-otonom-arac.html` and so on) redirect to the new ones.
 - Responsive, accessible markup, sitemap and robots file included.
 
@@ -42,28 +44,24 @@ Both values are public by design: they reach every visitor's browser, and every 
 
 ## Admin panel
 
-The panel lives at `/admin`. There is a single role: admin.
+The panel lives at `/admin`. There is a single role: admin. From the panel you manage blog posts, the board of directors, contact messages and other admins.
 
 **Adding an admin**
 
-1. Supabase dashboard, Authentication, Users, **Add user**. Enter the email and a password, and tick *Auto Confirm User*.
-2. Grant admin rights in the SQL editor:
+Open **Yöneticiler** in the panel and enter the person's email. They receive an invitation, set a password through the link and can sign in. Someone who already has an account simply gets admin rights. Nobody can remove their own admin rights, so the panel is never left without an admin.
 
-   ```sql
-   insert into public.admins (user_id)
-   select id from auth.users where email = 'name@example.com';
-   ```
+Invitations are sent by the `invite-admin` Edge Function (`supabase/functions/invite-admin`). It runs inside Supabase with the service role key, so that key is never part of the website. After changing it, deploy it again with `supabase functions deploy invite-admin --no-verify-jwt` (the function checks the caller itself).
 
 **Recommended Supabase settings**
 
-- Authentication, Sign In / Providers: turn off **Allow new users to sign up** (accounts are only created by hand).
-- Authentication, URL Configuration: set **Site URL** to the production address so password reset emails link back to the site.
+- Authentication, Sign In / Providers: turn off **Allow new users to sign up** (admins are invited from the panel).
+- Authentication, URL Configuration: set **Site URL** to the production address and add `https://<production address>/**` to **Redirect URLs**, so password reset and invitation emails link back to the site.
 
 ## Content that lives in code
 
 | What | Where |
 | --- | --- |
-| Board of directors | `lib/team.ts`, photos in `public/images/team/` |
+| Workshops | `content/workshops/`, images in `public/images/workshops/` |
 | Committee texts, all interface text (TR and EN) | `lib/i18n/dictionaries.ts` |
 | Email, social links, current term, optional homepage photo | `lib/site.ts` |
 | Colors and fonts | top of `app/globals.css` |
@@ -74,16 +72,18 @@ To add a wide club photo under the hero, put the image in `public/images/` and s
 
 ```text
 app/
-  [locale]/           Public pages in both languages: homepage, /blog, /blog/[slug]
-  admin/              Login, password reset, post list, editor, preview (own root layout)
+  [locale]/           Public pages in both languages: homepage, /blog, /atolyeler, /iletisim
+  admin/              Login, invitations, posts, board, messages, admins (own root layout)
   global-not-found.tsx  404 page for addresses that match nothing
   api/keepalive/      Daily request that keeps the free Supabase project awake
 components/
   site/               Header, mobile menu, team section, article, cards
-  admin/              Post editor, rich text editor, posts table, dialogs
-lib/                  Data access, i18n, team data, Supabase clients, helpers
-public/images/        Logos and team photos
-supabase/migrations/  Database schema (tables, policies, storage bucket)
+  admin/              Post editor, rich text editor, tables, team and admin managers, dialogs
+content/workshops/    One data file per workshop guide
+lib/                  Data access, i18n, Supabase clients, helpers
+public/images/        Logos, bundled team photos and workshop images
+supabase/migrations/  Database schema (tables, policies, storage buckets, seed data)
+supabase/functions/   invite-admin Edge Function
 proxy.ts              Admin session refresh and redirects for old ?lang= links
 ```
 
@@ -102,6 +102,8 @@ Every push to `main` deploys to production on Vercel; pull requests get preview 
 ## Contributing
 
 Branch members are welcome to contribute. Please read **[CONTRIBUTING.md](CONTRIBUTING.md)** first.
+
+The workshops section, the contact form and admin management for the board and for admins were first built by [Taha Bayati](https://github.com/tahabayati) in [tahabayati/IEEE-TEDU-Site](https://github.com/tahabayati/IEEE-TEDU-Site); the Web 101 workshop guide is his work. Thank you, Taha.
 
 ## Contact
 

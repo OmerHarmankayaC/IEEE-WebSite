@@ -4,7 +4,7 @@ import { SUPABASE_KEY, SUPABASE_URL } from "@/lib/env";
 import { switchLocalePath } from "@/lib/i18n/locale";
 
 // Admin pages that can be opened without a session.
-const PUBLIC_ADMIN_PATHS = ["/admin/giris", "/admin/sifremi-unuttum", "/admin/auth"];
+const PUBLIC_ADMIN_PATHS = ["/admin/giris", "/admin/sifremi-unuttum", "/admin/auth", "/admin/davet"];
 
 // Runs only for /admin and for links that carry ?lang= (see config below), so public
 // pages never wait for it and stay fully cached.
