@@ -1,11 +1,15 @@
 import { publicImageUrl } from "@/lib/env";
+import { EVENT_FIELDS, eventPhase, toEventInfo, type EventInfo, type EventRow } from "@/lib/events";
 import type { Locale } from "@/lib/i18n/dictionaries";
 import { createPublicClient } from "@/lib/supabase/public";
 
 export type CategoryRow = { slug: string; name_tr: string; name_en: string | null };
 
-type PostRow = {
+export type PostKind = "post" | "event";
+
+type PostRow = EventRow & {
   id: string;
+  kind: PostKind;
   slug: string;
   featured: boolean;
   published_at: string | null;
@@ -21,6 +25,9 @@ type PostRow = {
 
 export type PostSummary = {
   id: string;
+  kind: PostKind;
+  /** Set when kind is "event". */
+  event: EventInfo | null;
   slug: string;
   featured: boolean;
   publishedAt: string | null;
@@ -32,8 +39,7 @@ export type PostSummary = {
 
 export type Post = PostSummary & { contentHtml: string };
 
-const SUMMARY_FIELDS =
-  "id, slug, featured, published_at, cover_path, title_tr, title_en, excerpt_tr, excerpt_en, category:categories(slug, name_tr, name_en)";
+const SUMMARY_FIELDS = `id, kind, slug, featured, published_at, cover_path, title_tr, title_en, excerpt_tr, excerpt_en, ${EVENT_FIELDS}, category:categories(slug, name_tr, name_en)`;
 
 const pick = (tr: string | null | undefined, en: string | null | undefined, locale: Locale) =>
   locale === "en" && en && en.trim() ? en : (tr ?? null);
@@ -45,6 +51,8 @@ export function categoryName(category: CategoryRow, locale: Locale): string {
 export function toSummary(row: PostRow, locale: Locale): PostSummary {
   return {
     id: row.id,
+    kind: row.kind ?? "post",
+    event: row.kind === "event" ? toEventInfo(row) : null,
     slug: row.slug,
     featured: row.featured,
     publishedAt: row.published_at,
@@ -64,16 +72,14 @@ export function toPost(row: PostRow, locale: Locale): Post {
 }
 
 /**
- * Published posts, newest first. Row level security hides drafts and future dates,
- * so no status filter is needed here.
+ * Published posts and events, newest first. Row level security hides drafts and future
+ * dates, so no status filter is needed here. Pass a kind to get only posts or only events.
  */
-export async function getPublishedPosts(locale: Locale): Promise<PostSummary[]> {
+export async function getPublishedPosts(locale: Locale, kind?: PostKind): Promise<PostSummary[]> {
   try {
-    const { data, error } = await createPublicClient()
-      .from("posts")
-      .select(SUMMARY_FIELDS)
-      .order("published_at", { ascending: false })
-      .returns<PostRow[]>();
+    let query = createPublicClient().from("posts").select(SUMMARY_FIELDS);
+    if (kind) query = query.eq("kind", kind);
+    const { data, error } = await query.order("published_at", { ascending: false }).returns<PostRow[]>();
     if (error) throw error;
     return (data ?? []).map((row) => toSummary(row, locale));
   } catch (error) {
@@ -95,6 +101,53 @@ export async function getPostBySlug(slug: string, locale: Locale): Promise<Post 
     console.error("Could not load post", slug, error);
     return null;
   }
+}
+
+export type EventSummary = PostSummary & { event: EventInfo };
+
+const isEvent = (post: PostSummary): post is EventSummary => post.kind === "event" && post.event !== null;
+
+/** Published events split into those still to come (soonest first) and past ones (latest first). */
+export async function getEvents(locale: Locale, now = Date.now()): Promise<{ upcoming: EventSummary[]; past: EventSummary[] }> {
+  const events = (await getPublishedPosts(locale, "event")).filter(isEvent);
+  const upcoming = events
+    .filter((item) => eventPhase(item.event, now) !== "past")
+    .sort((a, b) => Date.parse(a.event.startsAt) - Date.parse(b.event.startsAt));
+  const past = events
+    .filter((item) => eventPhase(item.event, now) === "past")
+    .sort((a, b) => Date.parse(b.event.startsAt) - Date.parse(a.event.startsAt));
+  return { upcoming, past };
+}
+
+/** Number of site registrations per event id. */
+export async function getRegistrationCounts(): Promise<Map<string, number>> {
+  try {
+    const { data, error } = await createPublicClient().rpc("event_registration_counts");
+    if (error) throw error;
+    return new Map((data as { post_id: string; registered: number }[] | null ?? []).map((row) => [row.post_id, row.registered]));
+  } catch (error) {
+    console.error("Could not load registration counts", error);
+    return new Map();
+  }
+}
+
+export type HeroPick = { item: PostSummary; reason: "featured" | "upcoming" | "latest" };
+
+/**
+ * What the home page hero shows: the featured post or event; if nothing is featured
+ * (or the featured event is over), the next event; otherwise the latest post.
+ */
+export function pickHeroItem(all: PostSummary[], now = Date.now()): HeroPick | null {
+  const live = (item: PostSummary) => item.kind === "post" || (item.event !== null && eventPhase(item.event, now) !== "past");
+  const featured = all.find((item) => item.featured && live(item));
+  if (featured) return { item: featured, reason: "featured" };
+  const next = all
+    .filter(isEvent)
+    .filter((item) => eventPhase(item.event, now) !== "past")
+    .sort((a, b) => Date.parse(a.event.startsAt) - Date.parse(b.event.startsAt))[0];
+  if (next) return { item: next, reason: "upcoming" };
+  const latest = all.find((item) => item.kind === "post");
+  return latest ? { item: latest, reason: "latest" } : null;
 }
 
 /** Featured post first, then the rest by date. */

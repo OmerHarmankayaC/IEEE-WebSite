@@ -26,7 +26,6 @@ export function Article({
     <>
       <article>
         <div className="article-head">
-          <div className="sun" aria-hidden="true" />
           <div className="container sec article-head__inner">
             <Link href={backHref ?? localePath(locale, "/blog")} className="back-link article-head__back">
               <ChevronLeft />

@@ -75,3 +75,21 @@ export function ExternalIcon() {
     </svg>
   );
 }
+
+export function PinIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round" />
+      <circle cx="12" cy="9.5" r="2.5" stroke="currentColor" strokeWidth="2.2" />
+    </svg>
+  );
+}
+
+export function CalendarIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <rect x="2" y="3" width="12" height="11" stroke="currentColor" strokeWidth="2" />
+      <path d="M2 7h12M5.5 1.5v3M10.5 1.5v3" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}

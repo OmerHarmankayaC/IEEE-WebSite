@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPage({ params }: Props) {
   const locale = (await params).locale as Locale;
   const t = getDictionary(locale);
-  const posts = orderForDisplay(await getPublishedPosts(locale));
+  const posts = orderForDisplay(await getPublishedPosts(locale, "post"));
   const listText = { blog: t.blog, blogPage: t.blogPage };
 
   return (
@@ -34,7 +34,6 @@ export default async function BlogPage({ params }: Props) {
       <SiteHeader t={t} locale={locale} current="blog" />
       <main>
         <section className="page-head">
-          <div className="sun" aria-hidden="true" />
           <div className="container page-head__inner">
             <Link href={localePath(locale, "/")} className="back-link">
               <ChevronLeft />

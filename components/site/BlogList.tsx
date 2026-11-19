@@ -63,7 +63,7 @@ export function BlogListView({ posts: allPosts, locale, t, active }: ViewProps) 
   return (
     <>
       <Link href={localePath(locale, `/blog/${featured.slug}`)} className="featured-card">
-        <Cover src={featured.coverUrl} alt={featured.title} sizes="(max-width: 960px) 100vw, 760px" priority />
+        <Cover src={featured.coverUrl} alt={featured.title} label={featured.category?.name} sizes="(max-width: 960px) 100vw, 760px" priority />
         <span className="featured-card__text">
           {featured.featured && <span className="badge-sun">{t.blogPage.featured}</span>}
           <PostMeta post={featured} locale={locale} accent />
@@ -77,7 +77,7 @@ export function BlogListView({ posts: allPosts, locale, t, active }: ViewProps) 
           {rest.map((post) => (
             <li key={post.id}>
               <Link href={localePath(locale, `/blog/${post.slug}`)} className="post-card">
-                <Cover src={post.coverUrl} alt="" sizes="(max-width: 720px) 100vw, 300px" />
+                <Cover src={post.coverUrl} alt="" label={post.category?.name} sizes="(max-width: 720px) 100vw, 300px" />
                 <PostMeta post={post} locale={locale} accent />
                 <span className="post-title">{post.title}</span>
                 {post.excerpt && <span className="post-card__excerpt">{post.excerpt}</span>}

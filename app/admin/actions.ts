@@ -4,12 +4,32 @@ import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { IMAGE_BUCKET, SUPABASE_URL } from "@/lib/env";
+import { istanbulToIso } from "@/lib/events";
 import { isEmptyHtml, sanitizePostHtml } from "@/lib/sanitize";
 import { SLUG_PATTERN, slugify } from "@/lib/slug";
 import { CONTENT_TAG } from "@/lib/supabase/public";
+import { getWorkshops } from "@/lib/workshops";
+
+/** Event fields as the editor holds them: plain strings from the inputs. */
+export type EventInput = {
+  date: string; // YYYY-MM-DD, Istanbul
+  start: string; // HH:MM
+  end: string; // HH:MM or empty
+  location: string;
+  locationUrl: string;
+  committee: "" | "cs" | "ras" | "wie";
+  registration: "none" | "site" | "external";
+  registrationUrl: string;
+  capacity: string;
+  closesDate: string;
+  closesTime: string;
+  guide: string;
+};
 
 export type PostInput = {
   id: string | null;
+  kind: "post" | "event";
+  event: EventInput;
   slug: string;
   status: "draft" | "published";
   categoryId: string | null;
@@ -52,6 +72,107 @@ function publishedAt(date: string | null): string {
 const clean = (value: string) => value.trim();
 const orNull = (value: string) => (value.trim() ? value.trim() : null);
 
+/** Normalizes a link typed in the editor. Only https links are kept. */
+function httpsUrl(value: string): string | null | false {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  const withScheme = /^[a-z]+:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  try {
+    const url = new URL(withScheme);
+    if (url.protocol !== "https:" || !url.hostname.includes(".")) return false;
+    return url.toString();
+  } catch {
+    return false;
+  }
+}
+
+type EventColumns = {
+  event_starts_at: string | null;
+  event_ends_at: string | null;
+  event_location: string | null;
+  event_location_url: string | null;
+  event_committee: string | null;
+  event_registration: "none" | "site" | "external";
+  event_registration_url: string | null;
+  event_registration_closes_at: string | null;
+  event_capacity: number | null;
+  event_guide: string | null;
+};
+
+const NO_EVENT: EventColumns = {
+  event_starts_at: null,
+  event_ends_at: null,
+  event_location: null,
+  event_location_url: null,
+  event_committee: null,
+  event_registration: "none",
+  event_registration_url: null,
+  event_registration_closes_at: null,
+  event_capacity: null,
+  event_guide: null,
+};
+
+/** Checks the event fields and turns them into database columns, or explains what is wrong. */
+function eventColumns(input: EventInput): { ok: true; columns: EventColumns } | { ok: false; error: string } {
+  if (!input.date || !input.start) return { ok: false, error: "Etkinliğin tarihini ve başlangıç saatini gir." };
+  const startsAt = istanbulToIso(input.date, input.start);
+  if (!startsAt) return { ok: false, error: "Etkinliğin tarihi ya da saati geçersiz." };
+
+  let endsAt: string | null = null;
+  if (input.end) {
+    endsAt = istanbulToIso(input.date, input.end);
+    if (!endsAt) return { ok: false, error: "Bitiş saati geçersiz." };
+    if (Date.parse(endsAt) <= Date.parse(startsAt)) return { ok: false, error: "Bitiş saati başlangıç saatinden sonra olmalı." };
+  }
+
+  const location = input.location.trim();
+  if (location.length > 200) return { ok: false, error: "Yer en fazla 200 karakter olabilir." };
+  const locationUrl = httpsUrl(input.locationUrl);
+  if (locationUrl === false) return { ok: false, error: "Harita bağlantısı https:// ile başlayan geçerli bir adres olmalı." };
+
+  const committee = input.committee || null;
+  if (committee && !["cs", "ras", "wie"].includes(committee)) return { ok: false, error: "Geçersiz komite." };
+
+  const guide = input.guide.trim() || null;
+  if (guide && !getWorkshops().some((workshop) => workshop.slug === guide)) return { ok: false, error: "Seçilen kurulum rehberi bulunamadı." };
+
+  let registrationUrl: string | null = null;
+  if (input.registration === "external") {
+    const url = httpsUrl(input.registrationUrl);
+    if (!url) return { ok: false, error: "Kayıt bağlantısını https:// ile başlayan bir adres olarak gir." };
+    registrationUrl = url;
+  }
+
+  let capacity: number | null = null;
+  if (input.registration === "site" && input.capacity.trim()) {
+    capacity = Number(input.capacity);
+    if (!Number.isInteger(capacity) || capacity < 1 || capacity > 10000) return { ok: false, error: "Kontenjan 1 ile 10000 arasında bir tam sayı olmalı." };
+  }
+
+  let closesAt: string | null = null;
+  if (input.registration !== "none" && (input.closesDate || input.closesTime)) {
+    closesAt = istanbulToIso(input.closesDate, input.closesTime || "23:59");
+    if (!closesAt) return { ok: false, error: "Kayıtların kapanacağı tarih geçersiz." };
+    if (Date.parse(closesAt) > Date.parse(startsAt)) return { ok: false, error: "Kayıtlar etkinlik başlamadan önce kapanmalı." };
+  }
+
+  return {
+    ok: true,
+    columns: {
+      event_starts_at: startsAt,
+      event_ends_at: endsAt,
+      event_location: location || null,
+      event_location_url: locationUrl,
+      event_committee: committee,
+      event_registration: input.registration,
+      event_registration_url: registrationUrl,
+      event_registration_closes_at: closesAt,
+      event_capacity: capacity,
+      event_guide: guide,
+    },
+  };
+}
+
 export async function savePost(input: PostInput): Promise<ActionResult<{ id: string }>> {
   const { supabase } = await requireAdmin();
 
@@ -60,6 +181,14 @@ export async function savePost(input: PostInput): Promise<ActionResult<{ id: str
   if (!titleTr) return fail("Başlık boş olamaz.");
   if (titleTr.length > 200) return fail("Başlık en fazla 200 karakter olabilir.");
   if (!SLUG_PATTERN.test(slug)) return fail("Adres yalnızca küçük harf, rakam ve kısa çizgiden oluşabilir.");
+  if (input.kind === "event" && slug === "rehber") return fail("Bu adres kurulum rehberleri için ayrıldı. Farklı bir adres yaz.");
+
+  let event: EventColumns = NO_EVENT;
+  if (input.kind === "event") {
+    const checked = eventColumns(input.event);
+    if (!checked.ok) return fail(checked.error);
+    event = checked.columns;
+  }
   if (input.excerptTr.trim().length > 200 || input.excerptEn.trim().length > 200) {
     return fail("Kısa özet en fazla 200 karakter olabilir.");
   }
@@ -80,6 +209,8 @@ export async function savePost(input: PostInput): Promise<ActionResult<{ id: str
 
   const row = {
     slug,
+    kind: input.kind,
+    ...event,
     status: input.status,
     category_id: input.categoryId,
     cover_path: input.coverPath,
@@ -100,19 +231,26 @@ export async function savePost(input: PostInput): Promise<ActionResult<{ id: str
     content_en: contentEn,
   };
 
+  // Only one post or event can be featured at a time, so the previous one steps down first.
+  if (input.featured) {
+    let others = supabase.from("posts").update({ featured: false }).eq("featured", true);
+    if (input.id) others = others.neq("id", input.id);
+    await others;
+  }
+
   const result = input.id
     ? await supabase.from("posts").update(row).eq("id", input.id).select("id").single()
     : await supabase.from("posts").insert(row).select("id").single();
 
   if (result.error) {
-    if (result.error.code === "23505") return fail("Bu adres başka bir yazıda kullanılıyor. Farklı bir adres yaz.");
+    if (result.error.code === "23505") {
+      if (result.error.message.includes("posts_one_featured_idx")) return fail("Başka bir içerik öne çıkmış durumda. Sayfayı yenileyip tekrar dene.");
+      return fail("Bu adres başka bir yazıda kullanılıyor. Farklı bir adres yaz.");
+    }
     console.error("savePost failed", result.error);
     return fail("Kaydedilemedi. Biraz sonra yeniden dene.");
   }
   const id = result.data.id as string;
-
-  // Only one post can be featured at a time.
-  if (input.featured) await supabase.from("posts").update({ featured: false }).neq("id", id).eq("featured", true);
 
   // Remove images that are no longer used by this post.
   if (previous) {

@@ -6,10 +6,9 @@ export function AuthShell({ title, lead, children, footnote }: { title: string; 
   return (
     <div className="auth-page">
       <div className="auth-art" aria-hidden="true">
-        <span className="auth-art__sun" />
         <span className="auth-art__square" />
         <span className="auth-art__title">Yönetim paneli</span>
-        <span className="auth-art__lead">Blog yazılarını buradan ekler, düzenler ve yayınlarsın.</span>
+        <span className="auth-art__lead">Yazıları ve etkinlikleri buradan ekler, düzenler ve yayınlarsın.</span>
       </div>
       <main className="auth-card">
         <div className="auth-card__body">

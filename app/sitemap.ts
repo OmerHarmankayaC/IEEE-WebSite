@@ -11,12 +11,20 @@ const both = (path: string) => ({
 });
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getPublishedPosts("tr");
+  const all = await getPublishedPosts("tr");
+  const posts = all.filter((item) => item.kind === "post");
+  const events = all.filter((item) => item.kind === "event");
   return [
     { ...both("/"), changeFrequency: "monthly", priority: 1 },
     { ...both("/blog"), changeFrequency: "weekly", priority: 0.8 },
-    { ...both("/atolyeler"), changeFrequency: "monthly", priority: 0.7 },
-    ...getWorkshops().map((workshop) => ({ ...both(`/atolyeler/${workshop.slug}`), changeFrequency: "monthly" as const, priority: 0.6 })),
+    { ...both("/etkinlikler"), changeFrequency: "weekly", priority: 0.8 },
+    ...events.map((event) => ({
+      ...both(`/etkinlikler/${event.slug}`),
+      lastModified: event.publishedAt ?? undefined,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
+    ...getWorkshops().map((workshop) => ({ ...both(`/etkinlikler/rehber/${workshop.slug}`), changeFrequency: "monthly" as const, priority: 0.6 })),
     { ...both("/iletisim"), changeFrequency: "yearly", priority: 0.5 },
     ...posts.map((post) => ({
       ...both(`/blog/${post.slug}`),

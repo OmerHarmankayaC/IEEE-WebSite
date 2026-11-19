@@ -23,7 +23,7 @@ You don't need to touch the code for that. Ask the current webmaster for an admi
 
 - **Text in two languages.** Any interface text goes into `lib/i18n/dictionaries.ts`, in both `tr` and `en`. TypeScript will complain if one side is missing.
 - **Turkish first.** Write natural Turkish, not a translation of English sentences. English uses American spelling.
-- **Design rules.** Sharp corners, solid navy rules, no shadows and no gradients. Colors come only from the IEEE palette in `app/globals.css`; reuse its tokens and classes instead of adding new colors.
+- **Design rules.** Sharp corners, solid navy rules, no shadows, no gradients and no decorative shapes: yellow marks something real (a call to action, a label, an open registration). Colors come only from the IEEE palette in `app/globals.css`; reuse its tokens and classes instead of adding new colors.
 - **Accessibility.** Use real buttons and links, give icon-only buttons an `aria-label`, and keep text contrast at 4.5:1 or more.
 - **Images.** Team photos are uploaded from the admin panel. Workshop images go in `public/images/workshops/<workshop>/`.
 - **Database changes** go in a new file under `supabase/migrations/`, and every new table needs row level security.

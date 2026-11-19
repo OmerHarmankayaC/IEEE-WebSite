@@ -2,12 +2,12 @@ import Link from "next/link";
 import type { Dictionary, Locale } from "@/lib/i18n/dictionaries";
 import { localePath } from "@/lib/i18n/locale";
 
-/** The 404 body: a yellow circle with the code, a short note and two ways out. */
+/** The 404 body: the code on a navy block, a short note and two ways out. */
 export function NotFoundView({ t, locale, extra }: { t: Dictionary; locale: Locale; extra?: React.ReactNode }) {
   return (
     <main className="notfound">
       <div className="container notfound__inner">
-        <div className="notfound__sun" aria-hidden="true">
+        <div className="notfound__code" aria-hidden="true">
           404
         </div>
         <div className="notfound__text">

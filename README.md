@@ -1,6 +1,6 @@
 # IEEE TEDU Student Branch Website
 
-The website of the **IEEE Student Branch at TED University** (Ankara, Türkiye). It introduces the branch and its committees (Computer Society, Robotics and Automation Society, Women in Engineering), shows the board of directors and hosts a blog that is written from an admin panel, without touching the code.
+The website of the **IEEE Student Branch at TED University** (Ankara, Türkiye). It introduces the branch and its committees (Computer Society, Robotics and Automation Society, Women in Engineering), shows the board of directors, lists events with registration and hosts a blog. Posts and events are written from an admin panel, without touching the code.
 
 **Live:** [ieee-tedu.vercel.app](https://ieee-tedu.vercel.app)
 
@@ -11,7 +11,9 @@ The website of the **IEEE Student Branch at TED University** (Ankara, Türkiye).
 - **Images are shrunk in the browser** (WebP, at most 1600 px) before upload, so free storage lasts.
 - **Board of directors by academic year,** edited from the admin panel: add a term, keep it hidden while you fill it in, add members with photos, then publish it.
 - **Contact form** at `/iletisim`. Messages are stored in the database and read in the admin panel. A hidden trap field stops simple bots, and the database accepts at most 3 messages an hour from one address and 30 in total.
-- **Workshops** at `/atolyeler`: setup guides for hands-on events, with steps for Windows, macOS and Linux, commands to copy and optional videos. Each workshop is one data file in `content/workshops/`.
+- **Events** at `/etkinlikler`, added from the admin panel like posts: date and time, place with an optional map link, the organizing committee, capacity and a registration deadline. Registration can be off, go through a form on the site or point to another link such as Google Forms. The site form refuses a second registration from the same email and closes by itself when the event is full or the deadline passes; admins see the list in the panel and download it as a CSV file that Excel opens. Every event page offers an "Add to calendar" file (`/api/takvim/<slug>`).
+- **The home page hero** shows the featured post or event next to the headline. Only one item can be featured at a time. When nothing is featured, or the featured event is over, it shows the next upcoming event, and failing that the latest post.
+- **Setup guides** at `/etkinlikler/rehber/<slug>`: what to install before a workshop, with steps for Windows, macOS and Linux, commands to copy and optional videos. Each guide is one data file in `content/workshops/`, and an event can link to one. Old `/atolyeler` addresses redirect here.
 - **Old addresses keep working:** links to the previous static pages (`blog-otonom-arac.html` and so on) redirect to the new ones.
 - Responsive, accessible markup, sitemap and robots file included.
 
@@ -44,7 +46,7 @@ Both values are public by design: they reach every visitor's browser, and every 
 
 ## Admin panel
 
-The panel lives at `/admin`. There is a single role: admin. From the panel you manage blog posts, the board of directors, contact messages and other admins.
+The panel lives at `/admin`. There is a single role: admin. From the panel you manage blog posts, events and their registrations, the board of directors, contact messages and other admins.
 
 **Adding an admin**
 
@@ -61,7 +63,7 @@ Invitations are sent by the `invite-admin` Edge Function (`supabase/functions/in
 
 | What | Where |
 | --- | --- |
-| Workshops | `content/workshops/`, images in `public/images/workshops/` |
+| Setup guides | `content/workshops/`, images in `public/images/workshops/` |
 | Committee texts, all interface text (TR and EN) | `lib/i18n/dictionaries.ts` |
 | Email, social links, current term, optional homepage photo | `lib/site.ts` |
 | Colors and fonts | top of `app/globals.css` |
@@ -72,14 +74,15 @@ To add a wide club photo under the hero, put the image in `public/images/` and s
 
 ```text
 app/
-  [locale]/           Public pages in both languages: homepage, /blog, /atolyeler, /iletisim
-  admin/              Login, invitations, posts, board, messages, admins (own root layout)
+  [locale]/           Public pages in both languages: homepage, /blog, /etkinlikler, /iletisim
+  admin/              Login, invitations, posts, events and registrations, board, messages, admins (own root layout)
   global-not-found.tsx  404 page for addresses that match nothing
   api/keepalive/      Daily request that keeps the free Supabase project awake
+  api/takvim/         Calendar file (.ics) for each event
 components/
   site/               Header, mobile menu, team section, article, cards
   admin/              Post editor, rich text editor, tables, team and admin managers, dialogs
-content/workshops/    One data file per workshop guide
+content/workshops/    One data file per setup guide
 lib/                  Data access, i18n, Supabase clients, helpers
 public/images/        Logos, bundled team photos and workshop images
 supabase/migrations/  Database schema (tables, policies, storage buckets, seed data)
@@ -89,7 +92,7 @@ proxy.ts              Admin session refresh and redirects for old ?lang= links
 
 ## How caching works
 
-Public pages are rendered ahead of time for both languages and served from Vercel's edge cache, so visitors never wait for the database. Turkish addresses reach the `tr` pages through rewrites in `next.config.ts`, which run in Vercel's routing layer and keep the cache intact. Every save or delete in the admin panel expires the cached pages immediately; otherwise they refresh once an hour. Newly published posts are rendered on their first visit and cached from then on.
+Public pages are rendered ahead of time for both languages and served from Vercel's edge cache, so visitors never wait for the database. Turkish addresses reach the `tr` pages through rewrites in `next.config.ts`, which run in Vercel's routing layer and keep the cache intact. Every save or delete in the admin panel, and every registration made on the site, expires the cached pages immediately; otherwise they refresh once an hour. Newly published posts are rendered on their first visit and cached from then on.
 
 Server code runs in Frankfurt (`fra1` in `vercel.json`), next to the Supabase database.
 
