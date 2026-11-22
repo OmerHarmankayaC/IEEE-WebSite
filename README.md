@@ -64,6 +64,7 @@ Invitations are sent by the `invite-admin` Edge Function (`supabase/functions/in
 | What | Where |
 | --- | --- |
 | Setup guides | `content/workshops/`, images in `public/images/workshops/` |
+| Images of the first posts and events, taken from the club's Instagram | `public/images/icerik/` (posts point to them with paths like `/images/icerik/<slug>.webp`) |
 | Committee texts, all interface text (TR and EN) | `lib/i18n/dictionaries.ts` |
 | Email, social links, current term, optional homepage photo | `lib/site.ts` |
 | Colors and fonts | top of `app/globals.css` |
@@ -84,7 +85,7 @@ components/
   admin/              Post editor, rich text editor, tables, team and admin managers, dialogs
 content/workshops/    One data file per setup guide
 lib/                  Data access, i18n, Supabase clients, helpers
-public/images/        Logos, bundled team photos and workshop images
+public/images/        Logos, bundled team photos, workshop images and the first post images
 supabase/migrations/  Database schema (tables, policies, storage buckets, seed data)
 supabase/functions/   invite-admin Edge Function
 proxy.ts              Admin session refresh and redirects for old ?lang= links

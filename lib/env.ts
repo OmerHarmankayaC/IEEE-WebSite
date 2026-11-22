@@ -13,8 +13,10 @@ export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
   (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000");
 
+/** Post images are either bundled under /images/ or stored in the blog-images bucket. */
 export function publicImageUrl(path: string | null | undefined): string | null {
-  if (!path || !SUPABASE_URL) return null;
+  if (!path) return null;
+  if (path.startsWith("/")) return path;
   return `${SUPABASE_URL}/storage/v1/object/public/${IMAGE_BUCKET}/${path}`;
 }
 
