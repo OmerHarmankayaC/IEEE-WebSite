@@ -25,5 +25,5 @@ You don't need to touch the code for that. Ask the current webmaster for an admi
 - **Turkish first.** Write natural Turkish, not a translation of English sentences. English uses American spelling.
 - **Design rules.** Sharp corners, solid navy rules, no shadows, no gradients and no decorative shapes: yellow marks something real (a call to action, a label, an open registration). Colors come only from the IEEE palette in `app/globals.css`; reuse its tokens and classes instead of adding new colors.
 - **Accessibility.** Use real buttons and links, give icon-only buttons an `aria-label`, and keep text contrast at 4.5:1 or more.
-- **Images.** Team photos are uploaded from the admin panel. Workshop images go in `public/images/workshops/<workshop>/`.
+- **Images.** Team photos and post images are uploaded from the admin panel. Workshop images go in `public/images/workshops/<workshop>/`. A post or event can also point to a bundled image with a path starting with `/` (for example `/images/icerik/<slug>.webp`); storage cleanup leaves those alone.
 - **Database changes** go in a new file under `supabase/migrations/`, and every new table needs row level security.

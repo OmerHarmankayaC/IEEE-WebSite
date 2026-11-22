@@ -59,6 +59,11 @@ function imagePaths(...htmls: (string | null | undefined)[]): string[] {
   return [...paths];
 }
 
+/** Bundled images (paths starting with "/") ship with the site, so storage cleanup skips them. */
+function storedOnly(paths: string[]): string[] {
+  return paths.filter((path) => !path.startsWith("/"));
+}
+
 function publishedAt(date: string | null): string {
   const now = new Date();
   if (!date) return now.toISOString();
@@ -256,7 +261,7 @@ export async function savePost(input: PostInput): Promise<ActionResult<{ id: str
   if (previous) {
     const before = new Set([...(previous.cover_path ? [previous.cover_path] : []), ...imagePaths(previous.content_tr, previous.content_en)]);
     const after = new Set([...(input.coverPath ? [input.coverPath] : []), ...imagePaths(contentTr, contentEn)]);
-    const unused = [...before].filter((path) => !after.has(path));
+    const unused = storedOnly([...before].filter((path) => !after.has(path)));
     if (unused.length) await supabase.storage.from(IMAGE_BUCKET).remove(unused);
   }
 
@@ -275,7 +280,7 @@ export async function deletePost(id: string): Promise<ActionResult> {
     return fail("Silinemedi. Biraz sonra yeniden dene.");
   }
 
-  const paths = [...(post.cover_path ? [post.cover_path] : []), ...imagePaths(post.content_tr, post.content_en)];
+  const paths = storedOnly([...(post.cover_path ? [post.cover_path] : []), ...imagePaths(post.content_tr, post.content_en)]);
   if (paths.length) await supabase.storage.from(IMAGE_BUCKET).remove(paths);
 
   updateTag(CONTENT_TAG);
