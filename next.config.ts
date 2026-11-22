@@ -46,6 +46,11 @@ const nextConfig: NextConfig = {
       { source: "/blog.html", destination: "/blog", permanent: true },
       { source: "/blog-post.html", destination: "/blog", permanent: true },
       { source: "/contact.html", destination: "/iletisim", permanent: true },
+      // Workshops became events; the setup guides moved under /etkinlikler/rehber.
+      { source: "/atolyeler", destination: "/etkinlikler", permanent: true },
+      { source: "/atolyeler/:slug", destination: "/etkinlikler/rehber/:slug", permanent: true },
+      { source: "/en/atolyeler", destination: "/en/etkinlikler", permanent: true },
+      { source: "/en/atolyeler/:slug", destination: "/en/etkinlikler/rehber/:slug", permanent: true },
       ...Object.entries(legacyPosts).map(([file, slug]) => ({
         source: `/${file}`,
         destination: `/blog/${slug}`,

@@ -5,12 +5,12 @@ import { localePath } from "@/lib/i18n/locale";
 import { LangSwitch } from "./LangSwitch";
 import { MobileMenu } from "./MobileMenu";
 
-export function SiteHeader({ t, locale, current }: { t: Dictionary; locale: Locale; current?: "blog" | "workshops" | "contact" }) {
+export function SiteHeader({ t, locale, current }: { t: Dictionary; locale: Locale; current?: "blog" | "events" | "contact" }) {
   const links = [
     { href: localePath(locale, "/#hakkimizda"), label: t.nav.about },
     { href: localePath(locale, "/#komiteler"), label: t.nav.committees },
     { href: localePath(locale, "/blog"), label: t.nav.blog, current: current === "blog" },
-    { href: localePath(locale, "/atolyeler"), label: t.nav.workshops, current: current === "workshops" },
+    { href: localePath(locale, "/etkinlikler"), label: t.nav.events, current: current === "events" },
     { href: localePath(locale, "/#ekip"), label: t.nav.team },
     { href: localePath(locale, "/iletisim"), label: t.nav.contact, current: current === "contact" },
   ];

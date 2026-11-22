@@ -6,10 +6,12 @@ import { usePathname } from "next/navigation";
 import { signOut } from "@/app/admin/actions";
 import { ExternalIcon, PlusIcon } from "@/components/icons";
 
-export function Sidebar({ email, postCount, unread }: { email: string | null; postCount: number; unread: number }) {
+export function Sidebar({ email, postCount, eventCount, unread }: { email: string | null; postCount: number; eventCount: number; unread: number }) {
   const pathname = usePathname();
   const isNew = pathname === "/admin/yazi/yeni";
+  const isNewEvent = pathname === "/admin/etkinlikler/yeni";
   const isPosts = !isNew && (pathname === "/admin" || pathname.startsWith("/admin/yazi"));
+  const isEvents = !isNewEvent && pathname.startsWith("/admin/etkinlikler");
   const current = (path: string) => (pathname.startsWith(path) ? "page" : undefined);
 
   return (
@@ -25,6 +27,14 @@ export function Sidebar({ email, postCount, unread }: { email: string | null; po
         </Link>
         <Link href="/admin/yazi/yeni" aria-current={isNew ? "page" : undefined}>
           <span>Yeni yazı</span>
+          <PlusIcon />
+        </Link>
+        <Link href="/admin/etkinlikler" aria-current={isEvents ? "page" : undefined}>
+          <span>Etkinlikler</span>
+          <span className="mono">{eventCount}</span>
+        </Link>
+        <Link href="/admin/etkinlikler/yeni" aria-current={isNewEvent ? "page" : undefined}>
+          <span>Yeni etkinlik</span>
           <PlusIcon />
         </Link>
         <Link href="/admin/ekip" aria-current={current("/admin/ekip")}>

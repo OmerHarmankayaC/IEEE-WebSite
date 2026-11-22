@@ -27,7 +27,6 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
       <SiteHeader t={t} locale={locale} current="contact" />
       <main>
         <section className="page-head">
-          <div className="sun" aria-hidden="true" />
           <div className="container page-head__inner">
             <Link href={localePath(locale, "/")} className="back-link">
               <ChevronLeft />

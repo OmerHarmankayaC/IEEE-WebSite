@@ -2,13 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Cover } from "@/components/site/Cover";
+import { FeaturedCard } from "@/components/site/FeaturedCard";
 import { PostMeta } from "@/components/site/PostMeta";
 import { FooterBand } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { TeamSection } from "@/components/site/TeamSection";
 import { getDictionary, type Locale } from "@/lib/i18n/dictionaries";
 import { isLocale, localePath } from "@/lib/i18n/locale";
-import { getPublishedPosts, orderForDisplay } from "@/lib/posts";
+import { getPublishedPosts, getRegistrationCounts, orderForDisplay, pickHeroItem } from "@/lib/posts";
 import { site } from "@/lib/site";
 import { getTerms } from "@/lib/team";
 
@@ -20,8 +21,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   if (!isLocale(raw)) notFound();
   const locale: Locale = raw;
   const t = getDictionary(locale);
-  const [allPosts, terms] = await Promise.all([getPublishedPosts(locale), getTerms()]);
-  const posts = orderForDisplay(allPosts);
+  const [everything, terms, counts] = await Promise.all([getPublishedPosts(locale), getTerms(), getRegistrationCounts()]);
+  const hero = pickHeroItem(everything);
+  const posts = orderForDisplay(everything.filter((item) => item.kind === "post"));
   const [featured, ...rest] = posts;
   const latest = rest.slice(0, 3);
 
@@ -31,7 +33,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <main>
         {/* Hero */}
         <section className="hero" id="ust">
-          <div className="container hero__inner">
+          <div className={hero ? "container hero__inner" : "container hero__inner hero__inner--solo"}>
             <div className="hero__copy">
               <h1 className="hero__title">{t.hero.title}</h1>
               <p className="hero__lead">{t.hero.lead}</p>
@@ -44,7 +46,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
                 </Link>
               </div>
             </div>
-            <div className="hero__sun" aria-hidden="true" />
+            {hero && <FeaturedCard pick={hero} registered={counts.get(hero.item.id) ?? 0} t={t} locale={locale} />}
           </div>
         </section>
 
@@ -111,7 +113,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             {featured ? (
               <div className="latest">
                 <Link href={localePath(locale, `/blog/${featured.slug}`)} className="latest__featured">
-                  <Cover src={featured.coverUrl} alt={featured.title} sizes="(max-width: 960px) 100vw, 720px" />
+                  <Cover src={featured.coverUrl} alt={featured.title} label={featured.category?.name} sizes="(max-width: 960px) 100vw, 720px" />
                   <PostMeta post={featured} locale={locale} accent />
                   <span className="post-title post-title--display">{featured.title}</span>
                   {featured.excerpt && <span className="excerpt">{featured.excerpt}</span>}

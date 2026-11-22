@@ -42,7 +42,6 @@ export function MobileMenu({ locale, joinHref, links, labels }: Props) {
       </button>
       {open && (
         <div id="mobile-menu" className="mobile-menu">
-          <div className="sun" aria-hidden="true" />
           <nav aria-label={labels.menu}>
             {links.map((link) => (
               <Link key={link.href} href={link.href} onClick={() => setOpen(false)}>

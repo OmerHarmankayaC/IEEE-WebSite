@@ -28,6 +28,18 @@ export async function deleteMessage(id: string): Promise<ActionResult> {
   return ok(undefined);
 }
 
+/* Event registrations ------------------------------------------------------- */
+
+export async function deleteRegistration(id: string): Promise<ActionResult> {
+  const { supabase } = await requireAdmin();
+  const { error } = await supabase.from("event_registrations").delete().eq("id", id);
+  if (error) return fail("Kayıt silinemedi.");
+  // The remaining places shown on the site change.
+  updateTag(CONTENT_TAG);
+  revalidatePath("/admin/etkinlikler", "layout");
+  return ok(undefined);
+}
+
 /* Board of directors ---------------------------------------------------------- */
 
 export type MemberInput = {

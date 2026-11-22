@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import type { Editor } from "@tiptap/react";
-import { createCategory, deletePost, savePost, type PostInput } from "@/app/admin/actions";
+import { createCategory, deletePost, savePost, type EventInput, type PostInput } from "@/app/admin/actions";
 import { publicImageUrl } from "@/lib/env";
 import { slugify } from "@/lib/slug";
 import { uploadImage } from "@/lib/upload";
@@ -13,6 +13,7 @@ import { RichTextEditor } from "./RichTextEditor";
 
 export type EditorPost = Omit<PostInput, "id"> & { id: string | null; updatedAt: string | null };
 export type CategoryOption = { id: string; name_tr: string };
+export type GuideOption = { slug: string; title: string };
 
 const EXCERPT_MAX = 200;
 
@@ -24,7 +25,18 @@ function formatSaved(iso: string | null) {
     .format(new Date(iso));
 }
 
-export function PostEditor({ post, categories: initialCategories }: { post: EditorPost; categories: CategoryOption[] }) {
+export function PostEditor({
+  post,
+  categories: initialCategories,
+  guides,
+  registrations,
+}: {
+  post: EditorPost;
+  categories: CategoryOption[];
+  guides: GuideOption[];
+  /** How many people registered through the site, for saved events. */
+  registrations: number | null;
+}) {
   const router = useRouter();
   const [form, setForm] = useState(post);
   const [slugTouched, setSlugTouched] = useState(Boolean(post.id));
@@ -53,6 +65,11 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
     setDirty(true);
   };
 
+  const updateEvent = <K extends keyof EventInput>(key: K, value: EventInput[K]) => {
+    setForm((current) => ({ ...current, event: { ...current.event, [key]: value } }));
+    setDirty(true);
+  };
+
   const setTitleTr = (value: string) => {
     setForm((current) => ({ ...current, titleTr: value, slug: slugTouched ? current.slug : slugify(value) }));
     setDirty(true);
@@ -69,10 +86,10 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
       setDirty(false);
       setSavedAt(new Date().toISOString());
       setMessage({ kind: "success", text: form.status === "published" ? "Kaydedildi ve yayında." : "Taslak kaydedildi." });
-      if (!form.id) {
-        setForm((current) => ({ ...current, id: result.data.id }));
-        router.replace(`/admin/yazi/${result.data.id}`);
-      }
+      // Posts and events are edited at different addresses; follow the kind that was saved.
+      const target = form.kind === "event" ? `/admin/etkinlikler/${result.data.id}` : `/admin/yazi/${result.data.id}`;
+      if (!form.id) setForm((current) => ({ ...current, id: result.data.id }));
+      if (window.location.pathname !== target) router.replace(target);
       router.refresh();
     });
   };
@@ -87,7 +104,7 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
         return;
       }
       setDirty(false);
-      router.replace("/admin");
+      router.replace(isEvent ? "/admin/etkinlikler" : "/admin");
       router.refresh();
     });
   };
@@ -120,16 +137,19 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
 
   const coverUrl = publicImageUrl(form.coverPath);
   const published = form.status === "published";
+  const isEvent = form.kind === "event";
+  const noun = isEvent ? "etkinlik" : "yazı";
+  const ev = form.event;
 
   return (
     <div className="admin-page">
       <div className="admin-head admin-head--editor">
         <div className="stack" style={{ gap: 8 }}>
           <span className="mono mono--muted">
-            <Link href="/admin" style={{ textDecoration: "none" }}>
-              Yazılar
+            <Link href={isEvent ? "/admin/etkinlikler" : "/admin"} style={{ textDecoration: "none" }}>
+              {isEvent ? "Etkinlikler" : "Yazılar"}
             </Link>{" "}
-            / {form.id ? "Düzenle" : "Yeni yazı"}
+            / {form.id ? "Düzenle" : isEvent ? "Yeni etkinlik" : "Yeni yazı"}
           </span>
           <span className="status-line">
             <span className={published ? "badge badge--published" : "badge badge--draft"}>{published ? "Yayında" : "Taslak"}</span>
@@ -158,6 +178,25 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
 
       <div className="editor-layout">
         <div className="editor-main">
+          <fieldset className="kind-switch">
+            <legend className="field__label">Ne ekliyorsun?</legend>
+            <div className="kind-switch__options">
+              <label className="kind-switch__option">
+                <input type="radio" name="kind" checked={!isEvent} onChange={() => update("kind", "post")} />
+                Yazı
+              </label>
+              <label className="kind-switch__option">
+                <input type="radio" name="kind" checked={isEvent} onChange={() => update("kind", "event")} />
+                Etkinlik
+              </label>
+            </div>
+            <span className="field__help">
+              {isEvent
+                ? "Etkinlikler sitenin Etkinlikler sayfasında listelenir. Tarih, yer ve kayıt ayarları sağ taraftadır."
+                : "Yazılar blogda listelenir. Bir etkinlik duyuruyorsan Etkinlik'i seç."}
+            </span>
+          </fieldset>
+
           <div className="chip-row" role="group" aria-label="Yazının dili">
             <button type="button" className="chip" aria-pressed={lang === "tr"} onClick={() => setLang("tr")}>
               Türkçe
@@ -171,12 +210,12 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
           <div className="stack" style={{ gap: 24 }} hidden={lang !== "tr"}>
             <label className="field">
               <span className="field__label">Başlık</span>
-              <input className="input input--title" type="text" value={form.titleTr} onChange={(e) => setTitleTr(e.target.value)} placeholder="Yazının başlığı" maxLength={200} required />
+              <input className="input input--title" type="text" value={form.titleTr} onChange={(e) => setTitleTr(e.target.value)} placeholder={isEvent ? "Etkinliğin adı" : "Yazının başlığı"} maxLength={200} required />
             </label>
             <label className="field">
               <span className="field__label">Adres</span>
               <span className="slug-input">
-                <span className="slug-input__prefix">/blog/</span>
+                <span className="slug-input__prefix">{isEvent ? "/etkinlikler/" : "/blog/"}</span>
                 <input
                   className="input"
                   type="text"
@@ -197,7 +236,11 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
                 </span>
               </span>
               <textarea className="input textarea" rows={3} value={form.excerptTr} onChange={(e) => update("excerptTr", e.target.value)} />
-              <span className="field__help">Blog listesinde ve paylaşılan bağlantıların önizlemesinde görünür.</span>
+              <span className="field__help">
+                {isEvent
+                  ? "Ana sayfada, etkinlik listesinde ve paylaşılan bağlantıların önizlemesinde görünür."
+                  : "Blog listesinde ve paylaşılan bağlantıların önizlemesinde görünür."}
+              </span>
             </label>
             <div className="field">
               <span className="field__label">İçerik</span>
@@ -240,6 +283,116 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
         </div>
 
         <aside className="editor-side">
+          {isEvent && (
+            <section className="panel panel--strong" aria-labelledby="panel-event">
+              <h2 className="panel__bar" id="panel-event">
+                Etkinlik bilgileri
+              </h2>
+              <div className="panel__body">
+                <div className="field-row">
+                  <label className="field">
+                    <span className="field__help">Tarih</span>
+                    <input className="input" type="date" value={ev.date} onChange={(e) => updateEvent("date", e.target.value)} required />
+                  </label>
+                </div>
+                <div className="field-row field-row--two">
+                  <label className="field">
+                    <span className="field__help">Başlangıç</span>
+                    <input className="input" type="time" value={ev.start} onChange={(e) => updateEvent("start", e.target.value)} required />
+                  </label>
+                  <label className="field">
+                    <span className="field__help">Bitiş (isteğe bağlı)</span>
+                    <input className="input" type="time" value={ev.end} onChange={(e) => updateEvent("end", e.target.value)} />
+                  </label>
+                </div>
+                <label className="field">
+                  <span className="field__help">Yer</span>
+                  <input className="input" type="text" value={ev.location} onChange={(e) => updateEvent("location", e.target.value)} placeholder="Örn. TED Üniversitesi, B-201" maxLength={200} />
+                </label>
+                <label className="field">
+                  <span className="field__help">Harita bağlantısı (isteğe bağlı)</span>
+                  <input className="input" type="url" value={ev.locationUrl} onChange={(e) => updateEvent("locationUrl", e.target.value)} placeholder="https://maps.app.goo.gl/…" />
+                </label>
+                <label className="field">
+                  <span className="field__help">Düzenleyen</span>
+                  <select className="input" value={ev.committee} onChange={(e) => updateEvent("committee", e.target.value as EventInput["committee"])}>
+                    <option value="">IEEE TEDU (genel)</option>
+                    <option value="cs">Computer Society</option>
+                    <option value="ras">Robotics and Automation Society</option>
+                    <option value="wie">Women in Engineering</option>
+                  </select>
+                </label>
+                {guides.length > 0 && (
+                  <label className="field">
+                    <span className="field__help">Kurulum rehberi (isteğe bağlı)</span>
+                    <select className="input" value={ev.guide} onChange={(e) => updateEvent("guide", e.target.value)}>
+                      <option value="">Rehber yok</option>
+                      {guides.map((guide) => (
+                        <option key={guide.slug} value={guide.slug}>
+                          {guide.title}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="field__help">Etkinlik sayfasında, katılımcıların önceden kurması gerekenler için bağlantı olarak görünür.</span>
+                  </label>
+                )}
+              </div>
+            </section>
+          )}
+
+          {isEvent && (
+            <section className="panel panel--strong" aria-labelledby="panel-registration">
+              <h2 className="panel__bar" id="panel-registration">
+                Kayıt
+              </h2>
+              <div className="panel__body">
+                <fieldset className="radio-group">
+                  <legend className="field__help">Katılımcılar nasıl kayıt olacak?</legend>
+                  <label className="check">
+                    <input type="radio" name="registration" checked={ev.registration === "none"} onChange={() => updateEvent("registration", "none")} />
+                    Kayıt gerekmiyor
+                  </label>
+                  <label className="check">
+                    <input type="radio" name="registration" checked={ev.registration === "site"} onChange={() => updateEvent("registration", "site")} />
+                    Sitedeki kayıt formuyla
+                  </label>
+                  <label className="check">
+                    <input type="radio" name="registration" checked={ev.registration === "external"} onChange={() => updateEvent("registration", "external")} />
+                    Başka bir bağlantıyla (Google Forms gibi)
+                  </label>
+                </fieldset>
+                {ev.registration === "external" && (
+                  <label className="field">
+                    <span className="field__help">Kayıt bağlantısı</span>
+                    <input className="input" type="url" value={ev.registrationUrl} onChange={(e) => updateEvent("registrationUrl", e.target.value)} placeholder="https://forms.gle/…" required />
+                  </label>
+                )}
+                {ev.registration === "site" && (
+                  <label className="field">
+                    <span className="field__help">Kontenjan (isteğe bağlı)</span>
+                    <input className="input" type="number" min={1} max={10000} inputMode="numeric" value={ev.capacity} onChange={(e) => updateEvent("capacity", e.target.value)} placeholder="Sınır yok" />
+                    <span className="field__help">Dolunca form kendiliğinden kapanır. Sitede kalan yer sayısı görünür.</span>
+                  </label>
+                )}
+                {ev.registration !== "none" && (
+                  <div className="field">
+                    <span className="field__help">Kayıtların kapanacağı zaman (isteğe bağlı)</span>
+                    <div className="field-row field-row--datetime">
+                      <input className="input" type="date" aria-label="Kapanış tarihi" value={ev.closesDate} onChange={(e) => updateEvent("closesDate", e.target.value)} />
+                      <input className="input" type="time" aria-label="Kapanış saati" value={ev.closesTime} onChange={(e) => updateEvent("closesTime", e.target.value)} />
+                    </div>
+                    <span className="field__help">Boş bırakırsan kayıtlar etkinlik başlayınca kapanır.</span>
+                  </div>
+                )}
+                {form.id && registrations !== null && ev.registration === "site" && (
+                  <Link href={`/admin/etkinlikler/${form.id}/kayitlar`} className="btn btn--outline btn--small">
+                    Kayıtları gör ({registrations})
+                  </Link>
+                )}
+              </div>
+            </section>
+          )}
+
           <section className="panel" aria-labelledby="panel-publish">
             <h2 className="panel__bar" id="panel-publish">
               Yayın
@@ -261,10 +414,13 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
                 <input className="input" type="date" value={form.publishedDate ?? ""} onChange={(e) => update("publishedDate", e.target.value || null)} />
                 <span className="field__help">Boş bırakırsan yayınladığın an kullanılır. İleri bir tarih seçersen yazı o gün görünür.</span>
               </label>
-              <label className="check">
+              <label className={form.featured ? "check check--featured" : "check"}>
                 <input type="checkbox" checked={form.featured} onChange={(e) => update("featured", e.target.checked)} />
                 Ana sayfada öne çıkar
               </label>
+              <span className="field__help">
+                Ana sayfanın açılışında bu gösterilir. Aynı anda tek içerik öne çıkar; bunu seçersen öncekinin yerini alır. Hiçbiri seçili değilse tarihi gelmemiş en yakın etkinlik, o da yoksa en son yazı gösterilir.
+              </span>
             </div>
           </section>
 
@@ -333,13 +489,17 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
                   Kapağı kaldır
                 </button>
               )}
-              <span className="field__help">Blog listesinde, ana sayfada ve paylaşılan bağlantılarda görünür. Yüklenirken otomatik küçültülür.</span>
+              <span className="field__help">
+                {isEvent
+                  ? "Etkinlik sayfasının üstünde ve paylaşılan bağlantılarda görünür. Yüklenirken otomatik küçültülür."
+                  : "Blog listesinde, ana sayfada ve paylaşılan bağlantılarda görünür. Yüklenirken otomatik küçültülür."}
+              </span>
             </div>
           </section>
 
           {form.id && (
             <button type="button" className="btn btn--danger-outline btn--small" onClick={() => setConfirmDelete(true)}>
-              Yazıyı sil
+              {isEvent ? "Etkinliği sil" : "Yazıyı sil"}
             </button>
           )}
         </aside>
@@ -347,8 +507,8 @@ export function PostEditor({ post, categories: initialCategories }: { post: Edit
 
       {confirmDelete && (
         <ConfirmDialog
-          title="Bu yazı silinsin mi?"
-          body={`“${form.titleTr || "Başlıksız yazı"}” yazısı ve görselleri kalıcı olarak silinecek. Bu işlem geri alınamaz.`}
+          title={`Bu ${noun} silinsin mi?`}
+          body={`“${form.titleTr || "Başlıksız"}” ${noun}${isEvent ? "i, kayıtları" : "sı"} ve görselleri kalıcı olarak silinecek. Bu işlem geri alınamaz.`}
           confirmLabel={deleting ? "Siliniyor…" : "Evet, sil"}
           busy={deleting}
           onCancel={() => setConfirmDelete(false)}

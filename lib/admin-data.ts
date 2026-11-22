@@ -1,4 +1,6 @@
+import type { EventInput } from "@/app/admin/actions";
 import type { CategoryOption, EditorPost } from "@/components/admin/PostEditor";
+import { EVENT_FIELDS, isoToIstanbulInputs, type EventRow } from "@/lib/events";
 import type { createServerSupabase } from "@/lib/supabase/server";
 
 type Client = Awaited<ReturnType<typeof createServerSupabase>>;
@@ -14,8 +16,45 @@ export function toDateInput(iso: string | null): string | null {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Istanbul" }).format(new Date(iso));
 }
 
+export const emptyEvent: EventInput = {
+  date: "",
+  start: "",
+  end: "",
+  location: "",
+  locationUrl: "",
+  committee: "",
+  registration: "none",
+  registrationUrl: "",
+  capacity: "",
+  closesDate: "",
+  closesTime: "",
+  guide: "",
+};
+
+function toEventInput(row: EventRow): EventInput {
+  const start = isoToIstanbulInputs(row.event_starts_at);
+  const closes = isoToIstanbulInputs(row.event_registration_closes_at);
+  const committee = row.event_committee === "cs" || row.event_committee === "ras" || row.event_committee === "wie" ? row.event_committee : "";
+  return {
+    date: start.date,
+    start: start.time,
+    end: isoToIstanbulInputs(row.event_ends_at).time,
+    location: row.event_location ?? "",
+    locationUrl: row.event_location_url ?? "",
+    committee,
+    registration: row.event_registration ?? "none",
+    registrationUrl: row.event_registration_url ?? "",
+    capacity: row.event_capacity === null ? "" : String(row.event_capacity),
+    closesDate: closes.date,
+    closesTime: closes.time,
+    guide: row.event_guide ?? "",
+  };
+}
+
 export const emptyPost: EditorPost = {
   id: null,
+  kind: "post",
+  event: emptyEvent,
   slug: "",
   status: "draft",
   categoryId: null,
@@ -34,12 +73,14 @@ export const emptyPost: EditorPost = {
 export async function loadPost(supabase: Client, id: string): Promise<EditorPost | null> {
   const { data } = await supabase
     .from("posts")
-    .select("id, slug, status, category_id, cover_path, featured, published_at, title_tr, excerpt_tr, content_tr, title_en, excerpt_en, content_en, updated_at")
+    .select(`id, kind, slug, status, category_id, cover_path, featured, published_at, title_tr, excerpt_tr, content_tr, title_en, excerpt_en, content_en, updated_at, ${EVENT_FIELDS}`)
     .eq("id", id)
     .maybeSingle();
   if (!data) return null;
   return {
     id: data.id,
+    kind: data.kind,
+    event: data.kind === "event" ? toEventInput(data as unknown as EventRow) : emptyEvent,
     slug: data.slug,
     status: data.status,
     categoryId: data.category_id,

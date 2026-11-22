@@ -18,14 +18,15 @@ export default async function PanelLayout({ children }: { children: React.ReactN
     );
   }
 
-  const [{ count }, { count: unread }] = await Promise.all([
-    supabase.from("posts").select("id", { count: "exact", head: true }),
+  const [{ count }, { count: eventCount }, { count: unread }] = await Promise.all([
+    supabase.from("posts").select("id", { count: "exact", head: true }).eq("kind", "post"),
+    supabase.from("posts").select("id", { count: "exact", head: true }).eq("kind", "event"),
     supabase.from("messages").select("id", { count: "exact", head: true }).eq("status", "new"),
   ]);
 
   return (
     <div className="admin-shell">
-      <Sidebar email={user.email} postCount={count ?? 0} unread={unread ?? 0} />
+      <Sidebar email={user.email} postCount={count ?? 0} eventCount={eventCount ?? 0} unread={unread ?? 0} />
       <main className="admin-main">{children}</main>
     </div>
   );

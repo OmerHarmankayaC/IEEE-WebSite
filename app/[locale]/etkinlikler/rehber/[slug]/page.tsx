@@ -25,8 +25,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     title: workshop.title,
     description: workshop.summary,
     alternates: {
-      canonical: localePath(locale as Locale, `/atolyeler/${slug}`),
-      languages: { tr: `/atolyeler/${slug}`, en: `/en/atolyeler/${slug}` },
+      canonical: localePath(locale as Locale, `/etkinlikler/rehber/${slug}`),
+      languages: { tr: `/etkinlikler/rehber/${slug}`, en: `/en/etkinlikler/rehber/${slug}` },
     },
   };
 }
@@ -40,14 +40,13 @@ export default async function WorkshopPage({ params }: Params) {
 
   return (
     <>
-      <SiteHeader t={t} locale={locale} current="workshops" />
+      <SiteHeader t={t} locale={locale} current="events" />
       <main>
         <div className="article-head">
-          <div className="sun" aria-hidden="true" />
           <div className="container sec article-head__inner">
-            <Link href={localePath(locale, "/atolyeler")} className="back-link article-head__back">
+            <Link href={localePath(locale, "/etkinlikler")} className="back-link article-head__back">
               <ChevronLeft />
-              {t.workshops.title}
+              {t.events.back}
             </Link>
             <p className="vt vt--accent">{workshop.organizer.replace("IEEE TEDU ", "")}</p>
             <div className="article-head__text" lang="tr">

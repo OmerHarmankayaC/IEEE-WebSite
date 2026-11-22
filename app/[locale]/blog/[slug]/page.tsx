@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Article } from "@/components/site/Article";
 import { FooterBand } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
@@ -12,7 +12,7 @@ export const revalidate = 3600;
 export const dynamicParams = true;
 
 export async function generateStaticParams({ params }: { params: { locale: string } }) {
-  const posts = await getPublishedPosts(params.locale as Locale);
+  const posts = await getPublishedPosts(params.locale as Locale, "post");
   return posts.map((post) => ({ slug: post.slug }));
 }
 
@@ -21,7 +21,7 @@ type Props = { params: Promise<{ locale: string; slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const post = await getPostBySlug(slug, locale as Locale);
-  if (!post) return {};
+  if (!post || post.kind !== "post") return {};
   return {
     title: post.title,
     description: post.excerpt ?? undefined,
@@ -45,8 +45,10 @@ export default async function PostPage({ params }: Props) {
   const t = getDictionary(locale);
   const post = await getPostBySlug(slug, locale);
   if (!post) notFound();
+  // Events have their own pages.
+  if (post.kind === "event") permanentRedirect(localePath(locale, `/etkinlikler/${post.slug}`));
 
-  const more = (await getPublishedPosts(locale)).filter((item) => item.id !== post.id).slice(0, 3);
+  const more = (await getPublishedPosts(locale, "post")).filter((item) => item.id !== post.id).slice(0, 3);
 
   return (
     <>

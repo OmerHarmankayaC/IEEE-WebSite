@@ -23,6 +23,7 @@ export default async function PostsPage() {
   const { data } = await supabase
     .from("posts")
     .select("id, slug, status, featured, published_at, cover_path, title_tr, category:categories(name_tr)")
+    .eq("kind", "post")
     .order("updated_at", { ascending: false })
     .returns<Row[]>();
 
@@ -42,7 +43,7 @@ export default async function PostsPage() {
     <div className="admin-page">
       <div className="admin-head">
         <div className="stack" style={{ gap: 10 }}>
-                    <h1 className="admin-title">Yazılar</h1>
+          <h1 className="admin-title">Yazılar</h1>
         </div>
         <Link href="/admin/yazi/yeni" className="btn btn--sun btn--small">
           <PlusIcon />
