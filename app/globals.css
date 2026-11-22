@@ -116,10 +116,11 @@ button {
 }
 
 /* Editorial grid: a narrow column for the vertical section title, then the content. */
+/* Sections: the title sits above the content. */
 .sec {
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  gap: 28px 56px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
 }
 
 .sec > * {
@@ -128,17 +129,21 @@ button {
 
 .vt {
   margin: 0;
-  writing-mode: vertical-rl;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: 34px;
-  line-height: 1.2;
-  letter-spacing: 0.06em;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.1;
 }
 
+/* The small label above an article or event title, such as its category */
 .vt--accent {
   color: var(--accent);
-  font-size: 26px;
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.3;
+}
+
+.sec__spacer {
+  display: none;
 }
 
 .title-row {
@@ -1974,19 +1979,6 @@ a.member:hover .member__name {
 }
 
 @media (max-width: 720px) {
-  .sec {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .vt {
-    writing-mode: horizontal-tb;
-    letter-spacing: 0;
-  }
-
-  .sec__spacer {
-    display: none;
-  }
-
   .hero__actions {
     flex-direction: column;
     align-items: stretch;

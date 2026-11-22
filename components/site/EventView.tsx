@@ -50,7 +50,7 @@ export function EventView({
             <ChevronLeft />
             {te.back}
           </Link>
-          <p className="vt vt--accent">{event.committee ? event.committee.toUpperCase() : te.kind}</p>
+          <p className="vt vt--accent">{organizer}</p>
           <div className="article-head__text">
             <h1 className="article__title">{post.title}</h1>
             {post.excerpt && <p className="article__lead">{post.excerpt}</p>}
