@@ -58,6 +58,44 @@ export type MemberRow = {
 
 export const sortByName = (members: Member[]) => [...members].sort((a, b) => a.name.localeCompare(b.name, "tr"));
 
+/** Lowercase without accents, so "omer" finds "Ömer" and "isik" finds "Işık". */
+export function searchKey(text: string): string {
+  return text
+    .toLocaleLowerCase("tr")
+    .replace(/ı/g, "i")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Someone who was on the team in any term, with the details of their latest entry. */
+export type KnownPerson = {
+  name: string;
+  linkedin: string | null;
+  photoPath: string | null;
+  termId: string;
+  team: TeamGroup;
+  role: RoleKey;
+};
+
+/** Everyone in the given rows once, alphabetically. Missing LinkedIn or photo is taken from an older term. */
+export function collectPeople(rows: Pick<MemberRow, "term_id" | "team" | "role" | "name" | "linkedin" | "photo_path">[]): KnownPerson[] {
+  const byName = new Map<string, KnownPerson>();
+  // Newest term first, so the first entry of each person is their latest.
+  for (const row of [...rows].sort((a, b) => b.term_id.localeCompare(a.term_id))) {
+    const key = searchKey(row.name);
+    const known = byName.get(key);
+    if (!known) {
+      byName.set(key, { name: row.name, linkedin: row.linkedin, photoPath: row.photo_path, termId: row.term_id, team: row.team, role: row.role });
+      continue;
+    }
+    known.linkedin ??= row.linkedin;
+    known.photoPath ??= row.photo_path;
+  }
+  return [...byName.values()].sort((a, b) => a.name.localeCompare(b.name, "tr"));
+}
+
 export function buildBoard(rows: MemberRow[]): Board | null {
   if (rows.length === 0) return null;
   const toMember = (row: MemberRow): Member => ({

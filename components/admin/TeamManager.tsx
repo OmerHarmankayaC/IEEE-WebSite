@@ -3,13 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useId, useRef, useState, useTransition, type KeyboardEvent } from "react";
 import { createTerm, deleteMember, deleteTerm, saveMember, setTermPublished, type MemberInput } from "@/app/admin/panel-actions";
 import { PlusIcon } from "@/components/icons";
 import { TEAM_BUCKET, teamPhotoUrl } from "@/lib/env";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
-import { ROLES_BY_GROUP, type MemberRow, type RoleKey, type TeamGroup } from "@/lib/team";
+import { ROLES_BY_GROUP, searchKey, type KnownPerson, type MemberRow, type RoleKey, type TeamGroup } from "@/lib/team";
 import { uploadImage } from "@/lib/upload";
 import { ConfirmDialog } from "./ConfirmDialog";
 
@@ -25,6 +25,9 @@ const GROUPS: { id: TeamGroup; label: string }[] = [
   { id: "media", label: "Medya ve tasarım" },
 ];
 
+/** Short group names for the "last role" line under each person. */
+const GROUP_SHORT: Record<TeamGroup, string> = { board: "Başkanlık", cs: "CS", ras: "RAS", wie: "WIE", media: "Medya ve tasarım" };
+
 type Draft = { id: string | null; team: TeamGroup; role: RoleKey; name: string; linkedin: string; photoPath: string | null };
 
 function removeUploads(paths: string[]) {
@@ -32,20 +35,142 @@ function removeUploads(paths: string[]) {
   if (uploaded.length) void createBrowserSupabase().storage.from(TEAM_BUCKET).remove(uploaded);
 }
 
+/** "CS başkanı, 2025-2026": the person's role in their latest term. */
+function lastRole(person: KnownPerson): string {
+  const role = person.role === "leader" ? `${GROUP_SHORT[person.team]} başkanı` : ROLE_LABELS[person.role];
+  return `${role}, ${person.termId}`;
+}
+
+/** Name field that lists the people of earlier terms while typing. Picking one fills the form. */
+function PersonField({
+  value,
+  termId,
+  people,
+  inTerm,
+  onType,
+  onPick,
+}: {
+  value: string;
+  termId: string;
+  people: KnownPerson[];
+  inTerm: Set<string>;
+  onType: (name: string) => void;
+  onPick: (person: KnownPerson) => void;
+}) {
+  const listId = useId();
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(0);
+
+  const query = searchKey(value);
+  const matches = query ? people.filter((person) => searchKey(person.name).includes(query)) : people;
+  const shown = open && matches.length > 0;
+  const current = Math.min(active, matches.length - 1);
+
+  const pick = (person: KnownPerson) => {
+    onPick(person);
+    setOpen(false);
+  };
+
+  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (!shown) {
+      if (event.key === "ArrowDown" && matches.length > 0) {
+        event.preventDefault();
+        setOpen(true);
+        setActive(0);
+      }
+      return;
+    }
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActive((current + 1) % matches.length);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActive((current - 1 + matches.length) % matches.length);
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+      pick(matches[current]);
+    } else if (event.key === "Escape") {
+      // Close the list, not the whole dialog.
+      event.preventDefault();
+      event.stopPropagation();
+      setOpen(false);
+    }
+  };
+
+  return (
+    <>
+      <input
+        id="member-name"
+        className="input"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded={shown}
+        aria-controls={listId}
+        aria-activedescendant={shown ? `${listId}-${current}` : undefined}
+        autoComplete="off"
+        value={value}
+        maxLength={100}
+        onChange={(event) => {
+          onType(event.target.value);
+          setOpen(true);
+          setActive(0);
+        }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        onKeyDown={onKeyDown}
+        autoFocus
+      />
+      {shown && (
+        // Keep focus in the input while choosing with the mouse.
+        <ul id={listId} role="listbox" aria-label="Önceki dönemlerdeki kişiler" className="person-list" onMouseDown={(event) => event.preventDefault()}>
+          {matches.map((person, index) => {
+            const photo = teamPhotoUrl(person.photoPath);
+            return (
+              <li
+                key={searchKey(person.name)}
+                id={`${listId}-${index}`}
+                role="option"
+                aria-selected={index === current}
+                className="person-list__item"
+                onClick={() => pick(person)}
+                onMouseEnter={() => setActive(index)}
+              >
+                <span className="person-list__photo">{photo && <Image src={photo} alt="" fill sizes="40px" unoptimized />}</span>
+                <span className="person-list__text">
+                  <strong>{person.name}</strong>
+                  <span className="mono mono--muted">
+                    {lastRole(person)}
+                    {person.termId !== termId && inTerm.has(searchKey(person.name)) && ". Bu dönemde de ekli"}
+                  </span>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </>
+  );
+}
+
 function MemberDialog({
   draft,
   termId,
+  people,
+  inTerm,
   onClose,
   onSaved,
 }: {
   draft: Draft;
   termId: string;
+  people: KnownPerson[];
+  inTerm: Set<string>;
   onClose: () => void;
   onSaved: () => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState(draft);
+  const [picked, setPicked] = useState<KnownPerson | null>(null);
   const [uploads, setUploads] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -119,14 +244,38 @@ function MemberDialog({
           <label className="field__label" htmlFor="member-name">
             Ad soyad
           </label>
-          <input
-            id="member-name"
-            className="input"
-            value={form.name}
-            maxLength={100}
-            onChange={(event) => setForm({ ...form, name: event.target.value })}
-            autoFocus
-          />
+          {draft.id || people.length === 0 ? (
+            <input
+              id="member-name"
+              className="input"
+              value={form.name}
+              maxLength={100}
+              onChange={(event) => setForm({ ...form, name: event.target.value })}
+              autoFocus
+            />
+          ) : (
+            <>
+              <PersonField
+                value={form.name}
+                termId={termId}
+                people={people}
+                inTerm={inTerm}
+                onType={(name) => {
+                  setForm((value) => ({ ...value, name }));
+                  if (picked && name !== picked.name) setPicked(null);
+                }}
+                onPick={(person) => {
+                  setForm((value) => ({ ...value, name: person.name, linkedin: person.linkedin ?? "", photoPath: person.photoPath }));
+                  setPicked(person);
+                }}
+              />
+              <p className="help-text">
+                {picked
+                  ? `LinkedIn adresi ve fotoğraf ${picked.termId} döneminden geldi. Şimdi yeni görevini seç.`
+                  : "Önceki dönemlerden birini listeden seçersen LinkedIn adresi ve fotoğrafı da gelir. Yeni biriyse adını yazman yeterli."}
+              </p>
+            </>
+          )}
         </div>
         <div className="field">
           <label className="field__label" htmlFor="member-role">
@@ -186,7 +335,17 @@ function MemberDialog({
   );
 }
 
-export function TeamManager({ terms, selected, members }: { terms: AdminTerm[]; selected: AdminTerm | null; members: AdminMember[] }) {
+export function TeamManager({
+  terms,
+  selected,
+  members,
+  people,
+}: {
+  terms: AdminTerm[];
+  selected: AdminTerm | null;
+  members: AdminMember[];
+  people: KnownPerson[];
+}) {
   const router = useRouter();
   const [draft, setDraft] = useState<Draft | null>(null);
   const [removing, setRemoving] = useState<AdminMember | null>(null);
@@ -339,6 +498,8 @@ export function TeamManager({ terms, selected, members }: { terms: AdminTerm[]; 
         <MemberDialog
           draft={draft}
           termId={selected.id}
+          people={people}
+          inTerm={new Set(members.map((member) => searchKey(member.name)))}
           onClose={() => setDraft(null)}
           onSaved={() => {
             setDraft(null);
