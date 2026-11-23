@@ -59,9 +59,19 @@ function afterTeamChange() {
   revalidatePath("/admin/ekip");
 }
 
-/** Removes a photo we uploaded. Bundled photos under /images/team/ stay. */
-async function removeUploadedPhoto(supabase: Awaited<ReturnType<typeof requireAdmin>>["supabase"], path: string | null) {
-  if (path && !path.startsWith("/")) await supabase.storage.from(TEAM_BUCKET).remove([path]);
+/**
+ * Removes photos we uploaded once no member of any term uses them, since a person picked from an
+ * earlier term shares their photo. Bundled photos under /images/team/ always stay.
+ */
+async function removeUnusedPhotos(supabase: Awaited<ReturnType<typeof requireAdmin>>["supabase"], paths: (string | null | undefined)[]) {
+  const uploaded = [...new Set(paths.filter((path): path is string => Boolean(path && !path.startsWith("/"))))];
+  if (uploaded.length === 0) return;
+  const { data: inUse, error } = await supabase.from("team_members").select("photo_path").in("photo_path", uploaded);
+  // When we cannot tell, keeping a file is safer than breaking someone's photo.
+  if (error) return;
+  const used = new Set((inUse ?? []).map((row) => row.photo_path));
+  const unused = uploaded.filter((path) => !used.has(path));
+  if (unused.length) await supabase.storage.from(TEAM_BUCKET).remove(unused);
 }
 
 export async function saveMember(input: MemberInput): Promise<ActionResult<{ id: string }>> {
@@ -87,7 +97,7 @@ export async function saveMember(input: MemberInput): Promise<ActionResult<{ id:
     const { data: previous } = await supabase.from("team_members").select("photo_path").eq("id", input.id).maybeSingle();
     const { error } = await supabase.from("team_members").update(row).eq("id", input.id);
     if (error) return fail("Üye kaydedilemedi.");
-    if (previous && previous.photo_path !== input.photoPath) await removeUploadedPhoto(supabase, previous.photo_path);
+    if (previous && previous.photo_path !== input.photoPath) await removeUnusedPhotos(supabase, [previous.photo_path]);
     afterTeamChange();
     return ok({ id: input.id });
   }
@@ -103,7 +113,7 @@ export async function deleteMember(id: string): Promise<ActionResult> {
   const { data: member } = await supabase.from("team_members").select("photo_path").eq("id", id).maybeSingle();
   const { error } = await supabase.from("team_members").delete().eq("id", id);
   if (error) return fail("Üye silinemedi.");
-  await removeUploadedPhoto(supabase, member?.photo_path ?? null);
+  await removeUnusedPhotos(supabase, [member?.photo_path]);
   afterTeamChange();
   return ok(undefined);
 }
@@ -132,8 +142,7 @@ export async function deleteTerm(id: string): Promise<ActionResult> {
   const { data: members } = await supabase.from("team_members").select("photo_path").eq("term_id", id);
   const { error } = await supabase.from("team_terms").delete().eq("id", id);
   if (error) return fail("Dönem silinemedi.");
-  const uploaded = (members ?? []).map((m) => m.photo_path).filter((path): path is string => Boolean(path && !path.startsWith("/")));
-  if (uploaded.length) await supabase.storage.from(TEAM_BUCKET).remove(uploaded);
+  await removeUnusedPhotos(supabase, (members ?? []).map((m) => m.photo_path));
   afterTeamChange();
   return ok(undefined);
 }
